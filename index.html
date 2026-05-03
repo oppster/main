@@ -42,9 +42,15 @@
       align-items: center;
       justify-content: space-between;
     }
-    .logo { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 900; letter-spacing: -0.04em; }
-    .logo-mark { width: 40px; height: 40px; border-radius: 9px; background: var(--orange); color: white; display: grid; place-items: center; font-weight: 900; }
-    .logo .opp { color: var(--orange); }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo img {
+      height: 42px;   /* adjust 36–48px if needed */
+      display: block;
+    }
     .nav-links { display: flex; gap: 36px; color: var(--muted); font-weight: 700; }
     .nav-actions { display: flex; align-items: center; gap: 18px; font-weight: 700; }
     .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 10px; padding: 14px 22px; font-weight: 900; border: 1px solid transparent; cursor: pointer; }
@@ -149,9 +155,12 @@
 <body>
   <header>
     <div class="container nav">
-      <a href="#" class="logo" aria-label="Oppster home">
+      <!--a href="#" class="logo" aria-label="Oppster home">
         <span class="logo-mark">O</span>
         <span><span class="opp">Opp</span>ster</span>
+    </a-->
+      <a href="#" class="logo">
+        <img src="images/oppster-logo.png" alt="Oppster Logo">
       </a>
       <nav class="nav-links">
         <a href="#features">Features</a>
