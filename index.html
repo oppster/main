@@ -2,85 +2,309 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oppster - Opportunities & Options</title>
-  <meta name="description" content="Oppster.net - Empowering traders and investors with insight, strategies, and community.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oppster | Analytical Trading Ledger</title>
+  <meta name="description" content="Oppster is a precision Excel VBA trading ledger for serious retail traders." />
   <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --ink: #020617;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --dark: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background: #f8f9fa;
-      color: #333;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
     }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
     header {
-      background: #8BC34A; /* Light green background */
-      color: white;
-      padding: 2rem;
-      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
     }
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #777;
-    }
-    h1, h2 {
-      margin-top: 0;
-    }
-    .team {
+    .nav {
+      height: 76px;
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
+      align-items: center;
+      justify-content: space-between;
     }
-    .member {
-      background: #ffffff;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 900; letter-spacing: -0.04em; }
+    .logo-mark { width: 40px; height: 40px; border-radius: 9px; background: var(--orange); color: white; display: grid; place-items: center; font-weight: 900; }
+    .logo .opp { color: var(--orange); }
+    .nav-links { display: flex; gap: 36px; color: var(--muted); font-weight: 700; }
+    .nav-actions { display: flex; align-items: center; gap: 18px; font-weight: 700; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 10px; padding: 14px 22px; font-weight: 900; border: 1px solid transparent; cursor: pointer; }
+    .button.primary { background: var(--orange); color: white; box-shadow: 0 10px 24px rgba(249,115,22,.18); }
+    .button.primary:hover { background: var(--orange-dark); }
+    .button.secondary { background: white; border-color: var(--line); color: var(--ink); }
+
+    .hero { padding: 96px 0 104px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; background: #ffedd5; color: #c2410c; border-radius: 999px; padding: 8px 14px; font-weight: 900; font-size: 14px; margin-bottom: 28px; }
+    .dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; }
+    h1 { font-size: clamp(48px, 7vw, 78px); line-height: .95; letter-spacing: -0.07em; margin: 0; }
+    h1 span, .accent { color: var(--orange); }
+    .lead { margin-top: 28px; font-size: 21px; line-height: 1.55; color: var(--muted); max-width: 590px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 38px; }
+
+    .preview { background: var(--dark); border-radius: 22px; padding: 18px; box-shadow: 0 28px 80px rgba(2,6,23,.28); color: white; }
+    .window-bar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.1); color: #94a3b8; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+    .circle { width: 12px; height: 12px; border-radius: 50%; }
+    .red { background: #f87171; } .yellow { background: #fbbf24; } .green { background: #22c55e; }
+    .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .metric-card, .table-card { background: rgba(15,23,42,.9); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 18px; }
+    .metric-label { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .metric-value { font-size: 32px; font-weight: 900; margin-top: 8px; }
+    .chart { height: 88px; margin-top: 12px; background: linear-gradient(to top, rgba(249,115,22,.25), transparent); border-radius: 12px; display: flex; align-items: end; gap: 7px; padding: 12px; }
+    .bar { flex: 1; background: #fb923c; border-radius: 6px 6px 0 0; }
+    .linechart { width: 100%; height: 88px; margin-top: 12px; }
+    .table-card { grid-column: 1 / -1; color: #cbd5e1; font-size: 13px; }
+    .table-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .table-row:last-child { border-bottom: 0; }
+    .positive { color: #86efac; } .watch { color: #fdba74; }
+
+    section { padding: 88px 0; }
+    .white { background: white; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .center { text-align: center; }
+    h2 { font-size: clamp(38px, 5vw, 54px); line-height: 1.05; letter-spacing: -0.06em; margin: 0; }
+    .section-lead { max-width: 820px; margin: 22px auto 0; font-size: 21px; color: var(--muted); line-height: 1.55; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
+    .card { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 34px; box-shadow: 0 2px 10px rgba(2,6,23,.04); }
+    .icon { width: 58px; height: 58px; border-radius: 14px; background: #ffedd5; color: var(--orange); display: grid; place-items: center; font-size: 28px; margin-bottom: 22px; }
+    .card h3 { margin: 0; font-size: 22px; }
+    .card p { color: var(--muted); line-height: 1.6; font-size: 17px; }
+
+    .feature-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 64px; align-items: center; }
+    .feature-list { display: grid; gap: 28px; margin-top: 42px; }
+    .feature-item { display: flex; gap: 18px; align-items: flex-start; }
+    .feature-icon { flex: 0 0 48px; height: 48px; border-radius: 999px; background: #ffedd5; color: var(--orange); display: grid; place-items: center; font-size: 22px; }
+    .feature-item h3 { margin: 0; font-size: 22px; }
+    .feature-item p { margin: 8px 0 0; color: var(--muted); line-height: 1.55; font-size: 17px; }
+    .dark-panel { background: var(--dark); border-radius: 28px; padding: 28px; color: white; box-shadow: 0 28px 80px rgba(2,6,23,.22); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 15px; padding: 18px; }
+    .stat small { color: #94a3b8; }
+    .stat strong { display: block; font-size: 30px; margin-top: 8px; }
+    .big-chart { margin-top: 22px; height: 260px; background: linear-gradient(to top, rgba(249,115,22,.20), rgba(15,23,42,.2)); border-radius: 18px; padding: 20px; }
+
+    .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
+    .plan { position: relative; background: white; border: 1px solid var(--line); border-radius: 22px; padding: 34px; box-shadow: 0 2px 10px rgba(2,6,23,.04); }
+    .plan.popular { border-color: var(--orange); box-shadow: 0 0 0 4px #ffedd5; }
+    .popular-label { position: absolute; top: 0; right: 0; background: var(--orange); color: white; border-radius: 0 22px 0 14px; padding: 9px 15px; font-size: 12px; font-weight: 900; text-transform: uppercase; }
+    .plan h3 { font-size: 32px; margin: 0; }
+    .plan-desc { color: var(--muted); min-height: 54px; line-height: 1.5; }
+    .price { margin: 24px 0; }
+    .price strong { font-size: 52px; }
+    .price span { color: var(--muted); font-size: 22px; }
+    .features { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 14px; color: #334155; }
+    .features li::before { content: "✓"; color: var(--orange); font-weight: 900; margin-right: 10px; }
+    .plan .button { width: 100%; }
+
+    .faq { max-width: 860px; margin: 54px auto 0; }
+    details { border-bottom: 1px solid var(--line); padding: 22px 0; }
+    summary { cursor: pointer; font-size: 18px; font-weight: 900; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--muted); }
+    details[open] summary::after { content: "−"; }
+    details p { color: var(--muted); font-size: 17px; line-height: 1.6; max-width: 760px; }
+
+    .cta { background: var(--dark); color: white; text-align: center; }
+    .cta p { color: #cbd5e1; }
+    .note { margin-top: 18px; color: #94a3b8; }
+
+    footer { background: white; padding: 56px 0; }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; }
+    footer p, footer a { color: var(--muted); }
+    footer a { display: block; margin-top: 12px; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .feature-grid, .cards, .pricing, .footer-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .preview-grid, .stats { grid-template-columns: 1fr; }
+      h1 { font-size: 52px; }
     }
-    .member h3 {
-      margin: 0 0 0.5rem 0;
+    @media (max-width: 560px) {
+      .nav-actions a:first-child { display: none; }
+      .hero { padding-top: 60px; }
+      .button { width: 100%; }
+      .hero-actions { width: 100%; }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to Oppster</h1>
-    <p>Opportunities & Options for Modern Traders</p>
-  </header>
-  <main>
-    <h2>About Us</h2>
-    <p>At <strong>Oppster.com</strong>, we’re dedicated to helping individual traders and investors discover and seize new opportunities in the world of stocks, options, and beyond. Whether you’re just starting out or refining advanced strategies, we’re here to provide insight, tools, and a growing community of like-minded thinkers.</p>
-
-    <h2>Our Mission</h2>
-    <p>We aim to empower you with education, market analysis, and actionable content so you can navigate your trading journey with confidence and clarity.</p>
-<br><br/>
-    <h2>Meet the Team</h2>
-    <div class="team">
-      <div class="member">
-        <h3>Len Nicodemus, Oppster's Founding Managing Partner</h3>
-        <p>With a passion for uncovering market opportunities and simplifying complex trading strategies, Len leads the vision and direction of Oppster.net.</p>
-      </div>
-      <div class="member">
-        <h3>Myra Freytes, VP of Business Intelligence</h3>
-        <p>Myra brings data-driven insights and deep industry knowledge, helping our community make informed and confident trading decisions.</p>
+    <div class="container nav">
+      <a href="#" class="logo" aria-label="Oppster home">
+        <span class="logo-mark">O</span>
+        <span><span class="opp">Opp</span>ster</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it Works</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="#login">Log in</a>
+        <a class="button primary" href="#pricing">Get Started</a>
       </div>
     </div>
-<br><br/>
-    <h2>Stay Connected</h2>
-    <p>Exciting updates are coming soon! Be sure to bookmark this page and check back often.</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge"><span class="dot"></span>v2.0 Now Available</div>
+          <h1>The analytical ledger for <span>serious traders.</span></h1>
+          <p class="lead">Oppster is a precision trading tool built in Excel VBA. Record, track, and review your transactions with privacy, structure, and complete control.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#pricing">Start Trading Smarter →</a>
+            <a class="button secondary" href="#features">View Features</a>
+          </div>
+        </div>
+
+        <div class="preview" aria-label="Oppster workbook preview">
+          <div class="window-bar"><span class="circle red"></span><span class="circle yellow"></span><span class="circle green"></span><span style="margin-left:12px;">Oppster_Ledger_v2.xlsm</span></div>
+          <div class="preview-grid">
+            <div class="metric-card">
+              <div class="metric-label">Open P/L</div>
+              <div class="metric-value">$4,750</div>
+              <svg class="linechart" viewBox="0 0 240 88"><path d="M0 62 C35 22 55 52 80 36 S125 10 150 32 S205 56 240 20" fill="none" stroke="#fb923c" stroke-width="5"/></svg>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Win Rate</div>
+              <div class="metric-value">68%</div>
+              <div class="chart">
+                <span class="bar" style="height:42%"></span><span class="bar" style="height:65%"></span><span class="bar" style="height:38%"></span><span class="bar" style="height:72%"></span><span class="bar" style="height:50%"></span><span class="bar" style="height:80%"></span><span class="bar" style="height:58%"></span>
+              </div>
+            </div>
+            <div class="table-card">
+              <div class="table-row"><strong>Ticker</strong><strong>Strategy</strong><strong>Status</strong><strong>P/L</strong></div>
+              <div class="table-row"><span>AVGO</span><span>CSP</span><span class="watch">Watch</span><span class="positive">+$420</span></div>
+              <div class="table-row"><span>BRK.B</span><span>LEAP</span><span>Open</span><span class="positive">+$1,050</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="white">
+      <div class="container center">
+        <h2>A workstation, not a toy.</h2>
+        <p class="section-lead">Existing web journals can be slow, expensive, and disconnected from your workflow. Oppster gives spreadsheet-first traders a serious operating system for trade review.</p>
+      </div>
+      <div class="container cards">
+        <div class="card"><div class="icon">🔒</div><h3>Workbook Privacy</h3><p>Your trades stay in your Excel workbook. You control the file, the data, and the history.</p></div>
+        <div class="card"><div class="icon">⚡</div><h3>Fast Execution</h3><p>Log, filter, sort, and review trades without browser lag or waiting on API calls.</p></div>
+        <div class="card"><div class="icon">📊</div><h3>Performance Metrics</h3><p>Track P/L, win rate, assignment outcomes, strategy results, and account-level performance.</p></div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container feature-grid">
+        <div>
+          <h2>Visualize your edge.</h2>
+          <p class="lead">Raw data is not enough. Oppster helps you identify where you trade best, which setups are profitable, and where risk is building.</p>
+          <div class="feature-list">
+            <div class="feature-item"><div class="feature-icon">↗</div><div><h3>Strategy Tagging</h3><p>Tag every trade with custom setups and track what actually works over time.</p></div></div>
+            <div class="feature-item"><div class="feature-icon">📈</div><div><h3>Equity Curve Tracking</h3><p>View account growth, drawdowns, and performance patterns across strategies.</p></div></div>
+            <div class="feature-item"><div class="feature-icon">📄</div><div><h3>Broker Import Workflow</h3><p>Paste or import broker exports into your ledger workflow for faster updates.</p></div></div>
+          </div>
+        </div>
+        <div class="dark-panel">
+          <div style="display:flex; justify-content:space-between; color:#94a3b8; margin-bottom:22px;"><span>Performance Snapshot</span><span class="watch">Live Workbook View</span></div>
+          <div class="stats">
+            <div class="stat"><small>Profit Factor</small><strong>1.82</strong></div>
+            <div class="stat"><small>Max Drawdown</small><strong>-6.4%</strong></div>
+            <div class="stat"><small>Expectancy</small><strong>$128</strong></div>
+          </div>
+          <div class="big-chart">
+            <svg viewBox="0 0 600 240" width="100%" height="100%">
+              <path d="M0 210 L600 210" stroke="rgba(255,255,255,.10)"/><path d="M0 150 L600 150" stroke="rgba(255,255,255,.10)"/><path d="M0 90 L600 90" stroke="rgba(255,255,255,.10)"/>
+              <path d="M0 190 C70 100 95 160 150 120 S250 70 310 110 S390 185 450 95 S545 60 600 40" fill="none" stroke="#fb923c" stroke-width="7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="white">
+      <div class="container center">
+        <h2>Simple, transparent pricing.</h2>
+        <p class="section-lead">Pay for what you need. Cancel anytime and keep your data forever.</p>
+      </div>
+      <div class="container pricing">
+        <div class="plan">
+          <h3>Core</h3>
+          <p class="plan-desc">For traders who want clean tracking without complexity.</p>
+          <div class="price"><strong>$7</strong><span>/mo</span></div>
+          <ul class="features"><li>1 account</li><li>Stock, CSP, and covered calls</li><li>Trade ledger and basic P/L tracking</li><li>Default Trade Cues and Trade Gems</li><li>Manual trade entry</li></ul>
+          <a class="button secondary" href="#">Get Core</a>
+        </div>
+        <div class="plan popular">
+          <div class="popular-label">Most Popular</div>
+          <h3>Pro</h3>
+          <p class="plan-desc">For active traders who want better visibility into performance.</p>
+          <div class="price"><strong>$19</strong><span>/mo</span></div>
+          <ul class="features"><li>Up to 3 accounts</li><li>LEAPs, spreads, and roll tracking</li><li>Performance dashboards</li><li>Strategy tagging and filters</li><li>Broker CSV import workflow</li></ul>
+          <a class="button primary" href="#">Start Pro</a>
+        </div>
+        <div class="plan">
+          <h3>Premium</h3>
+          <p class="plan-desc">For disciplined traders who want customization and deeper control.</p>
+          <div class="price"><strong>$39</strong><span>/mo</span></div>
+          <ul class="features"><li>Up to 5 accounts</li><li>Personalized Trade Cues and Trade Gems</li><li>Profit target and health alerts</li><li>LLC financial tools</li><li>Advanced multi-account tracking</li></ul>
+          <a class="button secondary" href="#">Go Premium</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container center">
+        <h2>Frequently Asked Questions</h2>
+      </div>
+      <div class="container faq">
+        <details><summary>Do I need to know VBA to use Oppster?</summary><p>No. Oppster is designed as a workbook-based application. You use buttons, forms, ledgers, and dashboards without needing to write VBA.</p></details>
+        <details><summary>What versions of Excel are supported?</summary><p>Oppster is built for desktop Microsoft Excel with macro support. Excel for the web is not recommended because VBA macros are required.</p></details>
+        <details><summary>What happens to my data if I cancel my subscription?</summary><p>Your trade data remains in your workbook. Canceling stops access to paid features, but it does not remove your historical trade records.</p></details>
+        <details open><summary>Is my trading data secure?</summary><p>Yes. Your trade data stays in your Excel workbook. Oppster only checks subscription status when needed and does not sync your trade history to our servers.</p></details>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Ready to find your edge?</h2>
+        <p class="section-lead">Stop guessing if your strategy works. Start tracking it with precision.</p>
+        <div style="margin-top:36px;"><a class="button primary" href="#pricing">Get Oppster Today</a></div>
+        <div class="note">14-day money-back guarantee. No questions asked.</div>
+      </div>
+    </section>
   </main>
+
   <footer>
-    &copy; 2025 Oppster.net. All rights reserved.
+    <div class="container footer-grid">
+      <div>
+        <div class="logo"><span class="logo-mark">O</span><span><span class="opp">Opp</span>ster</span></div>
+        <p>The precision Excel VBA trading ledger for serious retail investors.</p>
+      </div>
+      <div><h3>Product</h3><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#faq">Documentation</a></div>
+      <div><h3>Company</h3><a href="mailto:support@oppster.com">Contact</a><a href="#privacy">Privacy Policy</a><a href="#terms">Terms of Service</a></div>
+    </div>
   </footer>
 </body>
 </html>
-
-
