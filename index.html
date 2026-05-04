@@ -219,10 +219,14 @@
       margin-top: 38px;
     }
 
-    /* Hero image (bigger) */
     .hero-image img {
       width: 100%;
-      max-width: 760px;
+      max-width: 760px;          /* keeps it large */
+      margin: 0 auto;
+      display: block;
+      border-radius: 18px;       /* ✅ restores rounded corners */
+      box-shadow: 0 24px 70px rgba(2,6,23,.20);  /* ✅ restores depth */
+      background: #f8fafc;
     }
     
     /* Manage / feature image (smaller) */
