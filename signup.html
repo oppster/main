@@ -466,7 +466,9 @@
       <input type="hidden" id="selectedExperience" name="Trading Experience" value="">
       <input type="hidden" id="selectedAccounts" name="Accounts to Track" value="">
       <input type="hidden" id="selectedSource" name="How They Found Oppster" value="">
-      <input type="hidden" id="selectedChallenges" name="Trading Challenges" value="">
+      <input type="hidden" id="selectedStructureChallenges" name="Structure and Discipline Challenges" value="">
+      <input type="hidden" id="selectedVisibilityChallenges" name="Visibility and Timing Challenges" value="">
+      <input type="hidden" id="selectedBehaviorChallenges" name="Trading Behaviors to Reduce" value="">
 
       <div class="container signup-shell">
 
@@ -607,70 +609,138 @@
 
         <!-- STEP 5 -->
         <section class="step" data-step="5">
-          <h1>What challenges are you trying to <span>improve?</span></h1>
+          <h1>Where do you need more <span>structure?</span></h1>
           <p class="step-lead">
-            Select any that apply. These help us understand what Oppster should help solve first.
+            Select any that apply. This helps us understand where Oppster can support your planning and discipline.
           </p>
 
           <div class="option-panel">
             <div class="option-grid multi-select">
-              <button type="button" class="option-card challenge-card" data-value="Trading without a clear plan">
+              <button type="button" class="option-card structure-card" data-value="Trading without a clear plan">
                 <span class="option-icon">🧩</span>
                 <span>Trading without a clear plan</span>
               </button>
 
-              <button type="button" class="option-card challenge-card" data-value="Managing trades emotionally">
-                <span class="option-icon">🧠</span>
-                <span>Managing trades emotionally</span>
+              <button type="button" class="option-card structure-card" data-value="Creating more structure and consistency">
+                <span class="option-icon">🏗️</span>
+                <span>Creating more structure and consistency</span>
               </button>
 
-              <button type="button" class="option-card challenge-card" data-value="Revenge trading">
-                <span class="option-icon">⛔</span>
-                <span>Revenge trading</span>
+              <button type="button" class="option-card structure-card" data-value="Needing strategy-specific guidance">
+                <span class="option-icon">🧭</span>
+                <span>Needing strategy-specific guidance</span>
               </button>
 
-              <button type="button" class="option-card challenge-card" data-value="Knowing when a position needs attention">
-                <span class="option-icon">⚠️</span>
-                <span>Knowing when a position needs attention</span>
-              </button>
-
-              <button type="button" class="option-card challenge-card" data-value="Understanding outcomes before closing trades">
-                <span class="option-icon">🔎</span>
-                <span>Understanding outcomes before closing trades</span>
-              </button>
-
-              <button type="button" class="option-card challenge-card" data-value="Tracking multiple accounts consistently">
-                <span class="option-icon">🗂️</span>
-                <span>Tracking multiple accounts consistently</span>
-              </button>
-
-              <button type="button" class="option-card challenge-card" data-value="Reviewing trade performance over time">
-                <span class="option-icon">📊</span>
-                <span>Reviewing trade performance over time</span>
-              </button>
-
-              <button type="button" class="option-card challenge-card" data-value="Managing rolls and adjustments">
-                <span class="option-icon">🔁</span>
-                <span>Managing rolls and adjustments</span>
-              </button>
-
-              <button type="button" class="option-card challenge-card" data-value="Staying disciplined with position management">
+              <button type="button" class="option-card structure-card" data-value="Staying disciplined with position management">
                 <span class="option-icon">🎯</span>
                 <span>Staying disciplined with position management</span>
               </button>
 
-              <button type="button" class="option-card challenge-card" data-value="Creating more structure and consistency">
-                <span class="option-icon">🏗️</span>
-                <span>Creating more structure and consistency</span>
+              <button type="button" class="option-card structure-card" data-value="Following a repeatable review process">
+                <span class="option-icon">🔁</span>
+                <span>Following a repeatable review process</span>
+              </button>
+
+              <button type="button" class="option-card structure-card" data-value="Managing trades with more confidence">
+                <span class="option-icon">✅</span>
+                <span>Managing trades with more confidence</span>
               </button>
             </div>
           </div>
 
-          <div class="error" id="error-5">Please select at least one challenge.</div>
+          <div class="error" id="error-5">Please select at least one area.</div>
         </section>
 
         <!-- STEP 6 -->
         <section class="step" data-step="6">
+          <h1>Where do you need better <span>visibility?</span></h1>
+          <p class="step-lead">
+            Select what would help you make faster, clearer trading decisions.
+          </p>
+
+          <div class="option-panel">
+            <div class="option-grid multi-select">
+              <button type="button" class="option-card visibility-card" data-value="Knowing when a position needs attention">
+                <span class="option-icon">⚠️</span>
+                <span>Knowing when a position needs attention</span>
+              </button>
+
+              <button type="button" class="option-card visibility-card" data-value="Understanding outcomes before closing trades">
+                <span class="option-icon">🔎</span>
+                <span>Understanding outcomes before closing trades</span>
+              </button>
+
+              <button type="button" class="option-card visibility-card" data-value="Seeing daily P/L without waiting for statements">
+                <span class="option-icon">💵</span>
+                <span>Seeing daily P/L without waiting for statements</span>
+              </button>
+
+              <button type="button" class="option-card visibility-card" data-value="Managing rolls and adjustments">
+                <span class="option-icon">🔄</span>
+                <span>Managing rolls and adjustments</span>
+              </button>
+
+              <button type="button" class="option-card visibility-card" data-value="Tracking multiple accounts consistently">
+                <span class="option-icon">🗂️</span>
+                <span>Tracking multiple accounts consistently</span>
+              </button>
+
+              <button type="button" class="option-card visibility-card" data-value="Reviewing trade performance over time">
+                <span class="option-icon">📊</span>
+                <span>Reviewing trade performance over time</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="error" id="error-6">Please select at least one area.</div>
+        </section>
+
+        <!-- STEP 7 -->
+        <section class="step" data-step="7">
+          <h1>What behaviors are you trying to <span>reduce?</span></h1>
+          <p class="step-lead">
+            Select any habits or patterns you want your trading workflow to help control.
+          </p>
+
+          <div class="option-panel">
+            <div class="option-grid multi-select">
+              <button type="button" class="option-card behavior-card" data-value="Revenge trading">
+                <span class="option-icon">⛔</span>
+                <span>Revenge trading</span>
+              </button>
+
+              <button type="button" class="option-card behavior-card" data-value="Overtrading">
+                <span class="option-icon">⚡</span>
+                <span>Overtrading</span>
+              </button>
+
+              <button type="button" class="option-card behavior-card" data-value="Managing trades emotionally">
+                <span class="option-icon">🧠</span>
+                <span>Managing trades emotionally</span>
+              </button>
+
+              <button type="button" class="option-card behavior-card" data-value="Taking impulsive trades">
+                <span class="option-icon">🚦</span>
+                <span>Taking impulsive trades</span>
+              </button>
+
+              <button type="button" class="option-card behavior-card" data-value="Letting winners turn into losers">
+                <span class="option-icon">📉</span>
+                <span>Letting winners turn into losers</span>
+              </button>
+
+              <button type="button" class="option-card behavior-card" data-value="Holding losing trades too long">
+                <span class="option-icon">⏳</span>
+                <span>Holding losing trades too long</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="error" id="error-7">Please select at least one behavior.</div>
+        </section>
+
+        <!-- STEP 8 -->
+        <section class="step" data-step="8">
           <h1>How should we <span>reach you?</span></h1>
           <p class="step-lead">
             Share your details and we’ll follow up with next steps.
@@ -739,7 +809,7 @@
             </p>
           </div>
 
-          <div class="error" id="error-6">Please complete the required contact fields.</div>
+          <div class="error" id="error-8">Please complete the required contact fields.</div>
         </section>
 
         <div class="nav-buttons">
@@ -758,7 +828,7 @@
   </footer>
 
   <script>
-    const totalSteps = 6;
+    const totalSteps = 8;
     let currentStep = 1;
 
     const nextButton = document.getElementById("nextButton");
@@ -803,7 +873,17 @@
         return false;
       }
 
-      if (step === 5 && !document.getElementById("selectedChallenges").value) {
+      if (step === 5 && !document.getElementById("selectedStructureChallenges").value) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 6 && !document.getElementById("selectedVisibilityChallenges").value) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 7 && !document.getElementById("selectedBehaviorChallenges").value) {
         error.style.display = "block";
         return false;
       }
@@ -826,16 +906,22 @@
       });
     });
 
-    document.querySelectorAll(".challenge-card").forEach(card => {
-      card.addEventListener("click", () => {
-        card.classList.toggle("selected");
+    function wireMultiSelect(cardClass, hiddenInputId) {
+      document.querySelectorAll("." + cardClass).forEach(card => {
+        card.addEventListener("click", () => {
+          card.classList.toggle("selected");
 
-        const values = Array.from(document.querySelectorAll(".challenge-card.selected"))
-          .map(item => item.dataset.value);
+          const values = Array.from(document.querySelectorAll("." + cardClass + ".selected"))
+            .map(item => item.dataset.value);
 
-        document.getElementById("selectedChallenges").value = values.join(", ");
+          document.getElementById(hiddenInputId).value = values.join(", ");
+        });
       });
-    });
+    }
+
+    wireMultiSelect("structure-card", "selectedStructureChallenges");
+    wireMultiSelect("visibility-card", "selectedVisibilityChallenges");
+    wireMultiSelect("behavior-card", "selectedBehaviorChallenges");
 
     nextButton.addEventListener("click", () => {
       if (!validateStep(currentStep)) return;
@@ -861,7 +947,7 @@
 
       if (!firstName || !lastName || !email || !source) {
         event.preventDefault();
-        document.getElementById("error-6").style.display = "block";
+        document.getElementById("error-8").style.display = "block";
       }
     });
   </script>
