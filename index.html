@@ -162,7 +162,7 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: .85fr 1.25fr;
+      grid-template-columns: .8fr 1.35fr;
       gap: 48px;
       align-items: center;
     }
@@ -221,14 +221,32 @@
       margin-top: 38px;
     }
 
+    .trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .trust-strip span {
+      white-space: nowrap;
+    }
+
     .hero-image img {
       width: 100%;
-      max-width: 760px;          /* keeps it large */
+      max-width: 860px;
       margin: 0 auto;
       display: block;
-      border-radius: 18px;       /* ✅ restores rounded corners */
-      box-shadow: 0 24px 70px rgba(2,6,23,.20);  /* ✅ restores depth */
+      border-radius: 18px;
+      box-shadow: 0 24px 70px rgba(2,6,23,.20);
       background: #f8fafc;
+    }
+
+    .open-opps-hero img {
+      max-width: 940px;
     }
     
     /* Trade hero image */
@@ -582,22 +600,28 @@
         <div>
           <div class="badge"><span class="dot"></span>v2.0 Now Available</div>
 
-          <h1>The analytical ledger for <span>serious traders.</span></h1>
+          <h1>Track every opportunity. <span>Act with confidence.</span></h1>
 
           <p class="lead">
-            Record, track, and review your transactions with privacy, structure, and complete control.
-            Oppster runs inside your Excel workbook, giving options sellers and active investors a repeatable system for trade execution and review.
+            See your open option positions at a glance with live pricing, priority, health,
+            and clear recommendations — all in one place.
           </p>
 
+          <div class="trust-strip" aria-label="Oppster product highlights">
+            <span>✓ Runs inside Excel</span>
+            <span>✓ No broker connection required</span>
+            <span>✓ Your data stays local</span>
+          </div>
+
           <div class="hero-actions">
-            <a class="button primary" href="#pricing">Start tracking your trades properly →</a>
-            <a class="button secondary" href="#features">View Features</a>
+            <a class="button primary" href="#pricing">Start Free Trial →</a>
+            <a class="button secondary" href="#features">See Features</a>
           </div>
         </div>
 
-        <div class="hero-image">
-          <img src="trade-hero.png" alt="Oppster trade setup and decision framework">
-          <p class="hero-caption">Built-in trade cues, structure, and decision support — directly in your workflow.</p>
+        <div class="hero-image open-opps-hero">
+          <img src="open-opps-hero.png" alt="Oppster Open Opps dashboard with live pricing, priority, health, and recommendations">
+          <p class="hero-caption">Real-time pricing. Clear priorities. Actionable insights. All in your workbook.</p>
         </div>
       </div>
     </section>
@@ -808,4 +832,3 @@
   </footer>
 </body>
 </html>
-
