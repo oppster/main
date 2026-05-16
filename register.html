@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Register for Oppster | Structured Options Management</title>
+  <meta name="description" content="Register your interest in Oppster, a structured options management workbook for disciplined traders." />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="oppster-icon.png">
+
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --ink: #020617;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --dark: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo img {
+      height: 42px;
+      display: block;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      padding: 14px 22px;
+      font-weight: 900;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: 15px;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 10px 24px rgba(249,115,22,.18);
+    }
+
+    .button.primary:hover {
+      background: var(--orange-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: white;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    main {
+      padding: 82px 0 96px;
+    }
+
+    .registration-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffedd5;
+      color: #c2410c;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6vw, 68px);
+      line-height: .98;
+      letter-spacing: -0.06em;
+      margin: 0;
+    }
+
+    h1 span {
+      color: var(--orange);
+    }
+
+    .lead {
+      margin-top: 28px;
+      font-size: 21px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .value-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 34px;
+      color: #334155;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .value-list div::before {
+      content: "✓";
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    .form-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 34px;
+      box-shadow: 0 24px 70px rgba(2,6,23,.10);
+    }
+
+    .form-card h2 {
+      font-size: 32px;
+      margin: 0 0 10px;
+      letter-spacing: -0.04em;
+    }
+
+    .form-card p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 14px;
+      font: inherit;
+      color: var(--ink);
+      background: white;
+      outline: none;
+      transition: .2s ease;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px #ffedd5;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 26px;
+    }
+
+    .privacy-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success-note {
+      display: none;
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid var(--line);
+      padding: 36px 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .registration-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-actions a:first-child {
+        display: none;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        padding-top: 56px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .logo img {
+        height: 36px;
+      }
+
+      .form-card {
+        padding: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo" aria-label="Oppster home">
+        <img src="oppster-logo.png" alt="Oppster Logo">
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html">Home</a>
+        <a class="button primary" href="index.html#pricing">View Pricing</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container registration-grid">
+
+      <section>
+        <div class="badge"><span class="dot"></span>Early Access Registration</div>
+
+        <h1>
+          Start trading with <span>structure.</span>
+        </h1>
+
+        <p class="lead">
+          Share your contact information and we’ll follow up with next steps for Oppster access,
+          workbook availability, and onboarding.
+        </p>
+
+        <div class="value-list">
+          <div>Built for income-focused and active options traders</div>
+          <div>Designed around Open Opps, Position Health, and Trade Cues</div>
+          <div>Your trade data stays local in your workbook</div>
+          <div>No broker connection required</div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <h2>Register your interest</h2>
+        <p>
+          Tell us how to reach you. This form prepares an email so someone from Oppster can follow up.
+        </p>
+
+        <form id="registrationForm">
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" type="text" autocomplete="given-name" required>
+            </div>
+
+            <div class="field">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" type="text" autocomplete="family-name" required>
+            </div>
+
+            <div class="field full">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel">
+            </div>
+
+            <div class="field">
+              <label for="tier">Plan interest</label>
+              <select id="tier" name="tier">
+                <option value="Not sure yet">Not sure yet</option>
+                <option value="Core">Core</option>
+                <option value="Pro">Pro</option>
+                <option value="Premium">Premium</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="source">How did you find Oppster?</label>
+              <select id="source" name="source">
+                <option value="Not specified">Select one</option>
+                <option value="Google search">Google search</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Social media">Social media</option>
+                <option value="Friend or referral">Friend or referral</option>
+                <option value="Trading community">Trading community</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label for="experience">Trading experience</label>
+              <select id="experience" name="experience">
+                <option value="Not specified">Select one</option>
+                <option value="Newer trader">Newer trader</option>
+                <option value="Income-focused trader">Income-focused trader</option>
+                <option value="Active options trader">Active options trader</option>
+                <option value="Advanced multi-strategy trader">Advanced multi-strategy trader</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="accounts">Accounts to track</label>
+              <select id="accounts" name="accounts">
+                <option value="Not specified">Select one</option>
+                <option value="1 account">1 account</option>
+                <option value="2-3 accounts">2-3 accounts</option>
+                <option value="4-5 accounts">4-5 accounts</option>
+                <option value="More than 5 accounts">More than 5 accounts</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="message">Anything you want us to know?</label>
+              <textarea id="message" name="message" placeholder="Example: strategies you trade, account types, or what you want Oppster to help you manage."></textarea>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button class="button primary" type="submit">Submit Registration →</button>
+            <a class="button secondary" href="mailto:support@oppster.com">Email Support</a>
+          </div>
+
+          <div id="successNote" class="success-note">
+            Your email app should open with the registration details. Send the prepared email and someone will be in touch.
+          </div>
+
+          <div class="privacy-note">
+            By submitting, you are choosing to share your contact information so Oppster can follow up.
+            This temporary form uses your email app to send the request.
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      Built for disciplined traders who value structure, clarity, and control.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const tier = document.getElementById("tier").value;
+      const experience = document.getElementById("experience").value;
+      const accounts = document.getElementById("accounts").value;
+      const message = document.getElementById("message").value.trim();
+      const source = document.getElementById("source").value;
+
+      const subject = encodeURIComponent("New Oppster Registration Request");
+      const body = encodeURIComponent(
+        "New Oppster registration request:\n\n" +
+        "Name: " + firstName + " " + lastName + "\n" +
+        "Email: " + email + "\n" +
+        "Phone: " + (phone || "Not provided") + "\n" +
+        "Plan Interest: " + tier + "\n" +
+        "Trading Experience: " + experience + "\n" +
+        "Accounts to Track: " + accounts + "\n\n" +
+        "How They Found Oppster: " + source + "\n" +
+        "Message:\n" + (message || "Not provided")
+      );
+
+      window.location.href = "mailto:support@oppster.com?subject=" + subject + "&body=" + body;
+      document.getElementById("successNote").style.display = "block";
+    });
+  </script>
+</body>
+</html>
