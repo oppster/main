@@ -272,6 +272,48 @@
       margin-top: 26px;
     }
 
+    .topic-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    
+    .topic-grid label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    
+      padding: 18px 20px;
+    
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    
+      background: #f8fafc;
+    
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+    
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    
+    .topic-grid label:hover {
+      border-color: var(--orange);
+      background: #fff7ed;
+      transform: translateY(-1px);
+    }
+    
+    .topic-grid input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--orange);
+      flex-shrink: 0;
+    }
+    
     .privacy-note {
       margin-top: 18px;
       color: var(--muted);
