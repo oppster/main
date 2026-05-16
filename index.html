@@ -248,7 +248,21 @@
     }
 
     .hero-caption {
-      display: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .caption-icon {
+      color: #f97316;
+      font-size: 18px;
+      line-height: 1;
     }
 
     /* -------------------------------------------------- */
@@ -354,9 +368,14 @@
           </div>
         </div>
 
-        <div class="hero-image open-opps-hero">
-          <img src="open-opps-hero.png" alt="Oppster Open Opps dashboard">
-        </div>
+       <div class="hero-image open-opps-hero">
+        <img src="open-opps-hero.png" alt="Oppster Open Opps dashboard">
+      
+        <p class="hero-caption">
+          <span class="caption-icon">◌</span>
+          Real-time pricing. Clear priorities. Actionable insights. All in your workbook.
+        </p>
+      </div>
 
       </div>
     </section>
