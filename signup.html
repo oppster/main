@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Sign Up for Oppster | Structured Options Management</title>
+  <meta name="description" content="Sign up for Oppster, a structured options management workbook for disciplined traders." />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="oppster-icon.png">
+
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --ink: #020617;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --dark: #0f172a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo img {
+      height: 42px;
+      display: block;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      padding: 14px 22px;
+      font-weight: 900;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: 15px;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 10px 24px rgba(249,115,22,.18);
+    }
+
+    .button.primary:hover {
+      background: var(--orange-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: white;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .button.secondary:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    main {
+      padding: 82px 0 96px;
+    }
+
+    .signup-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffedd5;
+      color: #c2410c;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6vw, 68px);
+      line-height: .98;
+      letter-spacing: -0.06em;
+      margin: 0;
+    }
+
+    h1 span {
+      color: var(--orange);
+    }
+
+    .lead {
+      margin-top: 28px;
+      font-size: 21px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .value-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 34px;
+      color: #334155;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .value-list div::before {
+      content: "✓";
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    .form-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 34px;
+      box-shadow: 0 24px 70px rgba(2,6,23,.10);
+    }
+
+    .form-card h2 {
+      font-size: 32px;
+      margin: 0 0 10px;
+      letter-spacing: -0.04em;
+    }
+
+    .form-card p {
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 28px;
+    }
+
+    .choice-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .choice-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      background: #f8fafc;
+    }
+
+    .choice-card h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .choice-card p {
+      margin: 10px 0 18px;
+      font-size: 15px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 14px;
+      font: inherit;
+      color: var(--ink);
+      background: white;
+      outline: none;
+      transition: .2s ease;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px #ffedd5;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 26px;
+    }
+
+    .privacy-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid var(--line);
+      padding: 36px 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .signup-grid,
+      .form-grid,
+      .choice-row {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-actions a:first-child {
+        display: none;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        padding-top: 56px;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .logo img {
+        height: 36px;
+      }
+
+      .form-card {
+        padding: 26px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo" aria-label="Oppster home">
+        <img src="oppster-logo.png" alt="Oppster Logo">
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html">Home</a>
+        <a class="button primary" href="index.html#pricing">View Pricing</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container signup-grid">
+
+      <section>
+        <div class="badge"><span class="dot"></span>Early Access</div>
+
+        <h1>
+          Choose your <span>next step.</span>
+        </h1>
+
+        <p class="lead">
+          Book a quick intro call or join early access. Either way, we’ll help you understand how Oppster can support your trading workflow.
+        </p>
+
+        <div class="value-list">
+          <div>Built for income-focused and active options traders</div>
+          <div>Designed around Open Opps, Position Health, and Trade Cues</div>
+          <div>Your trade data stays local in your workbook</div>
+          <div>No broker connection required</div>
+        </div>
+      </section>
+
+      <section class="form-card">
+        <h2>Choose your next step</h2>
+        <p>
+          Schedule time to talk through Oppster, or share your information and we’ll follow up.
+        </p>
+
+        <div class="choice-row">
+          <div class="choice-card">
+            <h3>Book Intro Call</h3>
+            <p>Schedule a quick conversation to discuss workflows, supported strategies, and whether Oppster fits your trading style.</p>
+            <a class="button primary" href="YOUR_CALENDLY_LINK" target="_blank" rel="noopener">Book Intro Call →</a>
+          </div>
+
+          <div class="choice-card">
+            <h3>Join Early Access</h3>
+            <p>Prefer email? Share your information and we’ll follow up with workbook availability and next steps.</p>
+            <a class="button secondary" href="#early-access-form">Join Early Access</a>
+          </div>
+        </div>
+
+        <form id="early-access-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <input type="hidden" name="_redirect" value="https://oppster.com/thank-you.html">
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="First Name" type="text" autocomplete="given-name" required>
+            </div>
+
+            <div class="field">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="Last Name" type="text" autocomplete="family-name" required>
+            </div>
+
+            <div class="field full">
+              <label for="email">Email address</label>
+              <input id="email" name="Email" type="email" autocomplete="email" required>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone number</label>
+              <input id="phone" name="Phone" type="tel" autocomplete="tel">
+            </div>
+
+            <div class="field">
+              <label for="tier">Plan interest</label>
+              <select id="tier" name="Plan Interest" required>
+                <option value="">Select a plan</option>
+                <option value="Core">Core</option>
+                <option value="Pro">Pro</option>
+                <option value="Premium">Premium</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="experience">Trading experience</label>
+              <select id="experience" name="Trading Experience">
+                <option value="Not specified">Select one</option>
+                <option value="Newer trader">Newer trader</option>
+                <option value="Income-focused trader">Income-focused trader</option>
+                <option value="Active options trader">Active options trader</option>
+                <option value="Advanced multi-strategy trader">Advanced multi-strategy trader</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="accounts">Accounts to track</label>
+              <select id="accounts" name="Accounts to Track">
+                <option value="Not specified">Select one</option>
+                <option value="1 account">1 account</option>
+                <option value="2-3 accounts">2-3 accounts</option>
+                <option value="4-5 accounts">4-5 accounts</option>
+                <option value="More than 5 accounts">More than 5 accounts</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="source">How did you find Oppster?</label>
+              <select id="source" name="How They Found Oppster">
+                <option value="Not specified">Select one</option>
+                <option value="Google search">Google search</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Social media">Social media</option>
+                <option value="Friend or referral">Friend or referral</option>
+                <option value="Trading community">Trading community</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label>What challenges are you trying to improve?</label>
+            
+              <div class="topic-grid">
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Trading without a clear plan">
+                  Trading without a clear plan
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Managing trades emotionally">
+                  Managing trades emotionally
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Revenge trading">
+                  Revenge trading
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Knowing when a position needs attention">
+                  Knowing when a position needs attention
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Understanding profit or loss outcomes before closing">
+                  Understanding profit or loss outcomes before closing
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Tracking multiple accounts consistently">
+                  Tracking multiple accounts consistently
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Reviewing trade performance over time">
+                  Reviewing trade performance over time
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Managing rolls and adjustments">
+                  Managing rolls and adjustments
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Staying disciplined with position management">
+                  Staying disciplined with position management
+                </label>
+            
+                <label>
+                  <input type="checkbox" name="Challenges" value="Creating more structure and consistency">
+                  Creating more structure and consistency
+                </label>
+            
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button class="button primary" type="submit">Let’s Go →</button>
+            <a class="button secondary" href="index.html">Back to Home</a>
+          </div>
+
+          <div class="privacy-note">
+            By submitting, you are choosing to share your contact information so Oppster can follow up.
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      Built for disciplined traders who value structure, clarity, and control.
+    </div>
+  </footer>
+</body>
+</html>
