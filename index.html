@@ -22,7 +22,6 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Oppster | Excel Trading Ledger for Serious Traders">
   <meta name="twitter:description" content="Record, track, and review your trades with privacy, structure, and complete control.">
-  <!--meta name="twitter:image" content="https://oppster.com/oppster-og.png"-->
   <meta name="twitter:image" content="https://oppster.com/open-opps-hero.png">
 
   <style>
@@ -82,15 +81,8 @@
       gap: 24px;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      flex: 0 0 auto;
-    }
-
     .logo img {
       height: 42px;
-      display: block;
     }
 
     .nav-links {
@@ -156,14 +148,18 @@
       text-align: center;
     }
 
+    /* -------------------------------------------------- */
+    /* UPDATED HERO STYLES                                */
+    /* -------------------------------------------------- */
+
     .hero {
       padding: 96px 0 104px;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: .8fr 1.35fr;
-      gap: 48px;
+      grid-template-columns: .75fr 1.45fr;
+      gap: 64px;
       align-items: center;
     }
 
@@ -199,13 +195,6 @@
       color: var(--orange);
     }
 
-    h2 {
-      font-size: clamp(38px, 5vw, 54px);
-      line-height: 1.05;
-      letter-spacing: -0.06em;
-      margin: 0;
-    }
-
     .lead {
       margin-top: 28px;
       font-size: 21px;
@@ -235,317 +224,53 @@
       white-space: nowrap;
     }
 
+    .hero-image {
+      background: transparent;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+    }
+
     .hero-image img {
       width: 100%;
-      max-width: 860px;
+      max-width: 1100px;
       margin: 0 auto;
       display: block;
       border-radius: 18px;
-      box-shadow: 0 24px 70px rgba(2,6,23,.20);
-      background: #f8fafc;
+      box-shadow: 0 24px 70px rgba(2,6,23,.18);
+      background: transparent;
     }
 
     .open-opps-hero img {
-      max-width: 940px;
+      max-width: 1100px;
     }
-    
-    /* Trade hero image */
-    .product-image img {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      display: block;
-      border-radius: 18px;
-      box-shadow: 0 24px 70px rgba(2,6,23,.20);
-      background: #f8fafc;
-    }
-
-    .manage-image img {
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
-      display: block;
-    }    
 
     .hero-caption {
-      margin-top: 18px;
-      color: var(--muted);
-      font-size: 15px;
-      text-align: center;
-    }
-
-    .section-lead {
-      max-width: 820px;
-      margin: 22px auto 0;
-      font-size: 21px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-      margin-top: 56px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 34px;
-      box-shadow: 0 2px 10px rgba(2,6,23,.04);
-    }
-
-    .icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 14px;
-      background: #ffedd5;
-      color: var(--orange);
-      display: grid;
-      place-items: center;
-      font-size: 28px;
-      margin-bottom: 22px;
-    }
-
-    .card h3 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .card p {
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 17px;
-      margin-bottom: 0;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: .95fr 1.05fr;
-      gap: 64px;
-      align-items: center;
-    }
-
-    .feature-list {
-      display: grid;
-      gap: 28px;
-      margin-top: 42px;
-    }
-
-    .feature-item {
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-    }
-
-    .feature-icon {
-      flex: 0 0 48px;
-      height: 48px;
-      border-radius: 999px;
-      background: #ffedd5;
-      color: var(--orange);
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-    }
-
-    .feature-item h3 {
-      margin: 0;
-      font-size: 22px;
-    }
-
-    .feature-item p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 17px;
-    }
-
-    .product-image {
-      margin-top: 44px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .product-image.narrow img {
-      max-width: 920px;
-    }
-
-    .pricing {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-      margin-top: 56px;
-    }
-
-    .plan {
-      position: relative;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 34px;
-      box-shadow: 0 2px 10px rgba(2,6,23,.04);
-    }
-
-    .plan.popular {
-      border-color: var(--orange);
-      box-shadow: 0 0 0 4px #ffedd5;
-    }
-
-    .popular-label {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: var(--orange);
-      color: white;
-      border-radius: 0 22px 0 14px;
-      padding: 9px 15px;
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .plan h3 {
-      font-size: 32px;
-      margin: 0;
-    }
-
-    .plan-desc {
-      color: var(--muted);
-      min-height: 54px;
-      line-height: 1.5;
-    }
-
-    .price {
-      margin: 24px 0;
-    }
-
-    .price strong {
-      font-size: 52px;
-    }
-
-    .price span {
-      color: var(--muted);
-      font-size: 22px;
-    }
-
-    .features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 28px;
-      display: grid;
-      gap: 14px;
-      color: #334155;
-    }
-
-    .features li::before {
-      content: "✓";
-      color: var(--orange);
-      font-weight: 900;
-      margin-right: 10px;
-    }
-
-    .plan .button {
-      width: 100%;
-    }
-
-    .faq {
-      max-width: 860px;
-      margin: 54px auto 0;
-    }
-
-    details {
-      border-bottom: 1px solid var(--line);
-      padding: 22px 0;
-    }
-
-    summary {
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: 900;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    summary::-webkit-details-marker {
       display: none;
     }
 
-    summary::after {
-      content: "+";
-      color: var(--muted);
-    }
+    /* -------------------------------------------------- */
 
-    details[open] summary::after {
-      content: "−";
-    }
-
-    details p {
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.6;
-      max-width: 760px;
-    }
-
-    .cta {
-      background: var(--dark);
-      color: white;
-      text-align: center;
-    }
-
-    .cta p {
-      color: #cbd5e1;
-    }
-
-    .note {
-      margin-top: 18px;
-      color: #94a3b8;
-    }
-
-    footer {
-      background: white;
-      padding: 56px 0;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
-      gap: 48px;
-    }
-
-    footer p,
-    footer a {
-      color: var(--muted);
-    }
-
-    footer a {
+    .hero-image img {
+      width: 100%;
       display: block;
-      margin-top: 12px;
     }
 
     @media (max-width: 900px) {
-      .hero-grid,
-      .feature-grid,
-      .cards,
-      .pricing,
-      .footer-grid {
+      .hero-grid {
         grid-template-columns: 1fr;
       }
-    
+
       .nav-links {
         display: none;
       }
-    
+
       h1 {
         font-size: 52px;
       }
-    
+
       .hero-image {
-        margin-top: 24px;   /* ✅ spacing instead of reordering */
+        margin-top: 24px;
       }
     }
 
@@ -594,20 +319,28 @@
   </header>
 
   <main>
+
     <!-- HERO -->
     <section class="hero">
       <div class="container hero-grid">
-        <div>
-          <div class="badge"><span class="dot"></span>v2.0 Now Available</div>
 
-          <h1>Track every opportunity. <span>Act with confidence.</span></h1>
+        <div>
+          <div class="badge">
+            <span class="dot"></span>
+            v2.0 Now Available
+          </div>
+
+          <h1>
+            Track every opportunity.
+            <span>Act with confidence.</span>
+          </h1>
 
           <p class="lead">
-            See your open option positions at a glance with live pricing, priority, health,
-            and clear recommendations — all in one place.
+            See your open option positions at a glance with live pricing,
+            priority, health, and clear recommendations — all in one place.
           </p>
 
-          <div class="trust-strip" aria-label="Oppster product highlights">
+          <div class="trust-strip">
             <span>✓ Runs inside Excel</span>
             <span>✓ No broker connection required</span>
             <span>✓ Your data stays local</span>
@@ -620,9 +353,9 @@
         </div>
 
         <div class="hero-image open-opps-hero">
-          <img src="open-opps-hero.png" alt="Oppster Open Opps dashboard with live pricing, priority, health, and recommendations">
-          <p class="hero-caption">Real-time pricing. Clear priorities. Actionable insights. All in your workbook.</p>
+          <img src="open-opps-hero.png" alt="Oppster Open Opps dashboard">
         </div>
+
       </div>
     </section>
 
