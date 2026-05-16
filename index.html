@@ -225,17 +225,20 @@
     }
 
     .hero-image {
-      background: transparent;
-      padding: 0;
+      background: transparent; /* ✅ removes white square */
+      box-shadow: none;        /* ✅ removes outer glow */
       border: none;
+      padding: 0;
+    }
+    
+    .hero-image img {
+      background: transparent; /* ✅ ensures image itself has no white fill */
       box-shadow: none;
+      border: none;
+      display: block;
+      margin: 0 auto;
     }
 
-    .hero-image img {
-      background: transparent; /* removes white background */
-      box-shadow: none;        /* removes outer glow */
-      border: none;            /* removes border edge */
-    }
 
     .open-opps-hero img {
       max-width: 1100px;
