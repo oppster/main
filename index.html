@@ -272,6 +272,85 @@
       width: 100%;
       display: block;
     }
+    
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 56px;
+    }
+    
+    .plan {
+      position: relative;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 34px;
+      box-shadow: 0 2px 10px rgba(2,6,23,.04);
+    }
+    
+    .plan.popular {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px #ffedd5;
+    }
+    
+    .popular-label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--orange);
+      color: white;
+      border-radius: 0 22px 0 14px;
+      padding: 9px 15px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    
+    .plan h3 {
+      font-size: 32px;
+      margin: 0;
+    }
+    
+    .plan-desc {
+      color: var(--muted);
+      min-height: 54px;
+      line-height: 1.5;
+    }
+    
+    .price {
+      margin: 24px 0;
+    }
+    
+    .price strong {
+      font-size: 52px;
+    }
+    
+    .price span {
+      color: var(--muted);
+      font-size: 22px;
+    }
+    
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      display: grid;
+      gap: 14px;
+      color: #334155;
+    }
+    
+    .features li::before {
+      content: "✓";
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+    
+    .plan .button {
+      width: 100%;
+    }
+    
 
     @media (max-width: 900px) {
       .hero-grid {
