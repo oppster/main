@@ -279,13 +279,8 @@
       margin-top: 14px;
     }
     
-    .topic-grid label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    
-      padding: 18px 20px;
+    .topic-card {
+      padding: 18px 22px;
     
       border: 1px solid var(--line);
       border-radius: 16px;
@@ -301,17 +296,16 @@
       transition: .18s ease;
     }
     
-    .topic-grid label:hover {
+    .topic-card:hover {
       border-color: var(--orange);
       background: #fff7ed;
       transform: translateY(-1px);
     }
     
-    .topic-grid input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      accent-color: var(--orange);
-      flex-shrink: 0;
+    .topic-card.selected {
+      border: 2px solid var(--orange);
+      background: #fff7ed;
+      box-shadow: 0 0 0 3px rgba(249,115,22,.12);
     }
     
     .privacy-note {
@@ -496,57 +490,47 @@
               <label>What challenges are you trying to improve?</label>
             
               <div class="topic-grid">
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Trading without a clear plan">
+  
+                <div class="topic-card">
                   Trading without a clear plan
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Managing trades emotionally">
+                </div>
+              
+                <div class="topic-card">
                   Managing trades emotionally
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Revenge trading">
+                </div>
+              
+                <div class="topic-card">
                   Revenge trading
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Knowing when a position needs attention">
+                </div>
+              
+                <div class="topic-card">
                   Knowing when a position needs attention
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Understanding profit or loss outcomes before closing">
-                  Understanding profit or loss outcomes before closing
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Tracking multiple accounts consistently">
+                </div>
+              
+                <div class="topic-card">
+                  Understanding outcomes before closing trades
+                </div>
+              
+                <div class="topic-card">
                   Tracking multiple accounts consistently
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Reviewing trade performance over time">
+                </div>
+              
+                <div class="topic-card">
                   Reviewing trade performance over time
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Managing rolls and adjustments">
+                </div>
+              
+                <div class="topic-card">
                   Managing rolls and adjustments
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Staying disciplined with position management">
+                </div>
+              
+                <div class="topic-card">
                   Staying disciplined with position management
-                </label>
-            
-                <label>
-                  <input type="checkbox" name="Challenges" value="Creating more structure and consistency">
+                </div>
+              
+                <div class="topic-card">
                   Creating more structure and consistency
-                </label>
-            
+                </div>
+              
               </div>
             </div>
 
@@ -571,5 +555,13 @@
       Built for disciplined traders who value structure, clarity, and control.
     </div>
   </footer>
+
+  <script>
+    document.querySelectorAll(".topic-card").forEach(card => {
+      card.addEventListener("click", () => {
+        card.classList.toggle("selected");
+      });
+    });
+  </script>
 </body>
 </html>
