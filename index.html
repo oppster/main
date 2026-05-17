@@ -771,9 +771,13 @@
             <li>Structured trade review workflow</li>
           </ul>
     
-          <a class="button secondary" href="checkout-core.html">
-            Get Core
-          </a>
+          <form action="/api/create-checkout-session" method="POST">
+            <input type="hidden" name="lookup_key" value="oppster_core_monthly" />
+          
+            <button class="button secondary" type="submit">
+              Get Core
+            </button>
+          </form>
     
         </div>
     
@@ -803,9 +807,13 @@
             <li>Advanced Open Opps workflow</li>
           </ul>
     
-          <a class="button primary" href="checkout-pro.html">
-            Start Pro
-          </a>
+          <form action="/api/create-checkout-session" method="POST">
+            <input type="hidden" name="lookup_key" value="oppster_pro_monthly" />
+          
+            <button class="button primary" type="submit">
+              Start Pro
+            </button>
+          </form>
     
         </div>
     
@@ -831,9 +839,13 @@
             <li>Built for advanced multi-strategy workflows</li>
           </ul>
     
-          <a class="button secondary" href="checkout-premium.html">
-            Get Premium
-          </a>
+          <form action="/api/create-checkout-session" method="POST">
+            <input type="hidden" name="lookup_key" value="oppster_premium_monthly" />
+          
+            <button class="button secondary" type="submit">
+              Get Premium
+            </button>
+          </form>
     
         </div>
     
