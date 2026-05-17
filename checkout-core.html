@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .checkout-page {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #fff8f0;
+      color: #0f172a;
+    }
+    
+    .checkout-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+    
+    .checkout-card {
+      width: 100%;
+      max-width: 460px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+    }
+    
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #f97316;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+    
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+    }
+    
+    .plan-label {
+      color: #f97316;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    
+    .checkout-card h1 {
+      font-size: 34px;
+      line-height: 1.1;
+      margin: 0 0 16px;
+    }
+    
+    .checkout-subtext {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #64748b;
+      margin-bottom: 28px;
+    }
+    
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 28px;
+    }
+    
+    .price {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -2px;
+    }
+    
+    .period {
+      font-size: 22px;
+      color: #64748b;
+      margin-left: 4px;
+    }
+    
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 32px;
+    }
+    
+    .feature-list li {
+      margin-bottom: 14px;
+      font-size: 16px;
+    }
+    
+    .feature-list li::before {
+      content: "✓";
+      color: #f97316;
+      font-weight: 800;
+      margin-right: 10px;
+    }
+    
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      background: #f97316;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px 20px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background: #ea580c;
+    }
+    
+    .secure-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 18px;
+    }
+
+    
+  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscribe to Oppster Core</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="checkout-page">
+    <main class="checkout-wrap">
+      <section class="checkout-card">
+        <div class="brand-row">
+          <div class="brand-mark">O</div>
+          <span class="brand-name">Oppster</span>
+        </div>
+
+        <div class="plan-label">Core Plan</div>
+
+        <h1>Start tracking with structure.</h1>
+
+        <p class="checkout-subtext">
+          Oppster Core helps retail investors track and manage trading activity with a clear,
+          consistent workflow.
+        </p>
+
+        <div class="price-row">
+          <span class="price">$12</span>
+          <span class="period">/mo</span>
+        </div>
+
+        <ul class="feature-list">
+          <li>Single-account tracking</li>
+          <li>Core income and directional strategies</li>
+          <li>Trade Cues and Trade Gems</li>
+          <li>Open Opps prioritization workflow</li>
+          <li>Structured trade review workflow</li>
+        </ul>
+
+        <form action="/create-checkout-session" method="POST">
+          <input type="hidden" name="lookup_key" value="oppster_core_monthly" />
+          <button id="checkout-and-portal-button" type="submit">
+            Continue to Secure Checkout
+          </button>
+        </form>
+
+        <p class="secure-note">Secure checkout powered by Stripe.</p>
+      </section>
+    </main>
+  </body>
+</html>
