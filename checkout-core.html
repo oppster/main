@@ -18,7 +18,7 @@
     
     .checkout-card {
       width: 100%;
-      max-width: 460px;
+      max-width: 430px;
       background: #ffffff;
       border: 1px solid #e5e7eb;
       border-radius: 28px;
@@ -115,10 +115,20 @@
       font-weight: 800;
       padding: 16px 20px;
       cursor: pointer;
+
+      transition: all 0.2s ease;
     }
     
     button:hover {
       background: #ea580c;
+      transform: translateY(-1px);
+    }
+
+    .cancel-note {
+      text-align: center;
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 10px;
     }
     
     .secure-note {
@@ -174,6 +184,7 @@
           </button>
         </form>
 
+        <p class="cancel-note">Cancel anytime.</p>
         <p class="secure-note">Secure checkout powered by Stripe.</p>
       </section>
     </main>
