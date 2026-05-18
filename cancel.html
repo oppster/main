@@ -24,7 +24,7 @@
       background: white;
       border: 1px solid #e5e7eb;
       border-radius: 28px;
-      padding: 48px;
+      padding: 56px;
       max-width: 560px;
       width: 100%;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
@@ -43,8 +43,9 @@
     }
     
     .checkout-card h1 {
-      font-size: 52px;
-      line-height: 1.05;
+      font-size: 72px;
+      line-height: .95;
+      letter-spacing: -2px;
       margin-bottom: 20px;
     }
     
@@ -52,7 +53,13 @@
       color: #64748b;
       font-size: 18px;
       line-height: 1.7;
-      margin-bottom: 28px;
+      margin-bottom: 36px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: #ececec;
+      margin: 34px 0;
     }
     
     .feature-list {
@@ -66,6 +73,26 @@
     .feature-list li {
       margin-bottom: 14px;
     }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    
+    .info-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff7ed;
+      color: #f97316;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
     
     .button {
       display: flex;
@@ -75,7 +102,7 @@
       border-radius: 14px;
       font-weight: 700;
       height: 56px;
-      transition: .2s ease;
+      transition: all .22s ease;
     }
     
     .button.primary {
@@ -84,7 +111,7 @@
     }
     
     .button.primary:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
       box-shadow: 0 10px 20px rgba(249,115,22,.22);
     }
     
@@ -97,6 +124,37 @@
     .button.secondary:hover {
       border-color: #f97316;
     }
+
+    .bottom-banner {
+      margin-top: 34px;
+      background: #fafafa;
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    
+    .bottom-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: #fff7ed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+    
+    .bottom-title {
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    
+    .bottom-subtitle {
+      color: #64748b;
+    }
     
     .secure-note {
       text-align: center;
@@ -105,6 +163,7 @@
       margin-top: 26px;
     }
     
+
   </style>
 </head>
 
@@ -126,13 +185,18 @@
           Your checkout was canceled and no payment was processed.
           You can return anytime to continue exploring Oppster.
         </p>
-  
+
+        <div class="section-divider"></div>
+        
         <div class="feature-list">
   
           <p><strong>Still comparing options?</strong></p>
   
           <ul>
-            <li>Review pricing and plan differences</li>
+            <div class="info-row">
+              <div class="info-icon">✓</div>
+              <div>Review pricing and plan differences</div>
+            </div>
             <li>Learn how Oppster fits your workflow</li>
             <li>Schedule a quick intro call if you have questions</li>
           </ul>
@@ -152,9 +216,23 @@
   
         </div>
   
-        <p class="secure-note">
-          Built for traders who want clarity and control.
-        </p>
+        <div class="bottom-banner">
+
+          <div class="bottom-icon">
+            🛡️
+          </div>
+        
+          <div>
+            <div class="bottom-title">
+              Built for traders who want clarity and control.
+            </div>
+        
+            <div class="bottom-subtitle">
+              Organize. Review. Improve.
+            </div>
+          </div>
+        
+        </div>
   
       </div>
   
