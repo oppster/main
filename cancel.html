@@ -38,10 +38,16 @@
     }
 
     .plan-label {
+      display: inline-flex;
+      align-items: center;
+      background: #fff7ed;
       color: #f97316;
+      padding: 10px 16px;
+      border-radius: 999px;
       font-weight: 800;
-      font-size: 18px;
-      margin-bottom: 16px;
+      font-size: 14px;
+      margin-bottom: 22px;
+      border: 1px solid #fed7aa;
     }
 
     .checkout-card h1 {
@@ -124,9 +130,10 @@
     }
 
     .button {
+      position: relative;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       text-decoration: none;
       border-radius: 14px;
       font-weight: 800;
@@ -167,7 +174,9 @@
     }
 
     .button-arrow {
-      font-size: 24px;
+      position: absolute;
+      right: 22px;
+      font-size: 22px;
     }
 
     .bottom-banner {
@@ -184,10 +193,19 @@
       width: 54px;
       height: 54px;
       border-radius: 16px;
-      background: #fff7ed;
+    
+      background: linear-gradient(
+        180deg,
+        #fff7ed 0%,
+        #fffbf5 100%
+      );
+    
+      border: 1px solid #fde7cf;
+    
       display: flex;
       align-items: center;
       justify-content: center;
+    
       font-size: 26px;
       flex-shrink: 0;
     }
@@ -216,9 +234,13 @@
       }
 
       .compare-icon-box {
-        width: 88px;
-        height: 88px;
-        font-size: 40px;
+        background: linear-gradient(
+          180deg,
+          #fff7ed 0%,
+          #fffbf5 100%
+        );
+      
+        border: 1px solid #fde7cf;
       }
 
       .oppster-logo {
@@ -276,7 +298,7 @@
           <span class="button-arrow">→</span>
         </a>
 
-        <a href="https://calendly.com/YOUR-LINK" class="button secondary">
+        <a href="https://calendly.com/lennicodemus/30min" target="_blank" class="button secondary">
           <span class="button-left">
             <span class="button-icon">📅</span>
             <span>Schedule Intro Call</span>
