@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout canceled</title>
+
   <style>
     .checkout-page {
       background: #f8f5ef;
@@ -11,7 +12,7 @@
       margin: 0;
       color: #0f172a;
     }
-    
+
     .checkout-wrap {
       min-height: 100vh;
       display: flex;
@@ -19,22 +20,23 @@
       justify-content: center;
       padding: 40px 20px;
     }
-    
+
     .checkout-card {
       background: #fcfcfc;
       border: 1px solid #e5e7eb;
       border-radius: 28px;
       padding: 56px;
-      max-width: 560px;
+      max-width: 680px;
       width: 100%;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
     }
-    
+
     .oppster-logo {
       width: 180px;
       margin-bottom: 24px;
     }
-    
+
     .plan-label {
       color: #f97316;
       font-weight: 800;
@@ -42,17 +44,13 @@
       margin-bottom: 16px;
     }
 
-    .checkout-card {
-      max-width: 680px;
-    }
-    
     .checkout-card h1 {
-      font-size: 72px;
+      font-size: 64px;
       line-height: .95;
       letter-spacing: -2px;
-      margin-bottom: 20px;
+      margin: 0 0 22px;
     }
-    
+
     .checkout-subtext {
       color: #64748b;
       font-size: 18px;
@@ -65,14 +63,14 @@
       background: #ececec;
       margin: 34px 0;
     }
-    
+
     .compare-section {
       display: flex;
       gap: 28px;
       align-items: flex-start;
-      margin-top: 12px;
+      margin-bottom: 34px;
     }
-    
+
     .compare-icon-box {
       width: 120px;
       height: 120px;
@@ -84,36 +82,25 @@
       font-size: 54px;
       flex-shrink: 0;
     }
-    
+
     .compare-content h3 {
-      margin-top: 0;
-      font-size: 38px;
-      margin-bottom: 22px;
-    }
-    
-    .feature-list {
-      margin-bottom: 32px;
-    }
-    
-    .feature-list ul {
-      padding-left: 22px;
-    }
-    
-    .feature-list li {
-      margin-bottom: 14px;
+      margin: 0 0 22px;
+      font-size: 32px;
+      line-height: 1.1;
     }
 
     .info-list {
       margin-top: 16px;
     }
-    
+
     .info-row {
       display: flex;
       align-items: center;
       gap: 14px;
       margin-bottom: 18px;
+      font-size: 16px;
     }
-    
+
     .info-icon {
       width: 34px;
       height: 34px;
@@ -128,58 +115,59 @@
       font-size: 16px;
       flex-shrink: 0;
     }
-    
-    .button {
+
+    .button-stack {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: 700;
-      height: 56px;
-      transition: all .22s ease;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 30px;
     }
 
     .button {
-  justify-content: space-between;
-  padding: 0 22px;
-}
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 800;
+      height: 58px;
+      padding: 0 22px;
+      transition: all .22s ease;
+    }
 
-.button-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.button-arrow {
-  font-size: 24px;
-}
     .button.primary {
       background: #f97316;
       color: white;
     }
-    
+
     .button.primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 20px rgba(249,115,22,.22);
     }
-    
+
     .button.secondary {
       border: 1px solid #dbe1ea;
       color: #0f172a;
       background: #fcfcfc;
     }
 
-    button.secondary {
+    .button.secondary:hover {
+      border-color: #f97316;
+      transform: translateY(-2px);
+    }
+
+    .button-left {
+      display: flex;
+      align-items: center;
       gap: 12px;
     }
-    
+
     .button-icon {
       font-size: 20px;
     }
-    
-    .button.secondary:hover {
-      border-color: #f97316;
+
+    .button-arrow {
+      font-size: 24px;
     }
 
     .bottom-banner {
@@ -191,7 +179,7 @@
       align-items: center;
       gap: 18px;
     }
-    
+
     .bottom-icon {
       width: 54px;
       height: 54px;
@@ -201,135 +189,117 @@
       align-items: center;
       justify-content: center;
       font-size: 26px;
+      flex-shrink: 0;
     }
-    
+
     .bottom-title {
-      font-weight: 700;
+      font-weight: 800;
       color: #0f172a;
       margin-bottom: 6px;
     }
-    
+
     .bottom-subtitle {
       color: #64748b;
     }
-    
-    .secure-note {
-      text-align: center;
-      color: #64748b;
-      font-size: 14px;
-      margin-top: 26px;
-    }
-    
 
+    @media (max-width: 700px) {
+      .checkout-card {
+        padding: 36px 24px;
+      }
+
+      .checkout-card h1 {
+        font-size: 46px;
+      }
+
+      .compare-section {
+        flex-direction: column;
+      }
+
+      .compare-icon-box {
+        width: 88px;
+        height: 88px;
+        font-size: 40px;
+      }
+
+      .oppster-logo {
+        width: 150px;
+      }
+    }
   </style>
 </head>
 
 <body class="checkout-page">
+  <section class="checkout-wrap">
+    <div class="checkout-card">
 
-    <section class="checkout-wrap">
-  
-      <div class="checkout-card">
-  
-        <img src="oppster-logo.png" class="oppster-logo" alt="Oppster">
-  
-        <div class="plan-label">
-          Checkout canceled
-        </div>
-  
-        <h1>Continue when you're ready.</h1>
-  
-        <p class="checkout-subtext">
-          Your checkout was canceled and no payment was processed.
-          You can return anytime to continue exploring Oppster.
-        </p>
+      <img src="oppster-logo.png" class="oppster-logo" alt="Oppster">
 
-        <div class="section-divider"></div>
-        
-          <div class="compare-section">
-  
-          <div class="compare-icon-box">
-            📋
-          </div>
-        
-          <div class="compare-content">
-        
-            <h3>Still comparing options?</h3>
-        
-            <div class="info-list">
-              <div class="info-row">
-                <div class="info-icon">✓</div>
-                <div>Review pricing and plan differences</div>
-              </div>
-            
-              <div class="info-row">
-                <div class="info-icon">✓</div>
-                <div>Learn how Oppster fits your workflow</div>
-              </div>
-            
-              <div class="info-row">
-                <div class="info-icon">✓</div>
-                <div>Schedule a quick intro call if you have questions</div>
-              </div>
-            </div>
-        
-          </div>
-        
-        </div>
-        
-   
-        
-        
-        
-        
-        
-        
-        <div class="feature-list">
-  
-          <p><strong>Still comparing options?</strong></p>
-  
-          
-          </div>
-  
-        </div>
-  
-        <div style="display:flex; flex-direction:column; gap:14px; margin-top:30px;">
-  
-          <a href="index.html#pricing" class="button primary">
-            Return to Pricing
-          </a>
-  
-          <a href="https://calendly.com/YOUR-LINK" class="button secondary">
-            <div class="button-left">
-              <span class="button-icon">📅</span>
-              Schedule Intro Call
-            </div>
-            
-            <span class="button-arrow">→</span>
-          </a>
-  
-        </div>
-  
-        <div class="bottom-banner">
+      <div class="plan-label">Checkout canceled</div>
 
-          <div class="bottom-icon">
-            🛡️
-          </div>
-        
-          <div>
-            <div class="bottom-title">
-              Built for traders who want clarity and control.
+      <h1>Continue when you're ready.</h1>
+
+      <p class="checkout-subtext">
+        Your checkout was canceled and no payment was processed.
+        You can return anytime to continue exploring Oppster.
+      </p>
+
+      <div class="section-divider"></div>
+
+      <div class="compare-section">
+        <div class="compare-icon-box">📋</div>
+
+        <div class="compare-content">
+          <h3>Still comparing options?</h3>
+
+          <div class="info-list">
+            <div class="info-row">
+              <div class="info-icon">✓</div>
+              <div>Review pricing and plan differences</div>
             </div>
-        
-            <div class="bottom-subtitle">
-              Organize. Review. Improve.
+
+            <div class="info-row">
+              <div class="info-icon">✓</div>
+              <div>Learn how Oppster fits your workflow</div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">✓</div>
+              <div>Schedule a quick intro call if you have questions</div>
             </div>
           </div>
-        
         </div>
-  
       </div>
-  
-    </section>
-  
-  </body>
+
+      <div class="button-stack">
+        <a href="index.html#pricing" class="button primary">
+          <span>Return to Pricing</span>
+          <span class="button-arrow">→</span>
+        </a>
+
+        <a href="https://calendly.com/YOUR-LINK" class="button secondary">
+          <span class="button-left">
+            <span class="button-icon">📅</span>
+            <span>Schedule Intro Call</span>
+          </span>
+          <span class="button-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="bottom-banner">
+        <div class="bottom-icon">🛡️</div>
+
+        <div>
+          <div class="bottom-title">
+            Built for traders who want clarity and control.
+          </div>
+
+          <div class="bottom-subtitle">
+            Organize. Review. Improve.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</body>
 </html>
