@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Start Oppster | Structured Trading Workflow</title>
-  <meta name="description" content="Start Oppster with a guided onboarding flow built for structured trading workflows." />
 
   <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
 
@@ -64,42 +63,6 @@
       color: var(--muted);
     }
 
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      padding: 14px 22px;
-      font-weight: 900;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: .2s ease;
-      font-size: 15px;
-      min-height: 52px;
-    }
-
-    .button.primary {
-      background: var(--orange);
-      color: white;
-      box-shadow: 0 10px 24px rgba(249,115,22,.18);
-    }
-
-    .button.primary:hover {
-      background: var(--orange-dark);
-      transform: translateY(-1px);
-    }
-
-    .button.secondary {
-      background: white;
-      border-color: var(--line);
-      color: var(--ink);
-    }
-
-    .button.secondary:hover {
-      background: #f8fafc;
-      transform: translateY(-1px);
-    }
-
     main { padding: 70px 0 84px; }
 
     .signup-shell {
@@ -115,21 +78,11 @@
       margin-bottom: 54px;
     }
 
-    .step-brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-weight: 900;
-      color: var(--orange);
-      font-size: 24px;
-    }
-
     .step-meta {
       display: flex;
       align-items: center;
       gap: 16px;
       flex: 1;
-      max-width: 520px;
     }
 
     .step-label {
@@ -151,7 +104,7 @@
 
     .progress-bar {
       height: 100%;
-      width: 12.5%;
+      width: 20%;
       background: var(--orange);
       transition: width .25s ease;
     }
@@ -228,6 +181,42 @@
       flex-shrink: 0;
     }
 
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-weight: 900;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: 15px;
+      min-height: 52px;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 10px 24px rgba(249,115,22,.18);
+    }
+
+    .button.primary:hover {
+      background: var(--orange-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: white;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .button.secondary:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
     .nav-buttons {
       display: flex;
       align-items: center;
@@ -237,9 +226,6 @@
     }
 
     .back-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
       background: transparent;
       border: none;
       color: var(--ink);
@@ -269,7 +255,7 @@
 
     .trust-card {
       text-align: center;
-      max-width: 640px;
+      max-width: 650px;
       margin: 0 auto;
     }
 
@@ -304,14 +290,7 @@
       margin-top: 12px;
     }
 
-    .plan-focus,
-    .plan-grid {
-      display: grid;
-      gap: 22px;
-    }
-
     .plan-card {
-      position: relative;
       background: white;
       border: 1px solid var(--line);
       border-radius: 22px;
@@ -386,6 +365,12 @@
       margin-right: 10px;
     }
 
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
     .center-link {
       display: block;
       text-align: center;
@@ -421,10 +406,11 @@
 
     @media (max-width: 900px) {
       .step-top { display: block; }
+
       .step-meta {
         margin-top: 24px;
-        max-width: none;
       }
+
       .option-grid,
       .plan-grid {
         grid-template-columns: 1fr;
@@ -450,7 +436,7 @@
       }
 
       .back-button {
-        justify-content: center;
+        text-align: center;
       }
 
       .logo img { height: 36px; }
@@ -474,14 +460,9 @@
   <main>
     <div class="container signup-shell">
 
-      <div class="step-top">
-        <div class="step-brand">
-          <span>✦</span>
-          <span>Oppster</span>
-        </div>
-
+      <div class="step-top" id="stepTop">
         <div class="step-meta">
-          <div class="step-label">Step <span id="stepNumber">1</span> of 8</div>
+          <div class="step-label">Step <span id="stepNumber">1</span> of 5</div>
           <div class="progress-track">
             <div class="progress-bar" id="progressBar"></div>
           </div>
@@ -497,48 +478,44 @@
       <!-- STEP 1 -->
       <section class="step active" data-step="1">
         <h1>What best describes your <span>trading style?</span></h1>
-        <p class="step-lead">
-          This helps us understand the type of workflow support that may matter most to you.
-        </p>
+        <p class="step-lead">Select any that apply.</p>
 
         <div class="option-panel">
           <div class="option-grid">
-            <button type="button" class="option-card" data-input="selectedTradingStyle" data-value="Income-focused options trader">
+            <button type="button" class="option-card trading-style-card" data-value="Income-focused options trader">
               <span class="option-icon">💵</span>
               <span>Income-focused options trader</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedTradingStyle" data-value="Active options trader">
+            <button type="button" class="option-card trading-style-card" data-value="Active options trader">
               <span class="option-icon">📈</span>
               <span>Active options trader</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedTradingStyle" data-value="Long-term buy and hold investor">
+            <button type="button" class="option-card trading-style-card" data-value="Long-term buy and hold">
               <span class="option-icon">🏦</span>
               <span>Long-term buy and hold</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedTradingStyle" data-value="Multi-strategy trader">
+            <button type="button" class="option-card trading-style-card" data-value="Multi-strategy trader">
               <span class="option-icon">🧭</span>
               <span>Multi-strategy trader</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedTradingStyle" data-value="Learning options trading">
+            <button type="button" class="option-card trading-style-card" data-value="Learning options trading">
               <span class="option-icon">🌱</span>
               <span>Learning options trading</span>
             </button>
           </div>
         </div>
 
-        <div class="error" id="error-1">Please choose a trading style.</div>
+        <div class="error" id="error-1">Please choose at least one trading style.</div>
       </section>
 
       <!-- STEP 2 -->
       <section class="step" data-step="2">
         <h1>How active is your <span>trading workflow?</span></h1>
-        <p class="step-lead">
-          Choose the option that best reflects how often you manage trades.
-        </p>
+        <p class="step-lead">Choose the option that best reflects how often you manage trades.</p>
 
         <div class="option-panel">
           <div class="option-grid">
@@ -576,7 +553,7 @@
       <section class="step" data-step="3">
         <h1>How many accounts do you <span>manage?</span></h1>
         <p class="step-lead">
-          Oppster supports both single and multi-account workflows.
+          Include any account you want to track separately, such as taxable, IRA, Roth IRA, HSA, or any account that needs its own P/L view.
         </p>
 
         <div class="option-panel">
@@ -609,12 +586,10 @@
       <!-- STEP 4 -->
       <section class="step" data-step="4">
         <h1>Where do you want more <span>structure?</span></h1>
-        <p class="step-lead">
-          Select any that apply. This helps us understand where Oppster can support your planning and discipline.
-        </p>
+        <p class="step-lead">Select any that apply.</p>
 
         <div class="option-panel">
-          <div class="option-grid multi-select">
+          <div class="option-grid">
             <button type="button" class="option-card structure-card" data-value="Getting organized">
               <span class="option-icon">🗂️</span>
               <span>Getting organized</span>
@@ -630,17 +605,17 @@
               <span>Repeatable workflow</span>
             </button>
 
-            <button type="button" class="option-card structure-card" data-value="Staying disciplined with position management">
+            <button type="button" class="option-card structure-card" data-value="Position discipline">
               <span class="option-icon">🎯</span>
               <span>Position discipline</span>
             </button>
 
-            <button type="button" class="option-card structure-card" data-value="Following a review process">
+            <button type="button" class="option-card structure-card" data-value="Review process">
               <span class="option-icon">📋</span>
               <span>Review process</span>
             </button>
 
-            <button type="button" class="option-card structure-card" data-value="Managing trades with more confidence">
+            <button type="button" class="option-card structure-card" data-value="Trade confidence">
               <span class="option-icon">✅</span>
               <span>Trade confidence</span>
             </button>
@@ -653,12 +628,10 @@
       <!-- STEP 5 -->
       <section class="step" data-step="5">
         <h1>What are you trying to <span>improve?</span></h1>
-        <p class="step-lead">
-          Select any habits or patterns you want your trading workflow to help control.
-        </p>
+        <p class="step-lead">Select any habits or patterns you want your trading workflow to help control.</p>
 
         <div class="option-panel">
-          <div class="option-grid multi-select">
+          <div class="option-grid">
             <button type="button" class="option-card improvement-card" data-value="Overtrading">
               <span class="option-icon">⚡</span>
               <span>Overtrading</span>
@@ -679,12 +652,12 @@
               <span>Hesitating on exits</span>
             </button>
 
-            <button type="button" class="option-card improvement-card" data-value="Letting winners turn into losers">
+            <button type="button" class="option-card improvement-card" data-value="Losing gains">
               <span class="option-icon">📉</span>
               <span>Losing gains</span>
             </button>
 
-            <button type="button" class="option-card improvement-card" data-value="Holding losing trades too long">
+            <button type="button" class="option-card improvement-card" data-value="Holding losers">
               <span class="option-icon">⏳</span>
               <span>Holding losers</span>
             </button>
@@ -694,8 +667,41 @@
         <div class="error" id="error-5">Please select at least one area.</div>
       </section>
 
-      <!-- STEP 6 -->
+      <!-- RECOMMENDATION -->
       <section class="step" data-step="6">
+        <h1 id="recommendationHeadline">Based on your responses, Pro may be the best fit for your workflow.</h1>
+        <p class="step-lead" id="recommendationLead">
+          A structured starting point for active traders who want better visibility and workflow discipline.
+        </p>
+
+        <div class="trial-panel">
+          <div class="plan-card popular" id="recommendedCard">
+            <div class="popular-label" id="recommendedBadge">Most Popular</div>
+            <div class="trial-label" id="recommendedTrial">7 Day Free Trial</div>
+            <h3 id="recommendedPlan">Oppster Pro</h3>
+            <div class="plan-price" id="recommendedPrice">$19<span>/mo after trial</span></div>
+            <p id="recommendedDesc">
+              Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.
+            </p>
+
+            <ul class="feature-list" id="recommendedFeatures">
+              <li>Multi-account tracking</li>
+              <li>Advanced options workflows</li>
+              <li>Position health visibility</li>
+              <li>Trade Cues and Trade Gems</li>
+            </ul>
+
+            <p class="cancel-message">Cancel anytime on the website.</p>
+
+            <button class="button primary" type="button" id="continueToReminder">Continue</button>
+
+            <span class="center-link" id="viewAllPlansFromRecommendation">View all plans</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- REMINDER -->
+      <section class="step" data-step="7">
         <div class="trial-panel trust-card">
           <div class="reminder-icon">🔔</div>
 
@@ -712,65 +718,33 @@
           <p class="trust-note">
             Easy to cancel anytime on the website. No penalties or hidden fees.
           </p>
+
+          <form class="checkout-form" action="/api/create-checkout-session" method="POST">
+            <input type="hidden" name="lookup_key" id="recommendedLookupKey" value="oppster_pro_monthly" />
+            <input type="hidden" name="trial_days" id="recommendedTrialDays" value="7" />
+            <button class="button primary" type="submit" id="recommendedSubmit">Start My Free Week</button>
+          </form>
+
+          <span class="center-link" id="viewAllPlansFromReminder">View all plans</span>
         </div>
       </section>
 
-      <!-- STEP 7 -->
-      <section class="step" data-step="7">
-        <h1>Get started with a <span>7-day free trial.</span></h1>
-        <p class="step-lead">
-          Based on how most active traders use Oppster, Pro is the best starting point for a structured workflow.
-        </p>
-
-        <div class="trial-panel">
-          <div class="plan-focus">
-            <div class="plan-card popular">
-              <div class="popular-label">Most Popular</div>
-              <h3>Oppster Pro</h3>
-              <div class="plan-price">$19<span>/mo after trial</span></div>
-              <p>
-                Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.
-              </p>
-
-              <ul class="feature-list">
-                <li>Multi-account tracking</li>
-                <li>Advanced strategy workflows</li>
-                <li>Position management visibility</li>
-                <li>Structured trade review workflow</li>
-              </ul>
-
-              <p class="cancel-message">Cancel anytime on the website.</p>
-
-              <form class="checkout-form" action="/api/create-checkout-session" method="POST">
-                <input type="hidden" name="lookup_key" value="oppster_pro_monthly" />
-                <input type="hidden" name="trial_days" value="7" />
-                <button class="button primary" type="submit">Start My Free Week</button>
-              </form>
-
-              <span class="center-link" id="viewAllPlans">View all plans</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- STEP 8 -->
+      <!-- ALL PLANS -->
       <section class="step" data-step="8">
         <h1>Choose a <span>plan.</span></h1>
-        <p class="step-lead">
-          Start with the level that matches how you trade today. You can cancel anytime on the website.
-        </p>
+        <p class="step-lead">Start with the level that matches how you trade today.</p>
 
         <div class="trial-panel">
-          <div class="plan-grid" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="plan-grid">
             <div class="plan-card">
-              <div class="trial-label">7 Day Free Trial</div>
+              <div class="trial-label">3 Day Free Trial</div>
               <h3>Core</h3>
               <div class="plan-price">$12<span>/mo</span></div>
               <p>For traders who want a structured way to track and manage trading activity.</p>
 
               <form class="checkout-form" action="/api/create-checkout-session" method="POST">
                 <input type="hidden" name="lookup_key" value="oppster_core_monthly" />
-                <input type="hidden" name="trial_days" value="7" />
+                <input type="hidden" name="trial_days" value="3" />
                 <button class="button secondary" type="submit">Start Core</button>
               </form>
             </div>
@@ -807,7 +781,7 @@
         </div>
       </section>
 
-      <div class="nav-buttons">
+      <div class="nav-buttons" id="navButtons">
         <button type="button" class="back-button" id="backButton" disabled>‹ Back</button>
         <button type="button" class="button primary next-button" id="nextButton">Next</button>
       </div>
@@ -822,18 +796,124 @@
   </footer>
 
   <script>
-    const totalSteps = 8;
+    const discoverySteps = 5;
     let currentStep = 1;
+    let recommendedPlanKey = "pro";
 
     const nextButton = document.getElementById("nextButton");
     const backButton = document.getElementById("backButton");
     const stepNumber = document.getElementById("stepNumber");
     const progressBar = document.getElementById("progressBar");
+    const stepTop = document.getElementById("stepTop");
+    const navButtons = document.getElementById("navButtons");
+
+    function getSelectedValues(id) {
+      return document.getElementById(id).value || "";
+    }
+
+    function determineRecommendation() {
+      const style = getSelectedValues("selectedTradingStyle");
+      const activity = getSelectedValues("selectedActivity");
+      const accounts = getSelectedValues("selectedAccounts");
+
+      const isPremium =
+        style.includes("Multi-strategy trader") ||
+        activity.includes("Daily options trades") ||
+        activity.includes("High-volume") ||
+        accounts.includes("4-5") ||
+        accounts.includes("More than 5");
+
+      const isCore =
+        style.includes("Long-term buy and hold") ||
+        activity.includes("A few trades per month") ||
+        accounts.includes("1 account");
+
+      if (isPremium) return "premium";
+      if (isCore) return "core";
+      return "pro";
+    }
+
+    function applyRecommendation() {
+      recommendedPlanKey = determineRecommendation();
+
+      const content = {
+        core: {
+          headline: "Based on your responses, Core may be the best fit for your workflow.",
+          lead: "A simple structured starting point for tracking trading activity and improving consistency.",
+          badge: "",
+          trial: "3 Day Free Trial",
+          plan: "Oppster Core",
+          price: "$12<span>/mo after trial</span>",
+          desc: "Built for traders who want organization, visibility, and a repeatable review process.",
+          features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
+          lookup: "oppster_core_monthly",
+          trialDays: "3",
+          submit: "Start My Free Trial"
+        },
+        pro: {
+          headline: "Based on your responses, Pro may be the best fit for your workflow.",
+          lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
+          badge: "Most Popular",
+          trial: "7 Day Free Trial",
+          plan: "Oppster Pro",
+          price: "$19<span>/mo after trial</span>",
+          desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
+          features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
+          lookup: "oppster_pro_monthly",
+          trialDays: "7",
+          submit: "Start My Free Week"
+        },
+        premium: {
+          headline: "Based on your responses, Premium may be the best fit for your workflow.",
+          lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
+          badge: "",
+          trial: "3 Day Free Trial",
+          plan: "Oppster Premium",
+          price: "$39.99<span>/mo after trial</span>",
+          desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
+          features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
+          lookup: "oppster_premium_monthly",
+          trialDays: "3",
+          submit: "Start My Free Trial"
+        }
+      };
+
+      const selected = content[recommendedPlanKey];
+
+      document.getElementById("recommendationHeadline").textContent = selected.headline;
+      document.getElementById("recommendationLead").textContent = selected.lead;
+      document.getElementById("recommendedTrial").textContent = selected.trial;
+      document.getElementById("recommendedPlan").textContent = selected.plan;
+      document.getElementById("recommendedPrice").innerHTML = selected.price;
+      document.getElementById("recommendedDesc").textContent = selected.desc;
+      document.getElementById("recommendedLookupKey").value = selected.lookup;
+      document.getElementById("recommendedTrialDays").value = selected.trialDays;
+      document.getElementById("recommendedSubmit").textContent = selected.submit;
+
+      const badge = document.getElementById("recommendedBadge");
+      if (selected.badge) {
+        badge.style.display = "inline-flex";
+        badge.textContent = selected.badge;
+        document.getElementById("recommendedCard").classList.add("popular");
+      } else {
+        badge.style.display = "none";
+        document.getElementById("recommendedCard").classList.remove("popular");
+      }
+
+      const list = document.getElementById("recommendedFeatures");
+      list.innerHTML = "";
+      selected.features.forEach(feature => {
+        const li = document.createElement("li");
+        li.textContent = feature;
+        list.appendChild(li);
+      });
+    }
 
     function formatReminderDate() {
       const today = new Date();
+      const trialDays = Number(document.getElementById("recommendedTrialDays").value || 7);
       const reminderDate = new Date(today);
-      reminderDate.setDate(today.getDate() + 5);
+      reminderDate.setDate(today.getDate() + Math.max(trialDays - 2, 1));
 
       const formatted = reminderDate.toLocaleDateString("en-US", {
         month: "short",
@@ -849,10 +929,17 @@
         section.classList.toggle("active", Number(section.dataset.step) === step);
       });
 
-      stepNumber.textContent = step;
-      progressBar.style.width = ((step / totalSteps) * 100) + "%";
-      backButton.disabled = step === 1;
-      nextButton.style.display = step >= 7 ? "none" : "inline-flex";
+      if (step <= discoverySteps) {
+        stepTop.style.display = "flex";
+        navButtons.style.display = "flex";
+        stepNumber.textContent = step;
+        progressBar.style.width = ((step / discoverySteps) * 100) + "%";
+        backButton.disabled = step === 1;
+        nextButton.style.display = "inline-flex";
+      } else {
+        stepTop.style.display = "none";
+        navButtons.style.display = "none";
+      }
 
       document.querySelectorAll(".error").forEach(error => error.style.display = "none");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -861,27 +948,27 @@
     function validateStep(step) {
       const error = document.getElementById("error-" + step);
 
-      if (step === 1 && !document.getElementById("selectedTradingStyle").value) {
+      if (step === 1 && !getSelectedValues("selectedTradingStyle")) {
         error.style.display = "block";
         return false;
       }
 
-      if (step === 2 && !document.getElementById("selectedActivity").value) {
+      if (step === 2 && !getSelectedValues("selectedActivity")) {
         error.style.display = "block";
         return false;
       }
 
-      if (step === 3 && !document.getElementById("selectedAccounts").value) {
+      if (step === 3 && !getSelectedValues("selectedAccounts")) {
         error.style.display = "block";
         return false;
       }
 
-      if (step === 4 && !document.getElementById("selectedStructureChallenges").value) {
+      if (step === 4 && !getSelectedValues("selectedStructureChallenges")) {
         error.style.display = "block";
         return false;
       }
 
-      if (step === 5 && !document.getElementById("selectedImprovementGoals").value) {
+      if (step === 5 && !getSelectedValues("selectedImprovementGoals")) {
         error.style.display = "block";
         return false;
       }
@@ -917,14 +1004,19 @@
       });
     }
 
+    wireMultiSelect("trading-style-card", "selectedTradingStyle");
     wireMultiSelect("structure-card", "selectedStructureChallenges");
     wireMultiSelect("improvement-card", "selectedImprovementGoals");
 
     nextButton.addEventListener("click", () => {
       if (!validateStep(currentStep)) return;
 
-      if (currentStep < totalSteps) {
+      if (currentStep < discoverySteps) {
         currentStep += 1;
+        showStep(currentStep);
+      } else {
+        applyRecommendation();
+        currentStep = 6;
         showStep(currentStep);
       }
     });
@@ -936,12 +1028,22 @@
       }
     });
 
-    document.getElementById("viewAllPlans").addEventListener("click", () => {
+    document.getElementById("continueToReminder").addEventListener("click", () => {
+      formatReminderDate();
+      currentStep = 7;
+      showStep(currentStep);
+    });
+
+    document.getElementById("viewAllPlansFromRecommendation").addEventListener("click", () => {
       currentStep = 8;
       showStep(currentStep);
     });
 
-    formatReminderDate();
+    document.getElementById("viewAllPlansFromReminder").addEventListener("click", () => {
+      currentStep = 8;
+      showStep(currentStep);
+    });
+
     showStep(currentStep);
   </script>
 </body>
