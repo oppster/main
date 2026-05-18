@@ -4,7 +4,108 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Checkout canceled</title>
-  
+  <style>
+    .checkout-page {
+      background: #f8f5ef;
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      color: #0f172a;
+    }
+    
+    .checkout-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .checkout-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 28px;
+      padding: 48px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    
+    .oppster-logo {
+      width: 180px;
+      margin-bottom: 24px;
+    }
+    
+    .plan-label {
+      color: #f97316;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    
+    .checkout-card h1 {
+      font-size: 52px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    
+    .checkout-subtext {
+      color: #64748b;
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    
+    .feature-list {
+      margin-bottom: 32px;
+    }
+    
+    .feature-list ul {
+      padding-left: 22px;
+    }
+    
+    .feature-list li {
+      margin-bottom: 14px;
+    }
+    
+    .button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 700;
+      height: 56px;
+      transition: .2s ease;
+    }
+    
+    .button.primary {
+      background: #f97316;
+      color: white;
+    }
+    
+    .button.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(249,115,22,.22);
+    }
+    
+    .button.secondary {
+      border: 1px solid #dbe1ea;
+      color: #0f172a;
+      background: white;
+    }
+    
+    .button.secondary:hover {
+      border-color: #f97316;
+    }
+    
+    .secure-note {
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 26px;
+    }
+    
+  </style>
 </head>
 
 <body class="checkout-page">
