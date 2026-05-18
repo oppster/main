@@ -66,6 +66,31 @@
       margin: 34px 0;
     }
     
+    .compare-section {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      margin-top: 12px;
+    }
+    
+    .compare-icon-box {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      background: #fff7ed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      flex-shrink: 0;
+    }
+    
+    .compare-content h3 {
+      margin-top: 0;
+      font-size: 38px;
+      margin-bottom: 22px;
+    }
+    
     .feature-list {
       margin-bottom: 32px;
     }
@@ -90,15 +115,17 @@
     }
     
     .info-icon {
-      width: 28px;
-      height: 28px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: #fff7ed;
+      border: 1px solid #fed7aa;
       color: #f97316;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
+      font-weight: 900;
+      font-size: 16px;
       flex-shrink: 0;
     }
     
@@ -112,7 +139,21 @@
       height: 56px;
       transition: all .22s ease;
     }
-    
+
+    .button {
+  justify-content: space-between;
+  padding: 0 22px;
+}
+
+.button-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.button-arrow {
+  font-size: 24px;
+}
     .button.primary {
       background: #f97316;
       color: white;
@@ -127,6 +168,14 @@
       border: 1px solid #dbe1ea;
       color: #0f172a;
       background: #fcfcfc;
+    }
+
+    button.secondary {
+      gap: 12px;
+    }
+    
+    .button-icon {
+      font-size: 20px;
     }
     
     .button.secondary:hover {
@@ -196,25 +245,49 @@
 
         <div class="section-divider"></div>
         
+          <div class="compare-section">
+  
+          <div class="compare-icon-box">
+            📋
+          </div>
+        
+          <div class="compare-content">
+        
+            <h3>Still comparing options?</h3>
+        
+            <div class="info-list">
+              <div class="info-row">
+                <div class="info-icon">✓</div>
+                <div>Review pricing and plan differences</div>
+              </div>
+            
+              <div class="info-row">
+                <div class="info-icon">✓</div>
+                <div>Learn how Oppster fits your workflow</div>
+              </div>
+            
+              <div class="info-row">
+                <div class="info-icon">✓</div>
+                <div>Schedule a quick intro call if you have questions</div>
+              </div>
+            </div>
+        
+          </div>
+        
+        </div>
+        
+   
+        
+        
+        
+        
+        
+        
         <div class="feature-list">
   
           <p><strong>Still comparing options?</strong></p>
   
-          <div class="info-list">
-            <div class="info-row">
-              <div class="info-icon">✓</div>
-              <div>Review pricing and plan differences</div>
-            </div>
           
-            <div class="info-row">
-              <div class="info-icon">✓</div>
-              <div>Learn how Oppster fits your workflow</div>
-            </div>
-          
-            <div class="info-row">
-              <div class="info-icon">✓</div>
-              <div>Schedule a quick intro call if you have questions</div>
-            </div>
           </div>
   
         </div>
@@ -225,9 +298,13 @@
             Return to Pricing
           </a>
   
-          <a href="https://calendly.com/YOUR-LINK"
-             class="button secondary">
-             Schedule Intro Call
+          <a href="https://calendly.com/YOUR-LINK" class="button secondary">
+            <div class="button-left">
+              <span class="button-icon">📅</span>
+              Schedule Intro Call
+            </div>
+            
+            <span class="button-arrow">→</span>
           </a>
   
         </div>
