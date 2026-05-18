@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Start Oppster | Structured Trading Workflow</title>
-
   <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
 
   <style>
@@ -16,8 +15,8 @@
       --muted: #64748b;
       --line: #e2e8f0;
       --bg: #f8fafc;
-      --white: #ffffff;
       --dark: #0f172a;
+      --white: #ffffff;
     }
 
     * { box-sizing: border-box; }
@@ -253,41 +252,14 @@
       font-weight: 700;
     }
 
-    .trust-card {
-      text-align: center;
-      max-width: 650px;
-      margin: 0 auto;
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
     }
 
-    .reminder-icon {
-      width: 92px;
-      height: 92px;
-      border-radius: 28px;
-      background: #fff7ed;
-      color: var(--orange);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      margin-bottom: 26px;
-    }
-
-    .reminder-bubble {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 18px 22px;
-      margin: 28px auto;
-      max-width: 440px;
-      font-weight: 900;
-      color: var(--dark);
-    }
-
-    .trust-note {
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.6;
-      margin-top: 12px;
+    .offer-grid.three {
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .plan-card {
@@ -365,11 +337,8 @@
       margin-right: 10px;
     }
 
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
+    form.checkout-form { margin: 0; }
+    form.checkout-form button { width: 100%; }
 
     .center-link {
       display: block;
@@ -387,12 +356,41 @@
       margin: 24px 0 14px;
     }
 
-    form.checkout-form {
-      margin: 0;
+    .trust-card {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto;
     }
 
-    form.checkout-form button {
-      width: 100%;
+    .reminder-icon {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      background: #fff7ed;
+      color: var(--orange);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      margin-bottom: 26px;
+    }
+
+    .reminder-bubble {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin: 28px auto;
+      max-width: 440px;
+      font-weight: 900;
+      color: var(--dark);
+    }
+
+    .trust-note {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin-top: 12px;
     }
 
     footer {
@@ -412,7 +410,8 @@
       }
 
       .option-grid,
-      .plan-grid {
+      .offer-grid,
+      .offer-grid.three {
         grid-template-columns: 1fr;
       }
     }
@@ -675,28 +674,8 @@
         </p>
 
         <div class="trial-panel">
-          <div class="plan-card popular" id="recommendedCard">
-            <div class="popular-label" id="recommendedBadge">Most Popular</div>
-            <div class="trial-label" id="recommendedTrial">7 Day Free Trial</div>
-            <h3 id="recommendedPlan">Oppster Pro</h3>
-            <div class="plan-price" id="recommendedPrice">$19<span>/mo after trial</span></div>
-            <p id="recommendedDesc">
-              Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.
-            </p>
-
-            <ul class="feature-list" id="recommendedFeatures">
-              <li>Multi-account tracking</li>
-              <li>Advanced options workflows</li>
-              <li>Position health visibility</li>
-              <li>Trade Cues and Trade Gems</li>
-            </ul>
-
-            <p class="cancel-message">Cancel anytime on the website.</p>
-
-            <button class="button primary" type="button" id="continueToReminder">Continue</button>
-
-            <span class="center-link" id="viewAllPlansFromRecommendation">View all plans</span>
-          </div>
+          <div class="offer-grid" id="offerGrid"></div>
+          <span class="center-link" id="viewAllPlansFromRecommendation">View all plans</span>
         </div>
       </section>
 
@@ -735,13 +714,12 @@
         <p class="step-lead">Start with the level that matches how you trade today.</p>
 
         <div class="trial-panel">
-          <div class="plan-grid">
+          <div class="offer-grid three">
             <div class="plan-card">
               <div class="trial-label">3 Day Free Trial</div>
               <h3>Core</h3>
               <div class="plan-price">$12<span>/mo</span></div>
               <p>For traders who want a structured way to track and manage trading activity.</p>
-
               <form class="checkout-form" action="/api/create-checkout-session" method="POST">
                 <input type="hidden" name="lookup_key" value="oppster_core_monthly" />
                 <input type="hidden" name="trial_days" value="3" />
@@ -755,7 +733,6 @@
               <h3>Pro</h3>
               <div class="plan-price">$19<span>/mo</span></div>
               <p>For active traders who want advanced workflows and multi-account management.</p>
-
               <form class="checkout-form" action="/api/create-checkout-session" method="POST">
                 <input type="hidden" name="lookup_key" value="oppster_pro_monthly" />
                 <input type="hidden" name="trial_days" value="7" />
@@ -768,7 +745,6 @@
               <h3>Premium</h3>
               <div class="plan-price">$39.99<span>/mo</span></div>
               <p>For advanced options traders managing multi-strategy workflows and expanded portfolios.</p>
-
               <form class="checkout-form" action="/api/create-checkout-session" method="POST">
                 <input type="hidden" name="lookup_key" value="oppster_premium_monthly" />
                 <input type="hidden" name="trial_days" value="3" />
@@ -799,6 +775,51 @@
     const discoverySteps = 5;
     let currentStep = 1;
     let recommendedPlanKey = "pro";
+
+    const plans = {
+      core: {
+        name: "Core",
+        headline: "Based on your responses, Core may be the best fit for your workflow.",
+        lead: "A simple structured starting point for tracking trading activity and improving consistency.",
+        trial: "3 Day Free Trial",
+        price: "$12",
+        period: "/mo after trial",
+        desc: "Built for traders who want organization, visibility, and a repeatable review process.",
+        features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
+        lookup: "oppster_core_monthly",
+        trialDays: "3",
+        submit: "Start My Free Trial",
+        popular: false
+      },
+      pro: {
+        name: "Pro",
+        headline: "Based on your responses, Pro may be the best fit for your workflow.",
+        lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
+        trial: "7 Day Free Trial",
+        price: "$19",
+        period: "/mo after trial",
+        desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
+        features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
+        lookup: "oppster_pro_monthly",
+        trialDays: "7",
+        submit: "Start My Free Week",
+        popular: true
+      },
+      premium: {
+        name: "Premium",
+        headline: "Based on your responses, Premium may be the best fit for your workflow.",
+        lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
+        trial: "3 Day Free Trial",
+        price: "$39.99",
+        period: "/mo after trial",
+        desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
+        features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
+        lookup: "oppster_premium_monthly",
+        trialDays: "3",
+        submit: "Start My Free Trial",
+        popular: false
+      }
+    };
 
     const nextButton = document.getElementById("nextButton");
     const backButton = document.getElementById("backButton");
@@ -833,87 +854,78 @@
       return "pro";
     }
 
+    function getOfferSet(planKey) {
+      if (planKey === "core") return ["core", "pro"];
+      if (planKey === "premium") return ["pro", "premium"];
+      return ["core", "pro", "premium"];
+    }
+
+    function buildOfferCard(planKey, isRecommended) {
+      const plan = plans[planKey];
+      const card = document.createElement("div");
+      card.className = "plan-card" + (plan.popular ? " popular" : "");
+
+      const badge = plan.popular ? '<div class="popular-label">Most Popular</div>' : "";
+      const recommendedText = isRecommended ? "<div class='trial-label'>Recommended for you</div>" : `<div class="trial-label">${plan.trial}</div>`;
+
+      card.innerHTML = `
+        ${badge}
+        ${recommendedText}
+        <h3>Oppster ${plan.name}</h3>
+        <div class="plan-price">${plan.price}<span>${plan.period}</span></div>
+        <p>${plan.desc}</p>
+        <ul class="feature-list">
+          ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
+        </ul>
+        <p class="cancel-message">${plan.trial} available today.</p>
+        <button class="button ${plan.popular ? "primary" : "secondary"}" type="button" data-plan="${planKey}">
+          ${plan.submit}
+        </button>
+      `;
+
+      return card;
+    }
+
     function applyRecommendation() {
       recommendedPlanKey = determineRecommendation();
-
-      const content = {
-        core: {
-          headline: "Based on your responses, Core may be the best fit for your workflow.",
-          lead: "A simple structured starting point for tracking trading activity and improving consistency.",
-          badge: "",
-          trial: "3 Day Free Trial",
-          plan: "Oppster Core",
-          price: "$12<span>/mo after trial</span>",
-          desc: "Built for traders who want organization, visibility, and a repeatable review process.",
-          features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
-          lookup: "oppster_core_monthly",
-          trialDays: "3",
-          submit: "Start My Free Trial"
-        },
-        pro: {
-          headline: "Based on your responses, Pro may be the best fit for your workflow.",
-          lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
-          badge: "Most Popular",
-          trial: "7 Day Free Trial",
-          plan: "Oppster Pro",
-          price: "$19<span>/mo after trial</span>",
-          desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
-          features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
-          lookup: "oppster_pro_monthly",
-          trialDays: "7",
-          submit: "Start My Free Week"
-        },
-        premium: {
-          headline: "Based on your responses, Premium may be the best fit for your workflow.",
-          lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
-          badge: "",
-          trial: "3 Day Free Trial",
-          plan: "Oppster Premium",
-          price: "$39.99<span>/mo after trial</span>",
-          desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
-          features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
-          lookup: "oppster_premium_monthly",
-          trialDays: "3",
-          submit: "Start My Free Trial"
-        }
-      };
-
-      const selected = content[recommendedPlanKey];
+      const selected = plans[recommendedPlanKey];
 
       document.getElementById("recommendationHeadline").textContent = selected.headline;
       document.getElementById("recommendationLead").textContent = selected.lead;
-      document.getElementById("recommendedTrial").textContent = selected.trial;
-      document.getElementById("recommendedPlan").textContent = selected.plan;
-      document.getElementById("recommendedPrice").innerHTML = selected.price;
-      document.getElementById("recommendedDesc").textContent = selected.desc;
-      document.getElementById("recommendedLookupKey").value = selected.lookup;
-      document.getElementById("recommendedTrialDays").value = selected.trialDays;
-      document.getElementById("recommendedSubmit").textContent = selected.submit;
 
-      const badge = document.getElementById("recommendedBadge");
-      if (selected.badge) {
-        badge.style.display = "inline-flex";
-        badge.textContent = selected.badge;
-        document.getElementById("recommendedCard").classList.add("popular");
-      } else {
-        badge.style.display = "none";
-        document.getElementById("recommendedCard").classList.remove("popular");
-      }
+      const offerGrid = document.getElementById("offerGrid");
+      offerGrid.innerHTML = "";
+      offerGrid.className = "offer-grid";
 
-      const list = document.getElementById("recommendedFeatures");
-      list.innerHTML = "";
-      selected.features.forEach(feature => {
-        const li = document.createElement("li");
-        li.textContent = feature;
-        list.appendChild(li);
+      const offerSet = getOfferSet(recommendedPlanKey);
+      if (offerSet.length === 3) offerGrid.classList.add("three");
+
+      offerSet.forEach(key => {
+        offerGrid.appendChild(buildOfferCard(key, key === recommendedPlanKey));
+      });
+
+      offerGrid.querySelectorAll("button[data-plan]").forEach(button => {
+        button.addEventListener("click", () => {
+          recommendedPlanKey = button.dataset.plan;
+          prepareReminderCheckout(recommendedPlanKey);
+          currentStep = 7;
+          showStep(currentStep);
+        });
       });
     }
 
-    function formatReminderDate() {
+    function prepareReminderCheckout(planKey) {
+      const plan = plans[planKey];
+      document.getElementById("recommendedLookupKey").value = plan.lookup;
+      document.getElementById("recommendedTrialDays").value = plan.trialDays;
+      document.getElementById("recommendedSubmit").textContent = plan.submit;
+      formatReminderDate(plan.trialDays);
+    }
+
+    function formatReminderDate(trialDays) {
       const today = new Date();
-      const trialDays = Number(document.getElementById("recommendedTrialDays").value || 7);
       const reminderDate = new Date(today);
-      reminderDate.setDate(today.getDate() + Math.max(trialDays - 2, 1));
+      reminderDate.setDate(today.getDate() + Math.max(Number(trialDays) - 2, 1));
 
       const formatted = reminderDate.toLocaleDateString("en-US", {
         month: "short",
@@ -935,7 +947,6 @@
         stepNumber.textContent = step;
         progressBar.style.width = ((step / discoverySteps) * 100) + "%";
         backButton.disabled = step === 1;
-        nextButton.style.display = "inline-flex";
       } else {
         stepTop.style.display = "none";
         navButtons.style.display = "none";
@@ -1026,12 +1037,6 @@
         currentStep -= 1;
         showStep(currentStep);
       }
-    });
-
-    document.getElementById("continueToReminder").addEventListener("click", () => {
-      formatReminderDate();
-      currentStep = 7;
-      showStep(currentStep);
     });
 
     document.getElementById("viewAllPlansFromRecommendation").addEventListener("click", () => {
