@@ -620,25 +620,63 @@
       color: #94a3b8;
     }
 
-    footer {
-      background: white;
-      padding: 56px 0;
+    .site-footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 72px;
     }
-
+    
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
-      gap: 48px;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 56px;
+      padding-bottom: 60px;
     }
-
-    footer p,
-    footer a {
-      color: var(--muted);
+    
+    .footer-brand img {
+      height: 42px;
+      margin-bottom: 24px;
     }
-
-    footer a {
+    
+    .footer-tagline {
+      color: #64748b;
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 340px;
+      margin-bottom: 22px;
+    }
+    
+    .footer-note {
+      color: #f97316;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+    
+    .site-footer h4 {
+      margin: 0 0 18px;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #0f172a;
+    }
+    
+    .site-footer a {
       display: block;
-      margin-top: 12px;
+      color: #64748b;
+      margin-bottom: 14px;
+      transition: color .2s ease;
+    }
+    
+    .site-footer a:hover {
+      color: #f97316;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid #e2e8f0;
+      padding: 26px 20px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
     }
 
     @media (max-width: 900px) {
@@ -1033,29 +1071,67 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container footer-grid">
-      <div>
-        <a href="#" class="logo" aria-label="Oppster home">
-          <img src="oppster-logo.png" alt="Oppster Logo">
-        </a>
-        <p>The precision Excel VBA trading ledger for serious retail investors.</p>
-      </div>
+ <footer class="site-footer">
 
+    <div class="container footer-grid">
+  
+      <div class="footer-brand">
+  
+        <img
+          src="oppster-logo.png"
+          alt="Oppster Logo"
+        >
+  
+        <p class="footer-tagline">
+          The structured Excel trading ledger built for disciplined retail investors.
+        </p>
+  
+        <div class="footer-note">
+          Track. Review. Improve.
+        </div>
+  
+      </div>
+  
       <div>
-        <h3>Product</h3>
+  
+        <h4>Product</h4>
+  
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
-        <a href="#faq">Documentation</a>
+        <a href="signup.html">Start Free Trial</a>
+  
       </div>
-
+  
       <div>
-        <h3>Company</h3>
-        <a href="mailto:support@oppster.com">Contact</a>
-        <a href="#privacy">Privacy Policy</a>
-        <a href="#terms">Terms of Service</a>
+  
+        <h4>Resources</h4>
+  
+        <a href="#faq">FAQ</a>
+        <a href="mailto:support@oppster.com">Support</a>
+        <a href="#">Release Notes</a>
+  
       </div>
+  
+      <div>
+  
+        <h4>Company</h4>
+  
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="https://calendly.com/lennicodemus/30min" target="_blank">
+          Schedule Intro Call
+        </a>
+  
+      </div>
+  
     </div>
+  
+    <div class="footer-bottom">
+  
+      © 2026 Oppster. Built for traders who value structure and control.
+  
+    </div>
+  
   </footer>
 </body>
 </html>
