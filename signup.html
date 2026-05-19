@@ -318,9 +318,6 @@
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: .12em;
-      text-align: center;
-      width: 100%;
-      margin-bottom: 2px;
       padding-left: 4px;
     }
 
@@ -1020,6 +1017,13 @@
       const note = isRecommended ? `${plan.trial} available today.` : "Standard monthly pricing shown.";
       const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
 
+      const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
+
+      const buttonClass =
+        planKey === "core"
+          ? "secondary"
+          : (isRecommended || plan.popular ? "primary" : "secondary");
+      
       card.innerHTML = `
         ${badge}
         <div class="${labelClass}">${label}</div>
@@ -1030,7 +1034,10 @@
           ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
         </ul>
         <p class="offer-note">${note}</p>
-        <button class="button ${isRecommended || plan.popular ? "primary" : "secondary"}";
+        <button class="button ${buttonClass}" type="button" data-plan="${planKey}">
+          ${buttonLabel}
+        </button>
+      `;
 
       wrap.appendChild(card);
       return wrap;
