@@ -278,52 +278,69 @@
     }
 
     .review-hero-section {
-  padding: 100px 20px 120px;
-  background: #f8f5ef;
-}
+      padding: 100px 20px 70px;
+      background: #f8f5ef;
+      position: relative;
+    }
 
-.review-hero-copy {
-  text-align: center;
-  max-width: 860px;
-  margin: 0 auto 50px;
-}
-
-.section-label {
-  color: #f97316;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-
-.review-hero-copy h2 {
-  font-size: 64px;
-  line-height: 1.02;
-  margin-bottom: 22px;
-  color: #0f172a;
-}
-
-.review-hero-copy p {
-  font-size: 21px;
-  line-height: 1.7;
-  color: #64748b;
-}
-
-.review-hero-image {
-  max-width: 1450px;
-  margin: 0 auto;
-}
-
-.review-hero-image img {
-  width: 100%;
-  border-radius: 30px;
-
-  box-shadow:
-    0 25px 70px rgba(15, 23, 42, 0.18);
-
-  display: block;
-}
+    .review-hero-section::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+    
+      background:
+        linear-gradient(
+          to bottom,
+          #f8fafc 0%,
+          #f8f5ef 100%
+        );
+    }    
+    
+    .review-hero-copy {
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto 50px;
+    }
+    
+    .section-label {
+      color: #f97316;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    
+    .review-hero-copy h2 {
+      font-size: 64px;
+      line-height: 1.02;
+      margin-bottom: 22px;
+      color: #0f172a;
+    }
+    
+    .review-hero-copy p {
+      font-size: 21px;
+      line-height: 1.7;
+      color: #64748b;
+    }
+    
+    .review-hero-image {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    .review-hero-image img {
+      width: 100%;
+      border-radius: 30px;
+    
+      box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.18);
+    
+      display: block;
+    }
     
     .section-lead {
       max-width: 620px;
@@ -458,8 +475,19 @@
     
       display: flex;
       flex-direction: column;
+      
+      transition:
+        transform .22s ease,
+        box-shadow .22s ease;
     }
 
+    .plan:hover {
+      transform: translateY(-6px);
+    
+      box-shadow:
+        0 18px 40px rgba(15,23,42,.10);
+    }
+    
     .plan.popular {
       border-color: var(--orange);
       box-shadow: 0 0 0 4px #ffedd5;
@@ -879,7 +907,7 @@
             <input type="hidden" name="lookup_key" value="oppster_core_monthly" />
           
             <button class="button secondary" type="submit">
-              Get Core
+              Start Core
             </button>
           </form>
     
@@ -949,7 +977,7 @@
             <input type="hidden" name="lookup_key" value="oppster_premium_monthly" />
           
             <button class="button secondary" type="submit">
-              Get Premium
+              Start Premium
             </button>
           </form>
     
