@@ -508,6 +508,10 @@
       color: var(--dark);
     }
 
+    .hidden {
+      display: none;
+    }
+    
     .trust-note {
       color: var(--muted);
       font-size: 16px;
@@ -1126,7 +1130,9 @@
     function prepareReminderCheckout(planKey) {
 
       const plan = plans[planKey];
-    
+
+      document.getElementById("reminderDate").classList.remove("hidden");
+      
       const isNonRecommendedSelection =
         planKey !== recommendedPlanKey;
     
@@ -1149,19 +1155,20 @@
           "We have a special offer for you.";
       
         if (isPremiumDowngrade) {
-      
+
+          document.getElementById("reminderTitle").textContent =
+            `You selected Oppster ${plan.name}.`;
+        
           document.getElementById("reminderSubtitle").textContent =
-            "Start exploring Oppster immediately with full access to your selected plan.";
-      
+            `Start immediately with full ${plan.name} access and multi-account workflow visibility.`;
+        
           document.getElementById("billingNote").textContent =
             `Full ${plan.name} access begins immediately at ${plan.price}/month.`;
-      
+        
           document.getElementById("recommendedSubmit").textContent =
             `Start Oppster ${plan.name}`;
-      
-          document.getElementById("reminderDate").textContent =
-            "Transparent pricing with simple cancellation anytime.";
-      
+        
+          document.getElementById("reminderDate").classList.add("hidden");
         } else {
       
           document.getElementById("reminderSubtitle").textContent =
