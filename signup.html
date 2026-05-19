@@ -547,10 +547,25 @@
   });
 
   backButton.addEventListener("click", () => {
-    if (currentStep === 1) {
-      window.location.href = "index.html";
-      return;
-    }
+  if (currentStep === 1) {
+    window.location.href = "index.html";
+    return;
+  }
 
-    currentStep -= 1;
-    show
+  currentStep -= 1;
+  showStep(currentStep);
+});
+document.getElementById("viewAllPlansFromRecommendation").addEventListener("click", () => {
+  currentStep = 8;
+  showStep(currentStep);
+});
+
+document.getElementById("viewAllPlansFromReminder").addEventListener("click", () => {
+  currentStep = 8;
+  showStep(currentStep);
+});
+
+showStep(currentStep);
+</script>
+</body>
+</html>
