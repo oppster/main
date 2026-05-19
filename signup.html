@@ -994,10 +994,10 @@
 
     function buildOfferCard(planKey, isRecommended) {
       const plan = plans[planKey];
-
+    
       const wrap = document.createElement("div");
       wrap.className = "offer-card-wrap";
-
+    
       if (isRecommended) {
         const banner = document.createElement("div");
         banner.className = "recommendation-banner";
@@ -1009,24 +1009,33 @@
         spacer.innerHTML = "&nbsp;";
         wrap.appendChild(spacer);
       }
-
+    
       const card = document.createElement("div");
-      card.className = "plan-card" + (isRecommended ? " recommended" : "") + (plan.popular ? " popular" : "");
-
-      const badge = plan.popular ? '<div class="popular-label">Most Popular</div>' : "";
+      card.className =
+        "plan-card" +
+        (isRecommended ? " recommended" : "") +
+        (plan.popular ? " popular" : "");
+    
+      const badge = plan.popular
+        ? '<div class="popular-label">Most Popular</div>'
+        : "";
+    
       const label = isRecommended ? plan.trial : "Standard monthly pricing";
       const labelClass = isRecommended ? "trial-label" : "standard-label";
       const period = isRecommended ? plan.period : plan.standardPeriod;
-      const note = isRecommended ? `${plan.trial} available today.` : "Standard monthly pricing shown.";
+      const note = isRecommended
+        ? `${plan.trial} available today.`
+        : "Standard monthly pricing shown.";
+    
       const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
-
-      const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
-
+    
       const buttonClass =
         planKey === "core"
           ? "secondary"
-          : (isRecommended || plan.popular ? "primary" : "secondary");
-      
+          : isRecommended || plan.popular
+            ? "primary"
+            : "secondary";
+    
       card.innerHTML = `
         ${badge}
         <div class="${labelClass}">${label}</div>
@@ -1041,7 +1050,7 @@
           ${buttonLabel}
         </button>
       `;
-
+    
       wrap.appendChild(card);
       return wrap;
     }
