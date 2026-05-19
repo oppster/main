@@ -809,21 +809,21 @@
       <section class="step" data-step="7">
         <div class="trial-panel trust-card">
           <div class="reminder-icon">🔔</div>
-
-          <h1>We’ll remind you before your trial ends.</h1>
-
-          <p class="step-lead" style="margin-left:auto;margin-right:auto;">
+      
+          <h1 id="reminderTitle">We’ll remind you before your trial ends.</h1>
+      
+          <p class="step-lead" id="reminderSubtitle" style="margin-left:auto;margin-right:auto;">
             We’ll remind you 2 days before your trial ends.
           </p>
-
+      
           <div class="reminder-bubble" id="reminderDate">
             You’ll get a reminder before your trial ends.
           </div>
-
+      
           <p class="trust-note">
-            Easy to cancel anytime on the website. No penalties or hidden fees.
+            Transparent pricing with simple cancellation anytime.
           </p>
-
+      
           <form class="checkout-form" action="/api/create-checkout-session" method="POST">
             <input type="hidden" name="lookup_key" id="recommendedLookupKey" value="oppster_pro_monthly" />
             <input type="hidden" name="trial_days" id="recommendedTrialDays" value="7" />
@@ -1102,12 +1102,36 @@
 
     function prepareReminderCheckout(planKey) {
       const plan = plans[planKey];
-
+    
+      const isPremiumToProDowngrade =
+        recommendedPlanKey === "premium" && planKey === "pro";
+    
+      const trialDays = isPremiumToProDowngrade ? "3" : plan.trialDays;
+    
       document.getElementById("recommendedLookupKey").value = plan.lookup;
-      document.getElementById("recommendedTrialDays").value = plan.trialDays;
-      document.getElementById("recommendedSubmit").textContent = plan.submit;
-
-      formatReminderDate(plan.trialDays);
+      document.getElementById("recommendedTrialDays").value = trialDays;
+    
+      if (isPremiumToProDowngrade) {
+        document.getElementById("reminderTitle").textContent =
+          "Start exploring Oppster today.";
+    
+        document.getElementById("reminderSubtitle").textContent =
+          "Your 3 day trial begins immediately with full access to Pro features.";
+    
+        document.getElementById("recommendedSubmit").textContent =
+          "Start My 3 Day Trial";
+      } else {
+        document.getElementById("reminderTitle").textContent =
+          "We’ll remind you before your trial ends.";
+    
+        document.getElementById("reminderSubtitle").textContent =
+          "We’ll remind you 2 days before your trial ends.";
+    
+        document.getElementById("recommendedSubmit").textContent =
+          plan.submit;
+      }
+    
+      formatReminderDate(trialDays);
     }
 
     function formatReminderDate(trialDays) {
