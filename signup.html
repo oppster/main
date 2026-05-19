@@ -1,571 +1,1115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Oppster Discovery</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<style>
-  :root {
-    --orange: #ff7a00;
-    --gray: #666;
-    --light-gray: #f5f5f5;
-    --border: #ddd;
-  }
+  <title>Start Oppster | Structured Trading Workflow</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
 
-  body {
-    margin: 0;
-    font-family: Inter, sans-serif;
-    background: #fff;
-  }
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea580c;
+      --ink: #020617;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --bg: #f8fafc;
+      --dark: #0f172a;
+      --white: #ffffff;
+    }
 
-  .container {
-    width: min(90vw, 1250px);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
+    * { box-sizing: border-box; }
 
-  .step {
-    display: none;
-  }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
 
-  .step.active {
-    display: block;
-  }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-  .recommended-plan-name {
-    color: var(--orange);
-  }
+    .container {
+      width: min(100%, 1250px);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-  .feature-list {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0;
-  }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
 
-  .feature-list li {
-    margin-bottom: 8px;
-    padding-left: 20px;
-    position: relative;
-  }
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  .feature-list li::before {
-    content: "✓";
-    color: var(--orange);
-    position: absolute;
-    left: 0;
-  }
+    .logo img {
+      height: 42px;
+      display: block;
+    }
 
-  .option-card {
-    border: 1px solid var(--border);
-    padding: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 12px;
-  }
+    .nav-actions {
+      font-weight: 800;
+      color: var(--muted);
+    }
 
-  .option-card.selected {
-    border-color: var(--orange);
-    background: #fff7f0;
-  }
+    main {
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: flex-start;
+      padding: 48px 0 72px;
+    }
 
-  .plan-card {
-    border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
+    .signup-shell {
+      width: 100%;
+      max-width: 1250px;
+      margin: 0 auto;
+    }
 
-  .popular-label {
-    background: var(--orange);
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    display: inline-block;
-    margin-bottom: 8px;
-  }
+    .step-top {
+      margin-bottom: 46px;
+    }
 
-  .trial-label {
-    font-size: 14px;
-    color: var(--orange);
-    margin-bottom: 8px;
-  }
+    .step-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-  .plan-price {
-    font-size: 28px;
-    font-weight: 600;
-    margin: 12px 0;
-  }
+    .step-label {
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
 
-  .plan-price span {
-    font-size: 16px;
-    color: var(--gray);
-    margin-left: 4px;
-  }
+    .progress-track {
+      height: 12px;
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      background: white;
+      overflow: hidden;
+    }
 
-  .button {
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    margin-top: 12px;
-    width: 100%;
-  }
+    .progress-bar {
+      height: 100%;
+      width: 20%;
+      background: var(--orange);
+      transition: width .25s ease;
+    }
 
-  .button.primary {
-    background: var(--orange);
-    color: #fff;
-  }
+    .step {
+      display: none;
+    }
 
-  .button.secondary {
-    background: #eee;
-    color: #333;
-  }
+    .step.active {
+      display: block;
+    }
 
-  #navButtons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-  }
+    .step h1 {
+      font-size: clamp(52px, 5.5vw, 72px);
+      line-height: 1.05;
+      letter-spacing: -0.06em;
+      margin: 0;
+    }
 
-  #backButton {
-    background: #eee;
-  }
+    .step h1 span {
+      color: var(--orange);
+    }
 
-  #nextButton {
-    background: var(--orange);
-    color: #fff;
-  }
+    .step-lead {
+      margin: 18px 0 36px;
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.55;
+      max-width: 860px;
+    }
 
-  .center-link {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    cursor: pointer;
-    color: var(--orange);
-  }
-</style>
+    .option-panel,
+    .trial-panel {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 44px;
+      box-shadow: 0 18px 54px rgba(2,6,23,.06);
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .option-card {
+      width: 100%;
+      min-height: 104px;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 28px;
+      font-size: 22px;
+      font-weight: 900;
+      text-align: left;
+      color: var(--ink);
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .option-card:hover {
+      border-color: var(--orange);
+      background: #fff7ed;
+      transform: translateY(-2px);
+    }
+
+    .option-card.selected {
+      border: 3px solid var(--orange);
+      background: #fff7ed;
+      box-shadow: 0 0 0 4px rgba(249,115,22,.10);
+    }
+
+    .option-icon {
+      font-size: 24px;
+      width: 30px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-weight: 900;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s ease;
+      font-size: 15px;
+      min-height: 52px;
+    }
+
+    .button.primary {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 10px 24px rgba(249,115,22,.18);
+    }
+
+    .button.primary:hover {
+      background: var(--orange-dark);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: white;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .button.secondary:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 38px;
+    }
+
+    .back-button {
+      background: transparent;
+      border: none;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 12px 0;
+    }
+
+    .next-button {
+      min-width: 260px;
+    }
+
+    .error {
+      display: none;
+      margin-top: 18px;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .why-panel {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .why-panel h3 {
+      margin: 0 0 16px;
+      color: var(--dark);
+      font-size: 22px;
+    }
+
+    .why-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .why-list li {
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .why-list li::before {
+      content: "✓";
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .offer-grid.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .plan-card {
+      position: relative;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(2,6,23,.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-card.recommended {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px #ffedd5;
+    }
+
+    .plan-card.popular {
+      border-color: var(--orange);
+    }
+
+    .popular-label {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--orange);
+      color: white;
+      border-radius: 0 22px 0 14px;
+      padding: 9px 15px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .recommendation-label {
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 14px;
+    }
+
+    .trial-label {
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+    }
+
+    .plan-card h3 {
+      font-size: 30px;
+      margin: 0 0 10px;
+    }
+
+    .recommended-plan-name {
+      color: var(--orange);
+    }
+
+    .plan-price {
+      font-size: 44px;
+      font-weight: 900;
+      margin: 8px 0;
+    }
+
+    .plan-price span {
+      font-size: 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .plan-card p {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0;
+      flex: 1;
+    }
+
+    .feature-list li {
+      margin-bottom: 12px;
+      color: var(--dark);
+      font-weight: 700;
+    }
+
+    .feature-list li::before {
+      content: "✓";
+      color: var(--orange);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    form.checkout-form {
+      margin: 0;
+    }
+
+    form.checkout-form button {
+      width: 100%;
+    }
+
+    .cancel-message {
+      text-align: center;
+      color: var(--muted);
+      font-weight: 800;
+      margin: 24px 0 14px;
+    }
+
+    .trust-card {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .reminder-icon {
+      width: 92px;
+      height: 92px;
+      border-radius: 28px;
+      background: #fff7ed;
+      color: var(--orange);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      margin-bottom: 26px;
+    }
+
+    .reminder-bubble {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px 22px;
+      margin: 28px auto;
+      max-width: 440px;
+      font-weight: 900;
+      color: var(--dark);
+    }
+
+    .trust-note {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid var(--line);
+      padding: 22px 0;
+      color: var(--muted);
+      font-size: 15px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        padding: 42px 0 64px;
+      }
+
+      .step-meta {
+        display: block;
+      }
+
+      .step-label {
+        margin-bottom: 14px;
+      }
+
+      .option-grid,
+      .offer-grid,
+      .offer-grid.three {
+        grid-template-columns: 1fr;
+      }
+
+      .step h1 {
+        font-size: 46px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .option-panel,
+      .trial-panel {
+        padding: 24px;
+      }
+
+      .nav-buttons {
+        flex-direction: column-reverse;
+        align-items: stretch;
+      }
+
+      .button,
+      .next-button {
+        width: 100%;
+      }
+
+      .back-button {
+        text-align: center;
+      }
+
+      .logo img {
+        height: 36px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo" aria-label="Oppster home">
+        <img src="oppster-logo.png" alt="Oppster Logo">
+      </a>
 
-  <!-- STEP 1 -->
-  <section class="step" data-step="1">
-    <h1>What best describes your trading style?</h1>
-    <div id="error-1" class="error" style="display:none;color:red;">Please select an option.</div>
-
-    <button type="button" class="option-card trading-style-card" data-input="selectedTradingStyle" data-value="Long-term buy and hold">
-      Long-term buy and hold
-    </button>
-
-    <button type="button" class="option-card trading-style-card" data-input="selectedTradingStyle" data-value="Active options trader">
-      Active options trader
-    </button>
-
-    <button type="button" class="option-card trading-style-card" data-input="selectedTradingStyle" data-value="Multi-strategy trader">
-      Multi-strategy trader
-    </button>
-
-    <input type="hidden" id="selectedTradingStyle" />
-  </section>
-
-  <!-- STEP 2 -->
-  <section class="step" data-step="2">
-    <h1>How active are you?</h1>
-    <div id="error-2" class="error" style="display:none;color:red;">Please select an option.</div>
-
-    <button type="button" class="option-card" data-input="selectedActivity" data-value="A few trades per month">
-      A few trades per month
-    </button>
-
-    <button type="button" class="option-card" data-input="selectedActivity" data-value="Daily options trades">
-      Daily options trades
-    </button>
-
-    <button type="button" class="option-card" data-input="selectedActivity" data-value="High-volume">
-      High-volume
-    </button>
-
-    <input type="hidden" id="selectedActivity" />
-  </section>
-
-  <!-- STEP 3 -->
-  <section class="step" data-step="3">
-    <h1>How many accounts do you manage?</h1>
-    <div id="error-3" class="error" style="display:none;color:red;">Please select an option.</div>
-
-    <button type="button" class="option-card" data-input="selectedAccounts" data-value="1 account">
-      1 account
-    </button>
-
-    <button type="button" class="option-card" data-input="selectedAccounts" data-value="2-3 accounts">
-      2–3 accounts
-    </button>
-
-    <button type="button" class="option-card" data-input="selectedAccounts" data-value="4-5 accounts">
-      4–5 accounts
-    </button>
-
-    <button type="button" class="option-card" data-input="selectedAccounts" data-value="More than 5">
-      More than 5
-    </button>
-
-    <input type="hidden" id="selectedAccounts" />
-  </section>
-
-  <!-- STEP 4 -->
-  <section class="step" data-step="4">
-    <h1>Where do you struggle with structure?</h1>
-    <div id="error-4" class="error" style="display:none;color:red;">Please select an option.</div>
-
-    <button type="button" class="option-card structure-card" data-value="Getting organized">
-      Getting organized
-    </button>
-
-    <button type="button" class="option-card structure-card" data-value="Position discipline">
-      Position discipline
-    </button>
-
-    <button type="button" class="option-card structure-card" data-value="Trade review consistency">
-      Trade review consistency
-    </button>
-
-    <input type="hidden" id="selectedStructureChallenges" />
-  </section>
-
-  <!-- STEP 5 -->
-  <section class="step" data-step="5">
-    <h1>What would you like to improve?</h1>
-    <div id="error-5" class="error" style="display:none;color:red;">Please select an option.</div>
-
-    <button type="button" class="option-card improvement-card" data-value="Reduce gambling">
-      Reduce gambling
-    </button>
-
-    <button type="button" class="option-card improvement-card" data-value="Overtrading">
-      Overtrading
-    </button>
-
-    <button type="button" class="option-card improvement-card" data-value="Impulsive entries">
-      Impulsive entries
-    </button>
-
-    <input type="hidden" id="selectedImprovementGoals" />
-  </section>
-
-  <!-- RECOMMENDATION PAGE -->
-  <section class="step" data-step="6">
-    <h1 id="recommendationHeadline">
-      Based on your responses, <span id="recommendedPlanName" class="recommended-plan-name">Pro</span> is recommended for your workflow.
-    </h1>
-
-    <p class="step-lead" id="recommendationLead">
-      A structured starting point for active traders who want better visibility and workflow discipline.
-    </p>
-
-    <ul class="feature-list" id="recommendationBullets"></ul>
-
-    <div class="trial-panel">
-      <div class="offer-grid" id="offerGrid"></div>
-      <span class="center-link" id="viewAllPlansFromRecommendation">View all plans</span>
+      <div class="nav-actions">
+        <a href="index.html">Home</a>
+      </div>
     </div>
-  </section>
+  </header>
 
-  <!-- REMAINDER OF YOUR EXISTING REMINDER + ALL PLANS SECTIONS STAY THE SAME -->
+  <main>
+    <div class="container signup-shell">
 
-  <div id="navButtons">
-    <button id="backButton" class="button secondary">Back</button>
-    <button id="nextButton" class="button primary">Next</button>
-  </div>
+      <div class="step-top" id="stepTop">
+        <div class="step-meta">
+          <div class="step-label">Step <span id="stepNumber">1</span> of 5</div>
+          <div class="progress-track">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <input type="hidden" id="selectedTradingStyle">
+      <input type="hidden" id="selectedActivity">
+      <input type="hidden" id="selectedAccounts">
+      <input type="hidden" id="selectedStructureChallenges">
+      <input type="hidden" id="selectedImprovementGoals">
 
-<script>
-  const discoverySteps = 5;
-  let currentStep = 1;
-  let recommendedPlanKey = "pro";
+      <!-- STEP 1 -->
+      <section class="step active" data-step="1">
+        <h1>What best describes your <span>trading style?</span></h1>
+        <p class="step-lead">Select any that apply.</p>
 
-  const plans = {
-    core: {
-      name: "Core",
-      lead: "A simple structured starting point for tracking trading activity and improving consistency.",
-      trial: "3 Day Free Trial",
-      price: "$12",
-      period: "/mo after trial",
-      desc: "Built for traders who want organization, visibility, and a repeatable review process.",
-      features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
-      lookup: "oppster_core_monthly",
-      trialDays: "3",
-      submit: "Start My Free Trial",
-      popular: false
-    },
-    pro: {
-      name: "Pro",
-      lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
-      trial: "7 Day Free Trial",
-      price: "$19",
-      period: "/mo after trial",
-      desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
-      features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
-      lookup: "oppster_pro_monthly",
-      trialDays: "7",
-      submit: "Start My Free Week",
-      popular: true
-    },
-    premium: {
-      name: "Premium",
-      lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
-      trial: "3 Day Free Trial",
-      price: "$39.99",
-      period: "/mo after trial",
-      desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
-      features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
-      lookup: "oppster_premium_monthly",
-      trialDays: "3",
-      submit: "Start My Free Trial",
-      popular: false
+        <div class="option-panel">
+          <div class="option-grid">
+            <button type="button" class="option-card trading-style-card" data-value="Income-focused options trader">
+              <span class="option-icon">💵</span>
+              <span>Income-focused options trader</span>
+            </button>
+
+            <button type="button" class="option-card trading-style-card" data-value="Active options trader">
+              <span class="option-icon">📈</span>
+              <span>Active options trader</span>
+            </button>
+
+            <button type="button" class="option-card trading-style-card" data-value="Long-term buy and hold">
+              <span class="option-icon">🏦</span>
+              <span>Long-term buy and hold</span>
+            </button>
+
+            <button type="button" class="option-card trading-style-card" data-value="Multi-strategy trader">
+              <span class="option-icon">🧭</span>
+              <span>Multi-strategy trader</span>
+            </button>
+
+            <button type="button" class="option-card trading-style-card" data-value="Learning options trading">
+              <span class="option-icon">🌱</span>
+              <span>Learning options trading</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error" id="error-1">Please choose at least one trading style.</div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" data-step="2">
+        <h1>How active is your <span>trading workflow?</span></h1>
+        <p class="step-lead">Choose the option that best reflects how often you manage trades.</p>
+
+        <div class="option-panel">
+          <div class="option-grid">
+            <button type="button" class="option-card" data-input="selectedActivity" data-value="A few trades per month">
+              <span class="option-icon">🗓️</span>
+              <span>A few trades per month</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedActivity" data-value="A few trades per week">
+              <span class="option-icon">📆</span>
+              <span>A few trades per week</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedActivity" data-value="Daily stock trades">
+              <span class="option-icon">📊</span>
+              <span>Daily stock trades</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedActivity" data-value="Daily options trades">
+              <span class="option-icon">⚡</span>
+              <span>Daily options trades</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedActivity" data-value="High-volume multi-position management">
+              <span class="option-icon">🔥</span>
+              <span>High-volume management</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error" id="error-2">Please choose your trading activity level.</div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step" data-step="3">
+        <h1>How many accounts do you <span>manage?</span></h1>
+        <p class="step-lead">
+          Include any account you want to track separately, such as taxable, IRA, Roth IRA, HSA, or any account that needs its own P/L view.
+        </p>
+
+        <div class="option-panel">
+          <div class="option-grid">
+            <button type="button" class="option-card" data-input="selectedAccounts" data-value="1 account">
+              <span class="option-icon">①</span>
+              <span>1 account</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedAccounts" data-value="2-3 accounts">
+              <span class="option-icon">③</span>
+              <span>2–3 accounts</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedAccounts" data-value="4-5 accounts">
+              <span class="option-icon">⑤</span>
+              <span>4–5 accounts</span>
+            </button>
+
+            <button type="button" class="option-card" data-input="selectedAccounts" data-value="More than 5 accounts">
+              <span class="option-icon">＋</span>
+              <span>More than 5 accounts</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error" id="error-3">Please choose an account range.</div>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="step" data-step="4">
+        <h1>Where do you want more <span>structure?</span></h1>
+        <p class="step-lead">Select any that apply.</p>
+
+        <div class="option-panel">
+          <div class="option-grid">
+            <button type="button" class="option-card structure-card" data-value="Getting organized">
+              <span class="option-icon">🗂️</span>
+              <span>Getting organized</span>
+            </button>
+
+            <button type="button" class="option-card structure-card" data-value="Managing trades consistently">
+              <span class="option-icon">🔁</span>
+              <span>Managing trades consistently</span>
+            </button>
+
+            <button type="button" class="option-card structure-card" data-value="Following a repeatable workflow">
+              <span class="option-icon">🏗️</span>
+              <span>Repeatable workflow</span>
+            </button>
+
+            <button type="button" class="option-card structure-card" data-value="Position discipline">
+              <span class="option-icon">🎯</span>
+              <span>Position discipline</span>
+            </button>
+
+            <button type="button" class="option-card structure-card" data-value="Review process">
+              <span class="option-icon">📋</span>
+              <span>Review process</span>
+            </button>
+
+            <button type="button" class="option-card structure-card" data-value="Trade confidence">
+              <span class="option-icon">✅</span>
+              <span>Trade confidence</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error" id="error-4">Please select at least one area.</div>
+      </section>
+
+      <!-- STEP 5 -->
+      <section class="step" data-step="5">
+        <h1>What are you trying to <span>improve?</span></h1>
+        <p class="step-lead">Select any habits or patterns you want your trading workflow to help control.</p>
+
+        <div class="option-panel">
+          <div class="option-grid">
+            <button type="button" class="option-card improvement-card" data-value="Overtrading">
+              <span class="option-icon">⚡</span>
+              <span>Overtrading</span>
+            </button>
+
+            <button type="button" class="option-card improvement-card" data-value="Emotional trading">
+              <span class="option-icon">🧠</span>
+              <span>Emotional trading</span>
+            </button>
+
+            <button type="button" class="option-card improvement-card" data-value="Impulsive entries">
+              <span class="option-icon">🚦</span>
+              <span>Impulsive entries</span>
+            </button>
+
+            <button type="button" class="option-card improvement-card" data-value="Hesitating on exits">
+              <span class="option-icon">⏱️</span>
+              <span>Hesitating on exits</span>
+            </button>
+
+            <button type="button" class="option-card improvement-card" data-value="Losing gains">
+              <span class="option-icon">📉</span>
+              <span>Losing gains</span>
+            </button>
+
+            <button type="button" class="option-card improvement-card" data-value="Reduce Gambling">
+              <span class="option-icon">🎲</span>
+              <span>Reduce Gambling</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error" id="error-5">Please select at least one area.</div>
+      </section>
+
+      <!-- RECOMMENDATION -->
+      <section class="step" data-step="6">
+        <h1 id="recommendationHeadline">
+          Based on your responses, <span id="recommendedPlanName" class="recommended-plan-name">Pro</span> may be the best fit for your workflow.
+        </h1>
+
+        <p class="step-lead" id="recommendationLead">
+          A structured starting point for active traders who want better visibility and workflow discipline.
+        </p>
+
+        <div class="why-panel">
+          <h3 id="whyTitle">Why this tier fits your workflow</h3>
+          <ul class="why-list" id="recommendationBullets"></ul>
+        </div>
+
+        <div class="trial-panel">
+          <div class="offer-grid" id="offerGrid"></div>
+        </div>
+      </section>
+
+      <!-- REMINDER -->
+      <section class="step" data-step="7">
+        <div class="trial-panel trust-card">
+          <div class="reminder-icon">🔔</div>
+
+          <h1>We’ll remind you before your trial ends.</h1>
+
+          <p class="step-lead" style="margin-left:auto;margin-right:auto;">
+            We’ll remind you 2 days before your trial ends.
+          </p>
+
+          <div class="reminder-bubble" id="reminderDate">
+            You’ll get a reminder before your trial ends.
+          </div>
+
+          <p class="trust-note">
+            Easy to cancel anytime on the website. No penalties or hidden fees.
+          </p>
+
+          <form class="checkout-form" action="/api/create-checkout-session" method="POST">
+            <input type="hidden" name="lookup_key" id="recommendedLookupKey" value="oppster_pro_monthly" />
+            <input type="hidden" name="trial_days" id="recommendedTrialDays" value="7" />
+            <button class="button primary" type="submit" id="recommendedSubmit">Start My Free Week</button>
+          </form>
+        </div>
+      </section>
+
+      <div class="nav-buttons" id="navButtons">
+        <button type="button" class="back-button" id="backButton">‹ Back</button>
+        <button type="button" class="button primary next-button" id="nextButton">Next</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      Built for disciplined traders who value structure, clarity, and control.
+    </div>
+  </footer>
+
+  <script>
+    const discoverySteps = 5;
+    let currentStep = 1;
+    let recommendedPlanKey = "pro";
+
+    const plans = {
+      core: {
+        name: "Core",
+        headline: "Based on your responses, Core may be the best fit for your workflow.",
+        lead: "A simple structured starting point for tracking trading activity and improving consistency.",
+        trial: "3 Day Free Trial",
+        price: "$12",
+        period: "/mo after trial",
+        standardPeriod: "/mo",
+        desc: "Built for traders who want organization, visibility, and a repeatable review process.",
+        features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
+        why: [
+          "Single-account tracking and visibility",
+          "Organized workflow for long-term positions",
+          "Structured trade review process",
+          "Simple workflow without unnecessary complexity"
+        ],
+        lookup: "oppster_core_monthly",
+        trialDays: "3",
+        submit: "Start My Free Trial",
+        popular: false
+      },
+      pro: {
+        name: "Pro",
+        headline: "Based on your responses, Pro may be the best fit for your workflow.",
+        lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
+        trial: "7 Day Free Trial",
+        price: "$19",
+        period: "/mo after trial",
+        standardPeriod: "/mo",
+        desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
+        features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
+        why: [
+          "Multi-account tracking for separate P/L visibility",
+          "Position health visibility across active trades",
+          "Structured workflow to reduce reactive decisions",
+          "Trade review process to help protect gains"
+        ],
+        lookup: "oppster_pro_monthly",
+        trialDays: "7",
+        submit: "Start My Free Week",
+        popular: true
+      },
+      premium: {
+        name: "Premium",
+        headline: "Based on your responses, Premium may be the best fit for your workflow.",
+        lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
+        trial: "3 Day Free Trial",
+        price: "$39.99",
+        period: "/mo after trial",
+        standardPeriod: "/mo",
+        desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
+        features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
+        why: [
+          "Built for high-volume multi-strategy workflows",
+          "Expanded visibility across multiple accounts",
+          "Advanced position monitoring and prioritization",
+          "Structured oversight for active options management"
+        ],
+        lookup: "oppster_premium_monthly",
+        trialDays: "3",
+        submit: "Start My Free Trial",
+        popular: false
+      }
+    };
+
+    const nextButton = document.getElementById("nextButton");
+    const backButton = document.getElementById("backButton");
+    const stepNumber = document.getElementById("stepNumber");
+    const progressBar = document.getElementById("progressBar");
+    const stepTop = document.getElementById("stepTop");
+    const navButtons = document.getElementById("navButtons");
+
+    function getSelectedValues(id) {
+      return document.getElementById(id).value || "";
     }
-  };
 
-  const nextButton = document.getElementById("nextButton");
-  const backButton = document.getElementById("backButton");
-  const stepNumber = document.getElementById("stepNumber");
-  const progressBar = document.getElementById("progressBar");
-  const stepTop = document.getElementById("stepTop");
-  const navButtons = document.getElementById("navButtons");
+    function determineRecommendation() {
+      const style = getSelectedValues("selectedTradingStyle");
+      const activity = getSelectedValues("selectedActivity");
+      const accounts = getSelectedValues("selectedAccounts");
 
-  function getSelectedValues(id) {
-    return document.getElementById(id).value || "";
-  }
+      const isPremium =
+        style.includes("Multi-strategy trader") ||
+        activity.includes("Daily options trades") ||
+        activity.includes("High-volume") ||
+        accounts.includes("4-5") ||
+        accounts.includes("More than 5");
 
-  function determineRecommendation() {
-    const style = getSelectedValues("selectedTradingStyle");
-    const activity = getSelectedValues("selectedActivity");
-    const accounts = getSelectedValues("selectedAccounts");
+      const isCore =
+        style.includes("Long-term buy and hold") ||
+        activity.includes("A few trades per month") ||
+        accounts.includes("1 account");
 
-    const isPremium =
-      style.includes("Multi-strategy trader") ||
-      activity.includes("Daily options trades") ||
-      activity.includes("High-volume") ||
-      accounts.includes("4-5") ||
-      accounts.includes("More than 5");
-
-    const isCore =
-      style.includes("Long-term buy and hold") ||
-      activity.includes("A few trades per month") ||
-      accounts.includes("1 account");
-
-    if (isPremium) return "premium";
-    if (isCore) return "core";
-    return "pro";
-  }
-
-  function getOfferSet(planKey) {
-    if (planKey === "core") return ["core", "pro"];
-    if (planKey === "pro") return ["pro", "premium"];
-    if (planKey === "premium") return ["premium", "pro"];
-  }
-
-  function getJustificationBullets(planKey) {
-    if (planKey === "core") {
-      return [
-        "Single-account tracking and visibility",
-        "Organized workflow for long-term positions",
-        "Structured trade review process",
-        "Simple workflow without unnecessary complexity"
-      ];
+      if (isPremium) return "premium";
+      if (isCore) return "core";
+      return "pro";
     }
 
-    if (planKey === "pro") {
-      return [
-        "Multi-account tracking for separate P/L visibility",
-        "Position health visibility across active trades",
-        "Structured workflow to reduce reactive decisions",
-        "Trade review process to help protect gains"
-      ];
+    function getOfferSet(planKey) {
+      if (planKey === "core") return ["core", "pro"];
+      if (planKey === "pro") return ["pro", "premium"];
+      if (planKey === "premium") return ["premium", "pro"];
+      return ["pro", "premium"];
     }
 
-    if (planKey === "premium") {
-      return [
-        "Built for high-volume multi-strategy workflows",
-        "Expanded visibility across multiple accounts",
-        "Advanced position monitoring and prioritization",
-        "Structured oversight for active options management"
-      ];
+    function buildOfferCard(planKey, isRecommended) {
+      const plan = plans[planKey];
+      const card = document.createElement("div");
+      card.className = "plan-card" + (isRecommended ? " recommended" : "") + (plan.popular ? " popular" : "");
+
+      const badge = plan.popular ? '<div class="popular-label">Most Popular</div>' : "";
+      const recommendation = isRecommended ? '<div class="recommendation-label">Recommended for you</div>' : "";
+      const label = isRecommended ? plan.trial : "Standard monthly pricing";
+      const period = isRecommended ? plan.period : plan.standardPeriod;
+      const note = isRecommended ? `${plan.trial} available today.` : "Standard monthly pricing shown.";
+
+      card.innerHTML = `
+        ${badge}
+        ${recommendation}
+        <div class="trial-label">${label}</div>
+        <h3>Oppster ${plan.name}</h3>
+        <div class="plan-price">${plan.price}<span>${period}</span></div>
+        <p>${plan.desc}</p>
+        <ul class="feature-list">
+          ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
+        </ul>
+        <p class="cancel-message">${note}</p>
+        <button class="button ${isRecommended || plan.popular ? "primary" : "secondary"}" type="button" data-plan="${planKey}">
+          ${isRecommended ? plan.submit : `Choose ${plan.name}`}
+        </button>
+      `;
+
+      return card;
     }
 
-    return [];
-  }
+    function applyRecommendation() {
+      recommendedPlanKey = determineRecommendation();
+      const selected = plans[recommendedPlanKey];
 
-  function buildOfferCard(planKey, isPrimary) {
-    const plan = plans[planKey];
-    const card = document.createElement("div");
-    card.className = "plan-card" + (plan.popular ? " popular" : "");
+      document.getElementById("recommendationHeadline").innerHTML =
+        `Based on your responses, <span class="recommended-plan-name">${selected.name}</span> may be the best fit for your workflow.`;
 
-    const badge = plan.popular ? '<div class="popular-label">Most Popular</div>' : "";
+      document.getElementById("recommendationLead").textContent = selected.lead;
 
-    const labelHtml = isPrimary
-      ? `<div class="trial-label">${plan.trial}</div>`
-      : `<div class="trial-label">Standard monthly pricing</div>`;
-
-    const periodText = isPrimary ? plan.period : "/mo";
-
-    card.innerHTML = `
-      ${badge}
-      ${labelHtml}
-      <h3>Oppster ${plan.name}</h3>
-      <div class="plan-price">${plan.price}<span>${periodText}</span></div>
-      <p>${plan.desc}</p>
-      <ul class="feature-list">
-        ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
-      </ul>
-      <p class="cancel-message">${isPrimary ? plan.trial + " available today." : "Standard monthly pricing applies."}</p>
-      <button class="button ${plan.popular ? "primary" : "secondary"}" type="button" data-plan="${planKey}">
-        ${plan.submit}
-      </button>
-    `;
-
-    return card;
-  }
-
-  function prepareReminderCheckout(planKey, overrideTrialDays) {
-    const plan = plans[planKey];
-    const trialDays = overrideTrialDays || plan.trialDays;
-
-    document.getElementById("recommendedLookupKey").value = plan.lookup;
-    document.getElementById("recommendedTrialDays").value = trialDays;
-    document.getElementById("recommendedSubmit").textContent = plan.submit;
-
-    formatReminderDate(trialDays);
-  }
-
-  function formatReminderDate(trialDays) {
-    const today = new Date();
-    const reminderDate = new Date(today);
-    reminderDate.setDate(today.getDate() + Math.max(Number(trialDays) - 2, 1));
-
-    const formatted = reminderDate.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric"
-    });
-
-    document.getElementById("reminderDate").textContent =
-      "You’ll get a reminder on " + formatted + ".";
-  }
-
-  function showStep(step) {
-    document.querySelectorAll(".step").forEach(section => {
-      section.classList.toggle("active", Number(section.dataset.step) === step);
-    });
-
-    if (step <= discoverySteps) {
-      navButtons.style.display = "flex";
-    } else {
-      navButtons.style.display = "none";
-    }
-
-    document.querySelectorAll(".error").forEach(error => error.style.display = "none");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function validateStep(step) {
-    const error = document.getElementById("error-" + step);
-
-    if (step === 1 && !getSelectedValues("selectedTradingStyle")) {
-      error.style.display = "block";
-      return false;
-    }
-
-    if (step === 2 && !getSelectedValues("selectedActivity")) {
-      error.style.display = "block";
-      return false;
-    }
-
-    if (step === 3 && !getSelectedValues("selectedAccounts")) {
-      error.style.display = "block";
-      return false;
-    }
-
-    if (step === 4 && !getSelectedValues("selectedStructureChallenges")) {
-      error.style.display = "block";
-      return false;
-    }
-
-    if (step === 5 && !getSelectedValues("selectedImprovementGoals")) {
-      error.style.display = "block";
-      return false;
-    }
-
-    return true;
-  }
-
-  document.querySelectorAll(".option-card[data-input]").forEach(card => {
-    card.addEventListener("click", () => {
-      const inputId = card.dataset.input;
-      const value = card.dataset.value;
-
-      document.getElementById(inputId).value = value;
-
-      document.querySelectorAll('.option-card[data-input="' + inputId + '"]').forEach(item => {
-        item.classList.remove("selected");
+      const bullets = document.getElementById("recommendationBullets");
+      bullets.innerHTML = "";
+      selected.why.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        bullets.appendChild(li);
       });
 
-      card.classList.add("selected");
-    });
-  });
+      const offerGrid = document.getElementById("offerGrid");
+      offerGrid.innerHTML = "";
+      offerGrid.className = "offer-grid";
 
-  function wireMultiSelect(cardClass, hiddenInputId) {
-    document.querySelectorAll("." + cardClass).forEach(card => {
+      const offerSet = getOfferSet(recommendedPlanKey);
+
+      offerSet.forEach(key => {
+        offerGrid.appendChild(buildOfferCard(key, key === recommendedPlanKey));
+      });
+
+      offerGrid.querySelectorAll("button[data-plan]").forEach(button => {
+        button.addEventListener("click", () => {
+          const selectedPlan = button.dataset.plan;
+          prepareReminderCheckout(selectedPlan);
+          currentStep = 7;
+          showStep(currentStep);
+        });
+      });
+    }
+
+    function prepareReminderCheckout(planKey) {
+      const plan = plans[planKey];
+
+      document.getElementById("recommendedLookupKey").value = plan.lookup;
+      document.getElementById("recommendedTrialDays").value = plan.trialDays;
+      document.getElementById("recommendedSubmit").textContent = plan.submit;
+
+      formatReminderDate(plan.trialDays);
+    }
+
+    function formatReminderDate(trialDays) {
+      const today = new Date();
+      const reminderDate = new Date(today);
+      reminderDate.setDate(today.getDate() + Math.max(Number(trialDays) - 2, 1));
+
+      const formatted = reminderDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric"
+      });
+
+      document.getElementById("reminderDate").textContent =
+        "You’ll get a reminder on " + formatted + ".";
+    }
+
+    function showStep(step) {
+      document.querySelectorAll(".step").forEach(section => {
+        section.classList.toggle("active", Number(section.dataset.step) === step);
+      });
+
+      if (step <= discoverySteps) {
+        stepTop.style.display = "block";
+        navButtons.style.display = "flex";
+        stepNumber.textContent = step;
+        progressBar.style.width = ((step / discoverySteps) * 100) + "%";
+      } else {
+        stepTop.style.display = "none";
+        navButtons.style.display = "none";
+      }
+
+      document.querySelectorAll(".error").forEach(error => {
+        error.style.display = "none";
+      });
+
+      window.scrollTo(0, 0);
+    }
+
+    function validateStep(step) {
+      const error = document.getElementById("error-" + step);
+
+      if (step === 1 && !getSelectedValues("selectedTradingStyle")) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 2 && !getSelectedValues("selectedActivity")) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 3 && !getSelectedValues("selectedAccounts")) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 4 && !getSelectedValues("selectedStructureChallenges")) {
+        error.style.display = "block";
+        return false;
+      }
+
+      if (step === 5 && !getSelectedValues("selectedImprovementGoals")) {
+        error.style.display = "block";
+        return false;
+      }
+
+      return true;
+    }
+
+    document.querySelectorAll(".option-card[data-input]").forEach(card => {
       card.addEventListener("click", () => {
-        card.classList.toggle("selected");
+        const inputId = card.dataset.input;
+        const value = card.dataset.value;
 
-        const values = Array.from(document.querySelectorAll("." + cardClass + ".selected"))
-          .map(item => item.dataset.value);
+        document.getElementById(inputId).value = value;
 
-        document.getElementById(hiddenInputId).value = values.join(", ");
+        document.querySelectorAll('.option-card[data-input="' + inputId + '"]').forEach(item => {
+          item.classList.remove("selected");
+        });
+
+        card.classList.add("selected");
       });
     });
-  }
 
-  wireMultiSelect("trading-style-card", "selectedTradingStyle");
-  wireMultiSelect("structure-card", "selectedStructureChallenges");
-  wireMultiSelect("improvement-card", "selectedImprovementGoals");
+    function wireMultiSelect(cardClass, hiddenInputId) {
+      document.querySelectorAll("." + cardClass).forEach(card => {
+        card.addEventListener("click", () => {
+          card.classList.toggle("selected");
 
-  nextButton.addEventListener("click", () => {
-    if (!validateStep(currentStep)) return;
+          const values = Array.from(document.querySelectorAll("." + cardClass + ".selected"))
+            .map(item => item.dataset.value);
 
-    if (currentStep < discoverySteps) {
-      currentStep += 1;
-      showStep(currentStep);
-    } else {
-      applyRecommendation();
-      currentStep = 6;
-      showStep(currentStep);
+          document.getElementById(hiddenInputId).value = values.join(", ");
+        });
+      });
     }
-  });
 
-  backButton.addEventListener("click", () => {
-  if (currentStep === 1) {
-    window.location.href = "index.html";
-    return;
-  }
+    wireMultiSelect("trading-style-card", "selectedTradingStyle");
+    wireMultiSelect("structure-card", "selectedStructureChallenges");
+    wireMultiSelect("improvement-card", "selectedImprovementGoals");
 
-  currentStep -= 1;
-  showStep(currentStep);
-});
-document.getElementById("viewAllPlansFromRecommendation").addEventListener("click", () => {
-  currentStep = 8;
-  showStep(currentStep);
-});
+    nextButton.addEventListener("click", () => {
+      if (!validateStep(currentStep)) return;
 
-document.getElementById("viewAllPlansFromReminder").addEventListener("click", () => {
-  currentStep = 8;
-  showStep(currentStep);
-});
+      if (currentStep < discoverySteps) {
+        currentStep += 1;
+        showStep(currentStep);
+      } else {
+        applyRecommendation();
+        currentStep = 6;
+        showStep(currentStep);
+      }
+    });
 
-showStep(currentStep); 
-</script>
+    backButton.addEventListener("click", () => {
+      if (currentStep === 1) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      currentStep -= 1;
+      showStep(currentStep);
+    });
+
+    showStep(currentStep);
+  </script>
 </body>
 </html>
