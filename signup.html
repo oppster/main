@@ -1130,11 +1130,12 @@
       const isNonRecommendedSelection =
         planKey !== recommendedPlanKey;
     
-      const isPremiumToProDowngrade =
-        recommendedPlanKey === "premium" && planKey === "pro";
+      const isPremiumDowngrade =
+        recommendedPlanKey === "premium" &&
+        (planKey === "pro" || planKey === "core");
     
       const trialDays =
-        isPremiumToProDowngrade ? "3" : plan.trialDays;
+        isPremiumDowngrade ? "0" : plan.trialDays;
     
       document.getElementById("recommendedLookupKey").value =
         plan.lookup;
@@ -1143,59 +1144,60 @@
         trialDays;
     
       if (isNonRecommendedSelection) {
-    
+
         document.getElementById("reminderTitle").textContent =
           "We have a special offer for you.";
-    
-        if (isPremiumToProDowngrade) {
-    
+      
+        if (isPremiumDowngrade) {
+      
           document.getElementById("reminderSubtitle").textContent =
-            "Start with 3 days of full Pro access and explore Oppster at your own pace.";
-    
+            "Start exploring Oppster immediately with full access to your selected plan.";
+      
           document.getElementById("billingNote").textContent =
-            "Then continue with full Pro access at $19/month.";
-    
+            `Full ${plan.name} access begins immediately at ${plan.price}/month.`;
+      
           document.getElementById("recommendedSubmit").textContent =
-            "Start My 3 Day Trial";
-    
+            `Start Oppster ${plan.name}`;
+      
           document.getElementById("reminderDate").textContent =
-            "You’ll receive a reminder before your 3 day trial ends.";
-    
+            "Transparent pricing with simple cancellation anytime.";
+      
         } else {
-    
+      
           document.getElementById("reminderSubtitle").textContent =
             `Start with ${trialDays} days of full ${plan.name} access and explore Oppster at your own pace.`;
-    
+      
           document.getElementById("billingNote").textContent =
             `Then continue with full ${plan.name} access at ${plan.price}/month.`;
-    
+      
           document.getElementById("recommendedSubmit").textContent =
             plan.submit;
-    
+      
           document.getElementById("reminderDate").textContent =
             `You’ll receive a reminder before your ${trialDays} day trial ends.`;
         }
-    
+      
       } else {
-    
+      
         document.getElementById("reminderTitle").textContent =
           "We’ll remind you before your trial ends.";
-    
+      
         document.getElementById("reminderSubtitle").textContent =
           "We’ll remind you 2 days before your trial ends.";
-    
+      
         document.getElementById("billingNote").textContent =
           `Then continue with full ${plan.name} access at ${plan.price}/month.`;
-    
+      
         document.getElementById("recommendedSubmit").textContent =
           plan.submit;
-    
+      
         document.getElementById("reminderDate").textContent =
           "You’ll get a reminder before your trial ends.";
       }
-    
-      formatReminderDate(trialDays);
-    }
+      
+      if (!isPremiumDowngrade) {
+        formatReminderDate(trialDays);
+      }
 
     function formatReminderDate(trialDays) {
       const today = new Date();
