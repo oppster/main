@@ -148,7 +148,7 @@
       background: white;
       border: 1px solid var(--line);
       border-radius: 24px;
-      padding: 44px 44px 56px;
+      padding: 44px 44px 64px;
       box-shadow: 0 18px 54px rgba(2,6,23,.06);
     }
 
@@ -325,7 +325,7 @@
     }
 
     .recommendation-trust {
-      margin-top: 34px;
+      margin-top: 42px;
       text-align: center;
       color: var(--muted);
       font-size: 15px;
@@ -936,73 +936,62 @@
     }
 
     function getPersonalizedWhy(planKey) {
-      const bullets = [];
-
       const style = getSelectedValues("selectedTradingStyle");
-      const activity = getSelectedValues("selectedActivity");
-      const accounts = getSelectedValues("selectedAccounts");
       const structure = getSelectedValues("selectedStructureChallenges");
       const improvements = getSelectedValues("selectedImprovementGoals");
-
-      if (accounts) {
-        bullets.push(`You selected ${accounts}, so this recommendation emphasizes the right level of account-level P/L visibility.`);
-      }
-
-      if (style.includes("Long-term buy and hold")) {
-        bullets.push("You selected long-term buy and hold, so the workflow stays simple and focused on organization.");
-      } else if (style.includes("Income-focused options trader")) {
-        bullets.push("You selected income-focused options trading, so the recommendation emphasizes repeatable review and income workflow structure.");
+      const accounts = getSelectedValues("selectedAccounts");
+    
+      const bullets = [];
+    
+      if (style.includes("Income-focused options trader")) {
+        bullets.push("Helps create structure around income-focused trading decisions.");
       } else if (style.includes("Active options trader")) {
-        bullets.push("You selected active options trading, so the recommendation emphasizes position visibility and workflow discipline.");
+        bullets.push("Supports active traders who need clearer position visibility.");
+      } else if (style.includes("Long-term buy and hold")) {
+        bullets.push("Built for traders who want a simpler, more disciplined review routine.");
       } else if (style.includes("Multi-strategy trader")) {
-        bullets.push("You selected multi-strategy trading, so the recommendation emphasizes broader workflow oversight.");
+        bullets.push("Supports traders managing multiple strategies and moving parts.");
       } else if (style.includes("Learning options trading")) {
-        bullets.push("You selected learning options trading, so the recommendation emphasizes structure, visibility, and repeatable habits.");
+        bullets.push("Designed to help you build repeatable trading habits.");
       }
-
-      if (activity) {
-        bullets.push(`Your activity level is ${activity.toLowerCase()}, so the plan is matched to how often you manage trades.`);
-      }
-
-      if (structure.includes("Getting organized")) {
-        bullets.push("You want help getting organized, so the recommendation prioritizes clean tracking and review routines.");
-      } else if (structure.includes("Managing trades consistently")) {
-        bullets.push("You want more consistency, so the recommendation focuses on repeatable trade management workflows.");
-      } else if (structure.includes("Following a repeatable workflow")) {
-        bullets.push("You selected repeatable workflow, so the recommendation supports a more structured trading process.");
-      } else if (structure.includes("Review process")) {
-        bullets.push("You selected review process, so the recommendation supports better learning from prior trades.");
-      }
-
+    
       if (improvements.includes("Reduce Gambling")) {
-        bullets.push("You want to reduce gambling behavior, so the recommendation emphasizes structure before action.");
+        bullets.push("Adds structure before action to support more disciplined decisions.");
       } else if (improvements.includes("Overtrading")) {
-        bullets.push("You selected overtrading, so the recommendation supports better decision control and trade review.");
+        bullets.push("Helps slow the workflow down with more intentional review.");
       } else if (improvements.includes("Impulsive entries")) {
-        bullets.push("You selected impulsive entries, so the recommendation supports planning before execution.");
+        bullets.push("Supports planning before execution.");
       } else if (improvements.includes("Losing gains")) {
-        bullets.push("You selected losing gains, so the recommendation emphasizes visibility and disciplined review.");
+        bullets.push("Helps bring visibility to outcomes before gains disappear.");
+      } else if (structure.includes("Getting organized")) {
+        bullets.push("Helps keep trades organized and easier to review.");
+      } else {
+        bullets.push("Creates a repeatable structure for reviewing trading decisions.");
       }
-
+    
+      if (accounts) {
+        bullets.push("Built for the level of account visibility you need.");
+      }
+    
       const fallback = {
         core: [
-          "Your responses point to a simpler workflow with clear organization and review.",
-          "The recommendation keeps the experience focused without unnecessary complexity.",
-          "This tier supports visibility, structure, and repeatable habits."
+          "Built for traders who want a simpler, more disciplined review routine.",
+          "Helps keep trades organized and easier to review.",
+          "Built for the level of account visibility you need."
         ],
         pro: [
-          "Your responses point to active trade management and a need for better workflow visibility.",
-          "This tier supports more structure across positions, accounts, and review routines.",
-          "The recommendation helps connect activity level with disciplined trade management."
+          "Supports active traders who need clearer position visibility.",
+          "Creates a repeatable structure for reviewing trading decisions.",
+          "Built for the level of account visibility you need."
         ],
         premium: [
-          "Your responses point to higher activity or broader multi-account oversight.",
-          "This tier supports advanced visibility across more complex workflows.",
-          "The recommendation is designed for traders managing more moving parts."
+          "Supports traders managing multiple strategies and moving parts.",
+          "Adds structure around advanced position oversight.",
+          "Built for broader account visibility and review."
         ]
       };
-
-      return bullets.slice(0, 4).length ? bullets.slice(0, 4) : fallback[planKey];
+    
+      return bullets.length ? bullets.slice(0, 3) : fallback[planKey];
     }
 
     function buildOfferCard(planKey, isRecommended) {
