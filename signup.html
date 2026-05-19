@@ -17,6 +17,8 @@
       --bg: #f8fafc;
       --dark: #0f172a;
       --white: #ffffff;
+      --soft-orange: #fff7ed;
+      --soft-orange-border: #fed7aa;
     }
 
     * { box-sizing: border-box; }
@@ -176,13 +178,13 @@
 
     .option-card:hover {
       border-color: var(--orange);
-      background: #fff7ed;
+      background: var(--soft-orange);
       transform: translateY(-2px);
     }
 
     .option-card.selected {
       border: 3px solid var(--orange);
-      background: #fff7ed;
+      background: var(--soft-orange);
       box-shadow: 0 0 0 4px rgba(249,115,22,.10);
     }
 
@@ -263,8 +265,8 @@
     }
 
     .why-panel {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
+      background: var(--soft-orange);
+      border: 1px solid var(--soft-orange-border);
       border-radius: 20px;
       padding: 24px;
       margin-bottom: 28px;
@@ -287,6 +289,7 @@
     .why-list li {
       color: #334155;
       font-weight: 700;
+      line-height: 1.45;
     }
 
     .why-list li::before {
@@ -300,10 +303,22 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 22px;
+      align-items: stretch;
     }
 
-    .offer-grid.three {
-      grid-template-columns: repeat(3, 1fr);
+    .offer-card-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .recommendation-banner {
+      color: var(--orange);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      padding-left: 4px;
     }
 
     .plan-card {
@@ -315,15 +330,20 @@
       box-shadow: 0 10px 30px rgba(2,6,23,.05);
       display: flex;
       flex-direction: column;
+      min-height: 100%;
     }
 
     .plan-card.recommended {
+      background: #f8fafc;
       border-color: var(--line);
-      box-shadow: 0 0 0 4px #ffedd5;
+      box-shadow: none;
     }
 
     .plan-card.popular {
+      background: white;
       border-color: var(--orange);
+      box-shadow: 0 18px 40px rgba(249,115,22,.12);
+      transform: translateY(-6px);
     }
 
     .popular-label {
@@ -339,16 +359,16 @@
       text-transform: uppercase;
     }
 
-    .recommendation-label {
+    .trial-label {
       color: var(--orange);
       font-size: 13px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: .12em;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
-    .trial-label {
+    .standard-label {
       color: var(--orange);
       font-size: 13px;
       font-weight: 900;
@@ -411,7 +431,7 @@
       width: 100%;
     }
 
-    .cancel-message {
+    .offer-note {
       text-align: center;
       color: var(--muted);
       font-weight: 800;
@@ -428,7 +448,7 @@
       width: 92px;
       height: 92px;
       border-radius: 28px;
-      background: #fff7ed;
+      background: var(--soft-orange);
       color: var(--orange);
       display: inline-flex;
       align-items: center;
@@ -478,9 +498,12 @@
       }
 
       .option-grid,
-      .offer-grid,
-      .offer-grid.three {
+      .offer-grid {
         grid-template-columns: 1fr;
+      }
+
+      .plan-card.popular {
+        transform: none;
       }
 
       .step h1 {
@@ -815,12 +838,6 @@
         standardPeriod: "/mo",
         desc: "Built for traders who want organization, visibility, and a repeatable review process.",
         features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
-        why: [
-          "Single-account tracking and visibility",
-          "Organized workflow for long-term positions",
-          "Structured trade review process",
-          "Simple workflow without unnecessary complexity"
-        ],
         lookup: "oppster_core_monthly",
         trialDays: "3",
         submit: "Start My Free Trial",
@@ -836,12 +853,6 @@
         standardPeriod: "/mo",
         desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
         features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
-        why: [
-          "Multi-account tracking for separate P/L visibility",
-          "Position health visibility across active trades",
-          "Structured workflow to reduce reactive decisions",
-          "Trade review process to help protect gains"
-        ],
         lookup: "oppster_pro_monthly",
         trialDays: "7",
         submit: "Start My Free Week",
@@ -857,12 +868,6 @@
         standardPeriod: "/mo",
         desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
         features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
-        why: [
-          "Built for high-volume multi-strategy workflows",
-          "Expanded visibility across multiple accounts",
-          "Advanced position monitoring and prioritization",
-          "Structured oversight for active options management"
-        ],
         lookup: "oppster_premium_monthly",
         trialDays: "3",
         submit: "Start My Free Trial",
@@ -879,6 +884,10 @@
 
     function getSelectedValues(id) {
       return document.getElementById(id).value || "";
+    }
+
+    function hasValue(id, text) {
+      return getSelectedValues(id).includes(text);
     }
 
     function determineRecommendation() {
@@ -910,34 +919,121 @@
       return ["pro", "premium"];
     }
 
+    function getPersonalizedWhy(planKey) {
+      const bullets = [];
+
+      const style = getSelectedValues("selectedTradingStyle");
+      const activity = getSelectedValues("selectedActivity");
+      const accounts = getSelectedValues("selectedAccounts");
+      const structure = getSelectedValues("selectedStructureChallenges");
+      const improvements = getSelectedValues("selectedImprovementGoals");
+
+      if (accounts) {
+        bullets.push(`You selected ${accounts}, so this recommendation emphasizes the right level of account-level P/L visibility.`);
+      }
+
+      if (style.includes("Long-term buy and hold")) {
+        bullets.push("You selected long-term buy and hold, so the workflow stays simple and focused on organization.");
+      } else if (style.includes("Income-focused options trader")) {
+        bullets.push("You selected income-focused options trading, so the recommendation emphasizes repeatable review and income workflow structure.");
+      } else if (style.includes("Active options trader")) {
+        bullets.push("You selected active options trading, so the recommendation emphasizes position visibility and workflow discipline.");
+      } else if (style.includes("Multi-strategy trader")) {
+        bullets.push("You selected multi-strategy trading, so the recommendation emphasizes broader workflow oversight.");
+      } else if (style.includes("Learning options trading")) {
+        bullets.push("You selected learning options trading, so the recommendation emphasizes structure, visibility, and repeatable habits.");
+      }
+
+      if (activity) {
+        bullets.push(`Your activity level is ${activity.toLowerCase()}, so the plan is matched to how often you manage trades.`);
+      }
+
+      if (structure.includes("Getting organized")) {
+        bullets.push("You want help getting organized, so the recommendation prioritizes clean tracking and review routines.");
+      } else if (structure.includes("Managing trades consistently")) {
+        bullets.push("You want more consistency, so the recommendation focuses on repeatable trade management workflows.");
+      } else if (structure.includes("Following a repeatable workflow")) {
+        bullets.push("You selected repeatable workflow, so the recommendation supports a more structured trading process.");
+      } else if (structure.includes("Review process")) {
+        bullets.push("You selected review process, so the recommendation supports better learning from prior trades.");
+      }
+
+      if (improvements.includes("Reduce Gambling")) {
+        bullets.push("You want to reduce gambling behavior, so the recommendation emphasizes structure before action.");
+      } else if (improvements.includes("Overtrading")) {
+        bullets.push("You selected overtrading, so the recommendation supports better decision control and trade review.");
+      } else if (improvements.includes("Impulsive entries")) {
+        bullets.push("You selected impulsive entries, so the recommendation supports planning before execution.");
+      } else if (improvements.includes("Losing gains")) {
+        bullets.push("You selected losing gains, so the recommendation emphasizes visibility and disciplined review.");
+      }
+
+      const fallback = {
+        core: [
+          "Your responses point to a simpler workflow with clear organization and review.",
+          "The recommendation keeps the experience focused without unnecessary complexity.",
+          "This tier supports visibility, structure, and repeatable habits."
+        ],
+        pro: [
+          "Your responses point to active trade management and a need for better workflow visibility.",
+          "This tier supports more structure across positions, accounts, and review routines.",
+          "The recommendation helps connect activity level with disciplined trade management."
+        ],
+        premium: [
+          "Your responses point to higher activity or broader multi-account oversight.",
+          "This tier supports advanced visibility across more complex workflows.",
+          "The recommendation is designed for traders managing more moving parts."
+        ]
+      };
+
+      return bullets.slice(0, 4).length ? bullets.slice(0, 4) : fallback[planKey];
+    }
+
     function buildOfferCard(planKey, isRecommended) {
       const plan = plans[planKey];
+
+      const wrap = document.createElement("div");
+      wrap.className = "offer-card-wrap";
+
+      if (isRecommended) {
+        const banner = document.createElement("div");
+        banner.className = "recommendation-banner";
+        banner.textContent = "Recommended for you";
+        wrap.appendChild(banner);
+      } else {
+        const spacer = document.createElement("div");
+        spacer.className = "recommendation-banner";
+        spacer.innerHTML = "&nbsp;";
+        wrap.appendChild(spacer);
+      }
+
       const card = document.createElement("div");
       card.className = "plan-card" + (isRecommended ? " recommended" : "") + (plan.popular ? " popular" : "");
 
       const badge = plan.popular ? '<div class="popular-label">Most Popular</div>' : "";
-      const recommendation = isRecommended ? '<div class="recommendation-label">Recommended for you</div>' : "";
       const label = isRecommended ? plan.trial : "Standard monthly pricing";
+      const labelClass = isRecommended ? "trial-label" : "standard-label";
       const period = isRecommended ? plan.period : plan.standardPeriod;
       const note = isRecommended ? `${plan.trial} available today.` : "Standard monthly pricing shown.";
+      const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
 
       card.innerHTML = `
         ${badge}
-        ${recommendation}
-        <div class="trial-label">${label}</div>
+        <div class="${labelClass}">${label}</div>
         <h3>Oppster ${plan.name}</h3>
         <div class="plan-price">${plan.price}<span>${period}</span></div>
         <p>${plan.desc}</p>
         <ul class="feature-list">
           ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
         </ul>
-        <p class="cancel-message">${note}</p>
+        <p class="offer-note">${note}</p>
         <button class="button ${isRecommended || plan.popular ? "primary" : "secondary"}" type="button" data-plan="${planKey}">
-          ${isRecommended ? plan.submit : `Choose ${plan.name}`}
+          ${buttonLabel}
         </button>
       `;
 
-      return card;
+      wrap.appendChild(card);
+      return wrap;
     }
 
     function applyRecommendation() {
@@ -951,7 +1047,8 @@
 
       const bullets = document.getElementById("recommendationBullets");
       bullets.innerHTML = "";
-      selected.why.forEach(item => {
+
+      getPersonalizedWhy(recommendedPlanKey).forEach(item => {
         const li = document.createElement("li");
         li.textContent = item;
         bullets.appendChild(li);
