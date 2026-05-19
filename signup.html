@@ -781,6 +781,9 @@
 
         <div class="trial-panel">
           <div class="offer-grid" id="offerGrid"></div>
+          <p class="recommendation-trust">
+            Transparent pricing with simple cancellation anytime.
+          </p>
         </div>
       </section>
 
@@ -1020,13 +1023,9 @@
         ? '<div class="popular-label">Most Popular</div>'
         : "";
     
-      const label = isRecommended ? plan.trial : "Standard monthly pricing";
-      const labelClass = isRecommended ? "trial-label" : "standard-label";
-      const period = isRecommended ? plan.period : plan.standardPeriod;
-      const note = isRecommended
-        ? `${plan.trial} available today.`
-        : "Standard monthly pricing shown.";
-    
+      const label = ""; //isRecommended ? plan.trial : "Standard monthly pricing";
+      const labelClass = ""; //isRecommended ? "trial-label" : "standard-label";
+      const period = isRecommended ? plan.period : plan.standardPeriod; 
       const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
     
       const buttonClass =
@@ -1038,14 +1037,13 @@
     
       card.innerHTML = `
         ${badge}
-        <div class="${labelClass}">${label}</div>
         <h3>Oppster ${plan.name}</h3>
         <div class="plan-price">${plan.price}<span>${period}</span></div>
         <p>${plan.desc}</p>
         <ul class="feature-list">
           ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
         </ul>
-        <p class="offer-note">${note}</p>
+        
         <button class="button ${buttonClass}" type="button" data-plan="${planKey}">
           ${buttonLabel}
         </button>
