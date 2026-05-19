@@ -1235,6 +1235,14 @@
         nextButton.style.display = "inline-flex";
       }
     
+      if (step === 1) {
+        backButton.textContent = "‹ Back to home";
+      } else if (step === 7) {
+        backButton.textContent = "‹ Back to plans";
+      } else {
+        backButton.textContent = "‹ Back";
+      }
+    
       document.querySelectorAll(".error").forEach(error => {
         error.style.display = "none";
       });
