@@ -390,6 +390,14 @@
       margin-bottom: 10px;
     }
 
+    .trial-offer-inline {
+      text-align: center;
+      color: var(--orange);
+      font-size: 14px;
+      font-weight: 800;
+      margin: 6px 0 14px;
+    }
+    
     .plan-card h3 {
       font-size: 30px;
       margin: 0 0 10px;
@@ -1042,6 +1050,10 @@
         <ul class="feature-list">
           ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
         </ul>
+        
+        ${isRecommended
+          ? `<p class="trial-offer-inline">${plan.trial} available today.</p>`
+          : ""}
         
         <button class="button ${buttonClass}" type="button" data-plan="${planKey}">
           ${buttonLabel}
