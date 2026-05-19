@@ -1036,11 +1036,9 @@
       const buttonLabel = isRecommended ? plan.submit : `Choose ${plan.name}`;
     
       const buttonClass =
-        planKey === "core"
-          ? "secondary"
-          : isRecommended || plan.popular
-            ? "primary"
-            : "secondary";
+        isRecommended
+          ? "primary"
+          : "secondary";
     
       card.innerHTML = `
         ${badge}
