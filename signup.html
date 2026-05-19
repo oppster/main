@@ -842,19 +842,19 @@
           <div class="reminder-bubble" id="reminderDate">
             You’ll get a reminder before your trial ends.
           </div>
-      
-          <p class="trust-note">
-            Transparent pricing with simple cancellation anytime.
-          </p>
-      
+  
           <form class="checkout-form" action="/api/create-checkout-session" method="POST">
             <input type="hidden" name="lookup_key" id="recommendedLookupKey" value="oppster_pro_monthly" />
             <input type="hidden" name="trial_days" id="recommendedTrialDays" value="7" />
             <button class="button primary" type="submit" id="recommendedSubmit">Start My Free Week</button>
           </form>
-        </div>
-      </section>
 
+           <p class="trust-note">
+            Transparent pricing with simple cancellation anytime.
+          </p>
+        </div>       
+      </section>
+          
       <div class="nav-buttons" id="navButtons">
         <button type="button" class="back-button" id="backButton">‹ Back to plans</button>
         <button type="button" class="button primary next-button" id="nextButton">Next</button>
