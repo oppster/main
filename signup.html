@@ -143,6 +143,15 @@
       max-width: 1100px;
     }
 
+    .billing-note {
+      margin-top: -6px;
+      margin-bottom: 26px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+    
     .option-panel,
     .trial-panel {
       background: white;
@@ -815,7 +824,11 @@
           <p class="step-lead" id="reminderSubtitle" style="margin-left:auto;margin-right:auto;">
             We’ll remind you 2 days before your trial ends.
           </p>
-      
+
+          <p class="billing-note" id="billingNote">
+            Then continue with full Pro access at $19/month.
+          </p>
+          
           <div class="reminder-bubble" id="reminderDate">
             You’ll get a reminder before your trial ends.
           </div>
@@ -1112,27 +1125,36 @@
       document.getElementById("recommendedTrialDays").value = trialDays;
     
       if (isPremiumToProDowngrade) {
-        document.getElementById("reminderTitle").textContent =
-          "We have a special offer for you.";
-      
-        document.getElementById("reminderSubtitle").textContent =
-          "Start with 3 days of full Pro access and explore Oppster at your own pace.";
-      
-        document.getElementById("recommendedSubmit").textContent =
-          "Start My 3 Day Trial";
-      
-        document.getElementById("reminderDate").textContent =
-          "You’ll receive a reminder before your 3 day trial ends.";
-      } else {
-        document.getElementById("reminderTitle").textContent =
-          "We’ll remind you before your trial ends.";
+
+      document.getElementById("reminderTitle").textContent =
+        "We have a special offer for you.";
     
-        document.getElementById("reminderSubtitle").textContent =
-          "We’ll remind you 2 days before your trial ends.";
+      document.getElementById("reminderSubtitle").textContent =
+        "Start with 3 days of full Pro access and explore Oppster at your own pace.";
     
-        document.getElementById("recommendedSubmit").textContent =
-          plan.submit;
-      }
+      document.getElementById("billingNote").textContent =
+        "Then continue with full Pro access at $19/month.";
+    
+      document.getElementById("recommendedSubmit").textContent =
+        "Start My 3 Day Trial";
+    
+      document.getElementById("reminderDate").textContent =
+        "You’ll receive a reminder before your 3 day trial ends.";
+    
+    } else {
+    
+      document.getElementById("reminderTitle").textContent =
+        "We’ll remind you before your trial ends.";
+    
+      document.getElementById("reminderSubtitle").textContent =
+        "We’ll remind you 2 days before your trial ends.";
+    
+      document.getElementById("billingNote").textContent =
+        `Then continue with full ${plan.name} access at ${plan.price}/month.`;
+    
+      document.getElementById("recommendedSubmit").textContent =
+        plan.submit;
+    }
     
       formatReminderDate(trialDays);
     }
