@@ -1205,21 +1205,30 @@
       document.querySelectorAll(".step").forEach(section => {
         section.classList.toggle("active", Number(section.dataset.step) === step);
       });
-
+    
       if (step <= discoverySteps) {
         stepTop.style.display = "block";
         navButtons.style.display = "flex";
+        nextButton.style.display = "inline-flex";
+    
         stepNumber.textContent = step;
         progressBar.style.width = ((step / discoverySteps) * 100) + "%";
+    
+      } else if (step === 7) {
+        stepTop.style.display = "none";
+        navButtons.style.display = "flex";
+        nextButton.style.display = "none";
+    
       } else {
         stepTop.style.display = "none";
         navButtons.style.display = "none";
+        nextButton.style.display = "inline-flex";
       }
-
+    
       document.querySelectorAll(".error").forEach(error => {
         error.style.display = "none";
       });
-
+    
       window.scrollTo(0, 0);
     }
 
