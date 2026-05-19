@@ -1030,9 +1030,11 @@
           ${plan.features.map(feature => `<li>${feature}</li>`).join("")}
         </ul>
         <p class="offer-note">${note}</p>
-        <button class="button ${isRecommended || plan.popular ? "primary" : "secondary"}" type="button" data-plan="${planKey}">
-          ${buttonLabel}
-        </button>
+        <button class="button ${
+          planKey === "core"
+            ? "secondary"
+            : (isRecommended || plan.popular ? "primary" : "secondary")
+        }"
       `;
 
       wrap.appendChild(card);
