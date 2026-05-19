@@ -248,14 +248,24 @@
       margin-top: 38px;
     }
 
+    .step[data-step="7"] .nav-buttons {
+      max-width: 760px;
+      margin: 18px auto 0;
+      justify-content: flex-start;
+    }
+
     .back-button {
       background: transparent;
       border: none;
-      color: var(--ink);
-      font-size: 18px;
-      font-weight: 800;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      padding: 12px 0;
+      padding: 0;
+    }
+    
+    .back-button:hover {
+      color: var(--ink);
     }
 
     .next-button {
@@ -846,7 +856,7 @@
       </section>
 
       <div class="nav-buttons" id="navButtons">
-        <button type="button" class="back-button" id="backButton">‹ Back</button>
+        <button type="button" class="back-button" id="backButton">‹ Back to plans</button>
         <button type="button" class="button primary next-button" id="nextButton">Next</button>
       </div>
 
