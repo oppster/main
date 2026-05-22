@@ -69,6 +69,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       valid: isActiveStatus && notExpired,
       email: license.email,
+      license_key: license.license_key,
       tier: license.tier,
       status: license.status,
       expires: license.current_period_end,
