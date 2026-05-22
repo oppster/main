@@ -19,7 +19,6 @@ export default async function handler(req, res) {
 
     const response = await fetch(
       `${supabaseUrl}/rest/v1/licenses?email=ilike.${encodeURIComponent(email)}&license_key=eq.${encodeURIComponent(license_key)}&select=*`,
-{
       {
         headers: {
           apikey: supabaseKey,
