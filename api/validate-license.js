@@ -17,19 +17,24 @@ export default async function handler(req, res) {
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    const testUrl = `${supabaseUrl}/rest/v1/licenses?select=*`;
+    const response = await fetch(
+      `${supabaseUrl}/rest/v1/licenses?email=eq.${encodeURIComponent(email)}&select=*`,
+      {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+      }
+    );
 
-    const response = await fetch(testUrl, {
-      method: "GET",
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-      },
-    });
-    
-    const text = await response.text();
-    
-    return res.status(response.status).send(text);
+    const rows = await response.json();
+
+    if (!response.ok || !Array.isArray(rows) || rows.length === 0) {
+      return res.status(404).json({
+        valid: false,
+        status: "NOT_FOUND",
+      });
+    }
 
     const license = rows[0];
     const today = new Date();
