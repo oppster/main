@@ -7,25 +7,42 @@ export default async function handler(req, res) {
     const email = String(req.body?.email || "").trim().toLowerCase();
     const license_key = String(req.body?.license_key || "").trim();
 
-    if (!email || !license_key) {
+    if (!email) {
       return res.status(400).json({
         valid: false,
-        error: "Email and license key are required",
+        error: "Email is required",
       });
     }
 
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    const response = await fetch(
-      `${supabaseUrl}/rest/v1/licenses?email=eq.${encodeURIComponent(email)}&select=*`,
-      {
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-        },
-      }
-    );
+    const todayStr = new Date().toISOString().slice(0, 10);
+
+    let query =
+      `${supabaseUrl}/rest/v1/licenses` +
+      `?email=ilike.${encodeURIComponent(email)}` +
+      `&status=in.(ACTIVE,TRIALING,GRACE)` +
+      `&current_period_end=gte.${todayStr}` +
+      `&select=*` +
+      `&order=current_period_end.desc` +
+      `&limit=1`;
+    
+    if (license_key) {
+      query =
+        `${supabaseUrl}/rest/v1/licenses` +
+        `?email=ilike.${encodeURIComponent(email)}` +
+        `&license_key=eq.${encodeURIComponent(license_key)}` +
+        `&select=*` +
+        `&limit=1`;
+    }
+    
+    const response = await fetch(query, {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    });
 
     const rows = await response.json();
 
