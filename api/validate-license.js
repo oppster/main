@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     const response = await fetch(
-      `${supabaseUrl}/rest/v1/licenses?license_key=eq.${encodeURIComponent(license_key)}&select=*`,
+      `${supabaseUrl}/rest/v1/licenses?email=eq.${encodeURIComponent(email)}&select=*`,
       {
         headers: {
           apikey: supabaseKey,
