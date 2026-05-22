@@ -4,7 +4,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, license_key } = req.body || {};
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    const license_key = String(req.body?.license_key || "").trim();
 
     if (!email || !license_key) {
       return res.status(400).json({
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     const response = await fetch(
-      `${supabaseUrl}/rest/v1/licenses?email=eq.${encodeURIComponent(email)}&license_key=eq.${encodeURIComponent(license_key)}&select=*`,
+      `${supabaseUrl}/rest/v1/licenses?email=ilike.${encodeURIComponent(email)}&license_key=eq.${encodeURIComponent(license_key)}&select=*`
       {
         headers: {
           apikey: supabaseKey,
