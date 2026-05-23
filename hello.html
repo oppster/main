@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Oppster Hello</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Inter, Arial, sans-serif;
+background:#fffaf4;
+color:#172033;
+line-height:1.7;
+}
+
+/* Header */
+
+.policy-header{
+background:white;
+border-bottom:1px solid #e5e7eb;
+padding:18px 24px;
+}
+
+.header-container{
+max-width:1100px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+text-decoration:none;
+font-size:1.7rem;
+font-weight:700;
+color:#172033;
+}
+
+.opp{
+color:#ff6b00;
+}
+
+.back-home{
+text-decoration:none;
+color:#46556f;
+}
+
+.back-home:hover{
+color:#ff6b00;
+}
+
+
+/* Main */
+
+.policy-container{
+max-width:900px;
+margin:auto;
+padding:64px 24px;
+}
+
+h1{
+font-size:2.2rem;
+margin-bottom:10px;
+}
+
+.support-form{
+display:flex;
+flex-direction:column;
+gap:16px;
+margin-top:35px;
+}
+
+.support-form input,
+.support-form textarea,
+.support-form select{
+
+padding:14px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:1rem;
+font-family:inherit;
+}
+
+.support-form button{
+
+background:#ff6b00;
+color:white;
+border:none;
+padding:14px;
+border-radius:8px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+}
+
+.support-form button:hover{
+
+opacity:.9;
+}
+
+.support-note{
+
+margin-top:25px;
+font-size:.85rem;
+opacity:.7;
+}
+
+
+/* Footer */
+
+.footer-bottom{
+
+text-align:center;
+padding:35px;
+margin-top:60px;
+border-top:1px solid #e5e7eb;
+font-size:.85rem;
+color:#6b7280;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="policy-header">
+
+<div class="header-container">
+
+<a href="/" class="logo">
+<span class="opp">Opp</span>ster™
+</a>
+
+<a href="/" class="back-home">
+Return Home
+</a>
+
+</div>
+
+</header>
+
+
+
+<main class="policy-container">
+
+<h1>Oppster Hello</h1>
+
+<p>
+Questions, ideas, bugs, feedback, or feature requests —
+we'd love to hear from you.
+</p>
+
+
+<form class="support-form" action="https://formspree.io/f/meedzppo" method="POST">
+
+<input type="hidden" name="source" value="Oppster Website">
+<input type="hidden" id="browserInfo" name="browserInfo">
+<input type="hidden" id="platformInfo" name="platformInfo">
+<input type="hidden" id="screenInfo" name="screenInfo">
+<input type="hidden" id="pageUrl" name="pageUrl">
+<input type="hidden" id="languageInfo" name="languageInfo">
+<input type="hidden" id="timeStamp" name="timeStamp">
+<input type="hidden" id="workbookBuild" name="workbookBuild" value="1.0">
+<input type="hidden" name="siteVersion" value="1.0">
+<input type="hidden" id="userTimeZone" name="userTimeZone">
+
+<label>Request Type</label>
+
+<select name="requestType" required>
+
+<option value="">Select one</option>
+<option>General Question</option>
+<option>Bug Report</option>
+<option>Feature Request</option>
+<option>Account / Subscription</option>
+
+</select>
+
+
+<label>Current Plan</label>
+
+<select name="plan">
+
+<option>Core</option>
+<option>Pro</option>
+<option>Premium</option>
+<option>Not Sure</option>
+
+</select>
+
+
+<label>Workbook Version</label>
+
+<input type="text" name="version" placeholder="Example: 1.0">
+
+
+<label>Email</label>
+
+<input type="email" name="email" placeholder="you@example.com" required>
+
+
+<label>Message</label>
+
+<textarea rows="8" name="message" placeholder="How can we help?" required></textarea>
+
+
+<button type="submit">
+Send Message
+</button>
+
+</form>
+
+
+<p class="support-note">
+
+We aim to respond as quickly as possible,
+although response times may vary.
+
+</p>
+
+</main>
+
+
+
+<div class="footer-bottom">
+
+© 2026 Oppster™. Built for traders who value structure and control.<br>
+
+Oppster LLC. All rights reserved.
+
+</div>
+<script>
+
+document.getElementById("browserInfo").value =
+navigator.userAgent;
+
+document.getElementById("platformInfo").value =
+navigator.platform;
+
+document.getElementById("screenInfo").value =
+screen.width + " x " + screen.height;
+
+document.getElementById("pageUrl").value =
+window.location.href;
+
+document.getElementById("languageInfo").value =
+navigator.language;
+
+document.getElementById("timeStamp").value =
+new Date().toLocaleString();
+
+document.getElementById("userTimeZone").value =
+Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+</script>
+
+</body>
+
+</html>
