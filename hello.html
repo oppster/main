@@ -292,36 +292,30 @@ Oppster LLC. All rights reserved.
 
 </div>
 <script>
-  
-document.getElementById("browserInfo").value =
-navigator.userAgent;
 
-document.getElementById("platformInfo").value =
-navigator.platform;
-
-document.getElementById("screenInfo").value =
-screen.width + " x " + screen.height;
-
-document.getElementById("pageUrl").value =
-window.location.href;
-
-document.getElementById("languageInfo").value =
-navigator.language;
-
-document.getElementById("timeStamp").value =
-new Date().toLocaleString();
-
+document.getElementById("browserInfo").value = navigator.userAgent;
+document.getElementById("platformInfo").value = navigator.platform;
+document.getElementById("screenInfo").value = screen.width + " x " + screen.height;
+document.getElementById("pageUrl").value = window.location.href;
+document.getElementById("languageInfo").value = navigator.language;
+document.getElementById("timeStamp").value = new Date().toLocaleString();
 document.getElementById("userTimeZone").value =
 Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-const requestDropdown =
-document.querySelector('[name="requestType"]');
+function updateSubjectLine() {
+    const requestType = document.querySelector('[name="requestType"]').value;
+    const plan = document.querySelector('[name="plan"]').value;
+    const version = document.querySelector('[name="workbookVersion"]').value;
 
-requestDropdown.addEventListener("change", function(){
+    document.getElementById("subjectLine").value =
+    "Oppster Hello | " + requestType + " | " + plan + " | " + version;
+}
 
-document.getElementById("subjectLine").value =
-"Oppster Hello | " + this.value;
+document.querySelector('[name="requestType"]').addEventListener("change", updateSubjectLine);
+document.querySelector('[name="plan"]').addEventListener("change", updateSubjectLine);
+document.querySelector('[name="workbookVersion"]').addEventListener("change", updateSubjectLine);
 
+document.querySelector(".support-form").addEventListener("submit", updateSubjectLine);
 
 </script>
 
