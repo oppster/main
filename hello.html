@@ -26,6 +26,18 @@ border-bottom:1px solid #e5e7eb;
 padding:18px 24px;
 }
 
+.founder-note{
+
+background:#fff4e8;
+border:1px solid #ffd7b3;
+padding:18px;
+margin-top:25px;
+margin-bottom:30px;
+border-radius:12px;
+font-size:.95rem;
+
+}
+  
 .header-container{
 max-width:1100px;
 margin:auto;
@@ -158,6 +170,15 @@ Questions, ideas, bugs, feedback, or feature requests —
 we'd love to hear from you.
 </p>
 
+<div class="founder-note">
+
+🌟 <strong>Founder Preview</strong><br><br>
+
+You're among the first users helping shape Oppster.
+Your feedback, ideas, and insights directly influence
+future releases and improvements.
+
+</div>
 
 <form class="support-form" action="https://formspree.io/f/meedzppo" method="POST">
 
@@ -199,7 +220,19 @@ we'd love to hear from you.
 
 <label>Workbook Version</label>
 
-<input type="text" name="version" placeholder="Example: 1.0">
+<select name="workbookVersion" required>
+
+<option value="">Select version</option>
+
+<option>v1.0 Founder Preview 🌟</option>
+
+<option>v2.0</option>
+
+<option>v2.7</option>
+
+<option>Other / Not Sure</option>
+
+</select>
 
 
 <label>Email</label>
