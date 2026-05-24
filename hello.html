@@ -203,6 +203,7 @@ We appreciate your interest in Oppster and thank you for helping us build someth
 <form class="support-form" action="https://formspree.io/f/meedzppo" method="POST">
 
 <input type="hidden" name="source" value="Oppster Website">
+<input type="hidden" id="subjectLine" name="_subject">
 <input type="hidden" id="browserInfo" name="browserInfo">
 <input type="hidden" id="platformInfo" name="platformInfo">
 <input type="hidden" id="screenInfo" name="screenInfo">
@@ -291,7 +292,7 @@ Oppster LLC. All rights reserved.
 
 </div>
 <script>
-
+  
 document.getElementById("browserInfo").value =
 navigator.userAgent;
 
@@ -312,6 +313,15 @@ new Date().toLocaleString();
 
 document.getElementById("userTimeZone").value =
 Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+const requestDropdown =
+document.querySelector('[name="requestType"]');
+
+requestDropdown.addEventListener("change", function(){
+
+document.getElementById("subjectLine").value =
+"Oppster Hello | " + this.value;
+
 
 </script>
 
