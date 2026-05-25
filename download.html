@@ -1,0 +1,204 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Download Oppster</title>
+
+<link rel="stylesheet" href="styles.css">
+
+<style>
+
+body{
+    margin:0;
+    font-family:Segoe UI, sans-serif;
+    background:#f7f5f2;
+    color:#1f1f1f;
+  }
+
+.checkout-page{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+  }
+
+.checkout-wrap{
+    width:100%;
+    max-width:700px;
+  }
+
+.checkout-card{
+    background:white;
+    border-radius:18px;
+    padding:50px;
+    text-align:center;
+    box-shadow:
+    0 8px 30px rgba(0,0,0,.08);
+  }
+
+.oppster-logo{
+    width:160px;
+    margin-bottom:20px;
+  }
+
+.plan-label{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:50px;
+    background:#fff3e8;
+    color:#ff6a00;
+    font-weight:600;
+    margin-bottom:25px;
+  }
+
+h1{
+    margin-bottom:15px;
+  }
+
+.checkout-subtext{
+    color:#666;
+    line-height:1.6;
+    margin-bottom:35px;
+  }
+
+.download-form{
+    text-align:left;
+    margin-top:25px;
+  }
+
+.download-form label{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:8px;
+    margin-top:18px;
+  }
+
+.download-form input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+    box-sizing:border-box;
+  }
+
+.button{
+    display:inline-block;
+    margin-top:30px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    text-decoration:none;
+  }
+
+.primary{
+    background:#ff6a00;
+    color:white;
+  }
+
+.primary:hover{
+    opacity:.90;
+  }
+
+.secure-note{
+    margin-top:25px;
+    font-size:13px;
+    color:#888;
+  }
+
+.footer-link{
+    margin-top:25px;
+    display:block;
+    font-size:14px;
+    color:#777;
+    text-decoration:none;
+  }
+
+</style>
+
+</head>
+
+<body class="checkout-page">
+
+<main class="checkout-wrap">
+
+<section class="checkout-card">
+
+<img src="oppster-logo.png" alt="Oppster Logo" class="oppster-logo">
+
+<div class="plan-label">
+Founder Preview
+</div>
+
+<h1>Download Oppster</h1>
+
+<p class="checkout-subtext">
+Enter the email and license key associated with your subscription to securely download your Oppster workbook.
+</p>
+
+<form class="download-form" id="downloadForm">
+
+<label>
+Email used at checkout
+</label>
+
+<input type="email" name="email" required>
+
+<label>
+License Key
+</label>
+
+<input type="text" name="licenseKey" required>
+
+<button type="submit" class="button primary">
+Verify & Download
+</button>
+
+</form>
+
+<p class="secure-note">
+For your protection, download activity may be recorded including date, time, device/browser information, and related license activity.
+</p>
+
+<a href="index.html" class="footer-link">
+← Return to Oppster
+</a>
+
+</section>
+
+</main>
+
+<script>
+
+document
+.getElementById("downloadForm")
+.addEventListener(
+"submit",
+
+async function(e){
+e.preventDefault();
+alert(
+"Connect API route next."
+);
+
+}
+
+);
+
+</script>
+
+</body>
+
+</html>
+```
