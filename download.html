@@ -196,79 +196,42 @@ For your protection, download activity may be recorded including date, time, dev
 
 document
 .getElementById("downloadForm")
-.addEventListener(
-"submit",
+.addEventListener("submit", async function(e){
 
-async function(e){
+    e.preventDefault();
 
-e.preventDefault();
+    const email = document.querySelector('[name="email"]').value;
+    const licenseKey = document.querySelector('[name="licenseKey"]').value;
 
-const email =
-document.querySelector(
-'[name="email"]'
-).value;
+    try {
 
-const licenseKey =
-document.querySelector(
-'[name="licenseKey"]'
-).value;
+        const response = await fetch("/api/download-workbook", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                licenseKey: licenseKey
+            })
+        });
 
-try{
+        const data = await response.json();
 
-const response =
-await fetch(
-"/api/download-workbook",
-{
-method:"POST",
+        if (data.success) {
+            window.location.href = data.downloadUrl;
+        } else {
+            alert(data.error || "Unable to validate download.");
+        }
 
-headers:{
-"Content-Type":"application/json"
-},
+    } catch (error) {
 
-body:JSON.stringify({
+        console.error(error);
+        alert("Unexpected error occurred.");
 
-email:email,
-licenseKey:licenseKey
+    }
 
-})
-
-}
-
-);
-
-const data =
-await response.json();
-
-if(data.success){
-
-window.location.href =
-data.downloadUrl;
-
-}
-else{
-
-alert(
-data.error ||
-"Unable to validate download."
-);
-
-}
-
-}
-
-catch(error){
-
-console.error(error);
-
-alert(
-"Unexpected error occurred."
-);
-
-}
-
-}
-
-);
+});
 
 </script>
 
