@@ -8,8 +8,6 @@
 
 <title>Download Oppster</title>
 
-<link rel="stylesheet" href="styles.css">
-
 <style>
 
 body{
@@ -46,12 +44,12 @@ body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    margin-bottom:30px;
+    margin-bottom:24px;
     }
 
 .oppster-logo{
-    width:180px;
-    margin-bottom:18px;
+    width:200px;
+    margin-bottom:12px;
     }
 
 .plan-label{
@@ -65,13 +63,16 @@ body{
 
 h1{
     margin-bottom:15px;
-  }
+    }
 
 .checkout-subtext{
-    color:#666;
-    line-height:1.6;
+    color:#6a625c;
+    line-height:1.7;
     margin-bottom:35px;
-  }
+    max-width:520px;
+    margin-left:auto;
+    margin-right:auto;
+    }
 
 .download-form{
     text-align:left;
@@ -108,6 +109,11 @@ h1{
     text-decoration:none;
   }
 
+.button:disabled{
+    opacity:.7;
+    cursor:not-allowed;
+    }
+    
 .primary{
     background:#ff6a00;
     color:white;
@@ -200,8 +206,12 @@ document
 
     e.preventDefault();
 
+    const button = document.querySelector('button[type="submit"]');
     const email = document.querySelector('[name="email"]').value;
     const licenseKey = document.querySelector('[name="licenseKey"]').value;
+
+    button.disabled = true;
+    button.textContent = "Verifying...";
 
     try {
 
@@ -222,13 +232,17 @@ document
             window.location.href = data.downloadUrl;
         } else {
             alert(data.error || "Unable to validate download.");
+            button.disabled = false;
+            button.textContent = "Verify & Download";
         }
 
     } catch (error) {
 
         console.error(error);
-
         alert("Unexpected error occurred.");
+
+        button.disabled = false;
+        button.textContent = "Verify & Download";
 
     }
 
