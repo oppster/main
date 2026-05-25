@@ -224,10 +224,14 @@ document
             alert(data.error || "Unable to validate download.");
         }
 
-    } catch (error) {
+    } catch (err) {
 
-        console.error(error);
-        alert("Unexpected error occurred.");
+        console.error("Download API error:", err);
+
+        return res.status(500).json({
+            success:false,
+            error: err.message || "Unexpected server error"
+        }
 
     }
 
