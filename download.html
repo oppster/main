@@ -229,7 +229,74 @@ document
         const data = await response.json();
 
         if (data.success) {
-            window.location.href = data.downloadUrl;
+        
+            const card =
+            document.querySelector(".checkout-card");
+        
+            card.innerHTML = `
+        
+                <div class="hero-header">
+        
+                    <img src="oppster-logo.png"
+                         alt="Oppster Logo"
+                         class="oppster-logo">
+        
+                    <div class="plan-label">
+        
+                        🌟 Founder Member
+        
+                    </div>
+        
+                </div>
+        
+                <h1>
+        
+                    Download Ready
+        
+                </h1>
+        
+                <p class="checkout-subtext">
+        
+                    Your Oppster workbook download has started successfully.
+        
+                </p>
+        
+                <ul style="
+                    list-style:none;
+                    padding:0;
+                    line-height:2;
+                    color:#6a625c;
+                ">
+        
+                    <li>✓ Workbook download initiated</li>
+                    <li>✓ Download activity recorded</li>
+                    <li>✓ You're ready to activate Oppster</li>
+        
+                </ul>
+        
+                <a
+                class="button primary"
+                href="${data.downloadUrl}">
+        
+                Download Again
+        
+                </a>
+        
+                <a
+                href="index.html"
+                class="footer-link">
+        
+                ← Return to Oppster
+        
+                </a>
+        
+            `;
+        
+            window.open(
+                data.downloadUrl,
+                "_blank"
+            );
+        
         } else {
             alert(data.error || "Unable to validate download.");
             button.disabled = false;
