@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const { email, licenseKey } = req.body || {};
+    const { email, licenseKey, token } = req.body || {};
 
     if (!email || !licenseKey) {
       return res.status(400).json({
@@ -43,8 +43,48 @@ export default async function handler(req, res) {
       });
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
-    const normalizedKey = licenseKey.trim();
+    let normalizedEmail = email?.trim().toLowerCase();
+    let normalizedKey = licenseKey?.trim();
+
+    if (token) {
+
+        const {
+            data: tokenLicense,
+            error: tokenError
+        } = await supabase
+            .from("licenses")
+            .select(
+                "email,license_key"
+            )
+            .eq(
+                "download_token",
+                token
+            )
+            .single();
+    
+        if (
+            tokenError ||
+            !tokenLicense
+        ) {
+    
+            return res.status(403)
+            .json({
+    
+                success:false,
+                error:
+                "Invalid download link."
+    
+            });
+    
+        }
+    
+        normalizedEmail =
+            tokenLicense.email;
+    
+        normalizedKey =
+            tokenLicense.license_key;
+    
+    }    
 
     const ipAddress =
       req.headers["x-forwarded-for"] ||
