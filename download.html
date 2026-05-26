@@ -272,7 +272,15 @@ form.addEventListener("submit", async function(e){
             })
         });
 
-        const data = await response.json();
+        const responseText = await response.text();
+
+        let data;
+        
+        try {
+            data = JSON.parse(responseText);
+        } catch {
+            throw new Error(responseText);
+        }
 
         if (!data.success) {
             msg.style.display = "block";
