@@ -36,6 +36,15 @@ export default async function handler(req, res) {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedKey = licenseKey.trim();
 
+    const ipAddress =
+      req.headers["x-forwarded-for"] ||
+      req.socket.remoteAddress ||
+      "Unknown";
+
+    const browserInfo =
+      req.headers["user-agent"] ||
+      "Unknown";
+
     const { data: license, error: licenseError } = await supabase
       .from("licenses")
       .select("email, license_key, tier, status, current_period_end, account_limit")
@@ -44,6 +53,21 @@ export default async function handler(req, res) {
       .single();
 
     if (licenseError || !license) {
+
+      await supabase
+        .from("download_events")
+        .insert({
+          email: normalizedEmail,
+          license_key: normalizedKey,
+          tier: null,
+          download_ip: ipAddress,
+          download_country: "Unknown",
+          user_agent: browserInfo,
+          ip_match_score: 0,
+          status: "INVALID_LICENSE",
+          downloaded_at: new Date()
+        });
+
       return res.status(403).json({
         success: false,
         error: "We could not validate that email and license key combination."
@@ -53,6 +77,21 @@ export default async function handler(req, res) {
     const status = String(license.status || "").toLowerCase();
 
     if (status !== "active") {
+
+      await supabase
+        .from("download_events")
+        .insert({
+          email: normalizedEmail,
+          license_key: normalizedKey,
+          tier: license.tier,
+          download_ip: ipAddress,
+          download_country: "Unknown",
+          user_agent: browserInfo,
+          ip_match_score: 0,
+          status: "INACTIVE_LICENSE",
+          downloaded_at: new Date()
+        });
+
       return res.status(403).json({
         success: false,
         error: "This license is not currently active."
@@ -64,12 +103,41 @@ export default async function handler(req, res) {
       const now = new Date();
 
       if (expiresAt < now) {
+
+        await supabase
+          .from("download_events")
+          .insert({
+            email: normalizedEmail,
+            license_key: normalizedKey,
+            tier: license.tier,
+            download_ip: ipAddress,
+            download_country: "Unknown",
+            user_agent: browserInfo,
+            ip_match_score: 0,
+            status: "EXPIRED_LICENSE",
+            downloaded_at: new Date()
+          });
+
         return res.status(403).json({
           success: false,
           error: "This license has expired."
         });
       }
     }
+
+    await supabase
+      .from("download_events")
+      .insert({
+        email: normalizedEmail,
+        license_key: normalizedKey,
+        tier: license.tier,
+        download_ip: ipAddress,
+        download_country: "Unknown",
+        user_agent: browserInfo,
+        ip_match_score: 0,
+        status: "SUCCESS",
+        downloaded_at: new Date()
+      });
 
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
