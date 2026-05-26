@@ -211,7 +211,7 @@ export default async function handler(req, res) {
 
     const newToken = crypto.randomUUID();
 
-    await supabase
+    const { error: tokenUpdateError } = await supabase
       .from("licenses")
       .update({
           download_token: newToken,
@@ -219,6 +219,22 @@ export default async function handler(req, res) {
       })
       .eq("email", normalizedEmail)
       .eq("license_key", normalizedKey);
+    
+    if (tokenUpdateError) {
+    
+        console.error(
+            "Token update failed:",
+            tokenUpdateError.message
+        );
+    
+        return res.status(500).json({
+            success:false,
+            error:
+            "Token rotation failed: " +
+            tokenUpdateError.message
+        });
+    
+    }
     
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
