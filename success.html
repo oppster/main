@@ -57,13 +57,23 @@
     }
     
     .feature-list {
-      padding-left: 20px;
-      margin-bottom: 32px;
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 32px;
     }
     
     .feature-list li {
-      margin-bottom: 14px;
-      color: #0f172a;
+        margin-bottom: 14px;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+    }
+    
+    .feature-list li::before {
+        content: "✓";
+        color: #ff6a00;
+        font-weight: 700;
+        margin-right: 12px;
     }
     
     .secure-note {
@@ -111,12 +121,12 @@
     <section class="checkout-card">
       <img src="oppster-logo.png" alt="Oppster Logo" class="oppster-logo">
 
-      <div class="plan-label">Subscription active</div>
+      <div class="plan-label"> ✓ Subscription active</div>
 
-      <h1>Welcome to Oppster.</h1>
+      <h1>Welcome to Oppster</h1>
 
       <p class="checkout-subtext">
-        Your subscription was successful. Next, we’ll help you get started with your Oppster workbook and trading workflow.
+        Your subscription is active and your Oppster workbook access is ready. You're all set to begin building your trading workflow.
       </p>
 
       <ul class="feature-list">
@@ -131,7 +141,7 @@
           </a>
       </div>
 
-      <p class="secure-note">Questions? Contact us at your Oppster support email.</p>
+      <p class="secure-note">Questions? Contact Team Oppster for support.</p>
     </section>
   </main>
 </body>
