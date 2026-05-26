@@ -215,25 +215,17 @@ For your protection, download activity may be recorded including date, time, dev
 
 <script>
 
-const params = new URLSearchParams(
-    window.location.search
-);
-
-const downloadToken =
-    params.get("token");
+const params = new URLSearchParams(window.location.search);
+const downloadToken = params.get("token");
 
 if (downloadToken) {
-    const emailInput = document.querySelector('[name="email"]');
-    const licenseInput = document.querySelector('[name="licenseKey"]');
+    document.querySelector('[name="email"]').removeAttribute("required");
+    document.querySelector('[name="licenseKey"]').removeAttribute("required");
 
-    emailInput.removeAttribute("required");
-    licenseInput.removeAttribute("required");
-
-    emailInput.style.display = "none";
-    licenseInput.style.display = "none";
-
-    emailInput.previousElementSibling.style.display = "none";
-    licenseInput.previousElementSibling.style.display = "none";
+    document.getElementById("downloadMessage").style.display = "block";
+    document.getElementById("downloadMessage").style.color = "#6a625c";
+    document.getElementById("downloadMessage").innerHTML =
+        "Secure download link detected. Click Verify & Download to continue.";
 }
     
 document
