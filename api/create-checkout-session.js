@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
         },
       ],
       mode: 'subscription',
-      success_url: 'https://oppster.com/success.html',
+      success_url: 'https://oppster.com/success.html?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://oppster.com/cancel.html',
     };
 
