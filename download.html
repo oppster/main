@@ -369,15 +369,17 @@ form.addEventListener("submit", async function(e){
         window.open(data.downloadUrl, "_blank");
 
     } catch (error) {
-
+    
+        console.error("Download page error:", error);
+    
         msg.style.display = "block";
         msg.style.color = "#c0392b";
         msg.innerHTML =
-            "Unexpected error occurred. Please try again or contact Team Oppster.";
-
+            error.message || "Unexpected error occurred. Please try again or contact Team Oppster.";
+    
         button.disabled = false;
         button.textContent = "Verify & Download";
-
+    
     }
 
 });
