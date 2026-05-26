@@ -165,19 +165,19 @@ h1{
 
 <h1>Download Oppster</h1>
 
-<p class="checkout-subtext">
+<p class="checkout-subtext" id="downloadSubtext">
 Enter the email and license key associated with your subscription to securely download your Oppster workbook.
 </p>
 
 <form class="download-form" id="downloadForm">
 
-<label>
+<label id="emailLabel">
 Email used at checkout
 </label>
 
 <input type="email" name="email" required>
 
-<label>
+<label id="licenseLabel">
 License Key
 </label>
 
@@ -226,32 +226,25 @@ const msg = document.getElementById("downloadMessage");
 
 if (downloadToken) {
 
-    document.querySelector('[name="email"]')
-        .closest("label")
-        ?.style.setProperty("display","none");
+    emailInput.removeAttribute("required");
+    licenseInput.removeAttribute("required");
 
-    document.querySelector('[name="licenseKey"]')
-        .closest("label")
-        ?.style.setProperty("display","none");
+    document.getElementById("downloadSubtext").style.display = "none";
+    document.getElementById("emailLabel").style.display = "none";
+    document.getElementById("licenseLabel").style.display = "none";
 
-    document.querySelector('[name="email"]')
-        .style.display = "none";
-
-    document.querySelector('[name="licenseKey"]')
-        .style.display = "none";
-
-    const msg =
-    document.getElementById("downloadMessage");
+    emailInput.style.display = "none";
+    licenseInput.style.display = "none";
 
     msg.style.display = "block";
     msg.style.color = "#6a625c";
     msg.style.fontSize = "15px";
+    msg.style.lineHeight = "1.8";
 
     msg.innerHTML = `
-      Secure download link verified.
-      <br><br>
-      No email or license key is required.
-      Click Verify & Download to continue.
+        Secure download link detected.
+        <br><br>
+        Click Verify & Download to continue.
     `;
 }
 
