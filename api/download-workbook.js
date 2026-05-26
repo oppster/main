@@ -86,9 +86,10 @@ export default async function handler(req, res) {
         
             await logDownloadEvent({
                 email: "UNKNOWN",
-                license_key: 
-                  token?.substring(0,8) + "..."
-                  : "UNKNOWN",
+                license_key:
+                  token
+                    ? token.substring(0,8) + "..."
+                    : "UNKNOWN",
                 tier: "UNKNOWN",
                 download_ip: ipAddress,
                 download_country: downloadCountry,
