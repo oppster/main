@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import crypto from "crypto";
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -208,6 +209,17 @@ export default async function handler(req, res) {
       downloaded_at: new Date()
     });
 
+    const newToken = crypto.randomUUID();
+
+    await supabase
+      .from("licenses")
+      .update({
+          download_token: newToken,
+          last_downloaded_at: new Date()
+      })
+      .eq("email", normalizedEmail)
+      .eq("license_key", normalizedKey);
+    
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
       .createSignedUrl(
