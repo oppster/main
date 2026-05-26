@@ -123,6 +123,10 @@ h1{
     opacity:.90;
   }
 
+.success-list{
+    margin-bottom:25px;
+  }
+
 .secure-note{
     margin-top:25px;
     font-size:13px;
@@ -255,7 +259,7 @@ document
                     Your Oppster workbook has been securely delivered and is ready for activation.
                 </p>
             
-                <ul style="
+                <ul class="success-list" style="
                     list-style:none;
                     padding:0;
                     line-height:2;
@@ -270,15 +274,16 @@ document
                     class="button primary"
                     disabled
                     style="
-                        opacity:.65;
-                        cursor:not-allowed;
-                    ">
+                        background:#d8e9d6;
+                        color:#2e6b2e;
+                        cursor:default;
+                        border:none;
+                ">
                     Download Complete
                 </button>
             
                 <p class="secure-note">
-                    For your protection, this download activity may be recorded, including date, time,
-                    device/browser information, and related license activity.
+                    For your protection and account security, download activity may be recorded, including date, time, device/browser information, and related license activity.
                 </p>
             
                 <p class="secure-note">
