@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import crypto from "crypto";
+import { randomUUID } from "crypto";
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -263,7 +263,7 @@ export default async function handler(req, res) {
       downloaded_at: new Date()
     });
 
-    const newToken = crypto.randomUUID();
+    const newToken = randomUUID();
 
     const { error: tokenUpdateError } = await supabase
       .from("licenses")
