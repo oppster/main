@@ -223,11 +223,17 @@ const downloadToken =
     params.get("token");
 
 if (downloadToken) {
-    document.querySelector('[name="email"]').required = false;
-    document.querySelector('[name="licenseKey"]').required = false;
+    const emailInput = document.querySelector('[name="email"]');
+    const licenseInput = document.querySelector('[name="licenseKey"]');
 
-    document.querySelector('[name="email"]').parentElement.style.display = "none";
-    document.querySelector('[name="licenseKey"]').parentElement.style.display = "none";
+    emailInput.removeAttribute("required");
+    licenseInput.removeAttribute("required");
+
+    emailInput.style.display = "none";
+    licenseInput.style.display = "none";
+
+    emailInput.previousElementSibling.style.display = "none";
+    licenseInput.previousElementSibling.style.display = "none";
 }
     
 document
