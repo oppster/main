@@ -218,13 +218,16 @@ For your protection, download activity may be recorded including date, time, dev
 const params = new URLSearchParams(window.location.search);
 const downloadToken = params.get("token");
 
+console.log("Download token:", downloadToken);
+
 if (downloadToken) {
     document.querySelector('[name="email"]').removeAttribute("required");
     document.querySelector('[name="licenseKey"]').removeAttribute("required");
 
-    document.getElementById("downloadMessage").style.display = "block";
-    document.getElementById("downloadMessage").style.color = "#6a625c";
-    document.getElementById("downloadMessage").innerHTML =
+    const msg = document.getElementById("downloadMessage");
+    msg.style.display = "block";
+    msg.style.color = "#6a625c";
+    msg.innerHTML =
         "Secure download link detected. Click Verify & Download to continue.";
 }
     
@@ -234,6 +237,8 @@ document
 
     e.preventDefault();
 
+    console.log("Submit fired");
+    console.log("Token sent:", downloadToken);
     const button = document.querySelector('button[type="submit"]');
     let email = document.querySelector('[name="email"]').value;
     let licenseKey = document.querySelector('[name="licenseKey"]').value;
