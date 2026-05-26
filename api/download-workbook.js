@@ -55,6 +55,29 @@ export default async function handler(req, res) {
       req.headers["user-agent"] ||
       "Unknown";
 
+    const { data: previousDownloads } = await supabase
+      .from("download_events")
+      .select("download_ip")
+      .eq("email", normalizedEmail)
+      .order("downloaded_at", { ascending: false })
+      .limit(3);
+    
+    let ipMatchScore = 0;
+    
+    if (previousDownloads?.length > 0) {
+    
+      const matchCount =
+        previousDownloads.filter(
+          x => x.download_ip === ipAddress
+        ).length;
+    
+      ipMatchScore =
+        Math.round(
+          (matchCount / previousDownloads.length) * 100
+        );
+    
+    }
+    
     const { data: license, error: licenseError } = await supabase
       .from("licenses")
       .select("email, license_key, tier, status, current_period_end, account_limit")
@@ -66,11 +89,11 @@ export default async function handler(req, res) {
       await logDownloadEvent({
         email: normalizedEmail,
         license_key: normalizedKey,
-        tier: null,
+        tier: "UNKNOWN",
         download_ip: ipAddress,
         download_country: "Unknown",
         user_agent: browserInfo,
-        ip_match_score: 0,
+        ip_match_score: ipMatchScore,
         status: "INVALID_LICENSE",
         downloaded_at: new Date()
       });
@@ -91,7 +114,7 @@ export default async function handler(req, res) {
         download_ip: ipAddress,
         download_country: "Unknown",
         user_agent: browserInfo,
-        ip_match_score: 0,
+        ip_match_score: ipMatchScore,
         status: "INACTIVE_LICENSE",
         downloaded_at: new Date()
       });
@@ -114,7 +137,7 @@ export default async function handler(req, res) {
           download_ip: ipAddress,
           download_country: "Unknown",
           user_agent: browserInfo,
-          ip_match_score: 0,
+          ip_match_score: ipMatchScore,
           status: "EXPIRED_LICENSE",
           downloaded_at: new Date()
         });
@@ -133,7 +156,7 @@ export default async function handler(req, res) {
       download_ip: ipAddress,
       download_country: "Unknown",
       user_agent: browserInfo,
-      ip_match_score: 0,
+      ip_match_score: ipMatchScore,
       status: "SUCCESS",
       downloaded_at: new Date()
     });
