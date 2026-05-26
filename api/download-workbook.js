@@ -172,7 +172,7 @@ export default async function handler(req, res) {
         error: "This license is not currently active."
       });
     }
-
+    
     if (license.current_period_end) {
       const expiresAt = new Date(license.current_period_end);
       const now = new Date();
@@ -197,7 +197,7 @@ export default async function handler(req, res) {
       }
     }
 
-    const { count } = await supabase
+    const { count, error: countError } = await supabase
       .from("download_events")
       .select("*", {
           count:"exact",
@@ -206,7 +206,26 @@ export default async function handler(req, res) {
       .eq("license_key", normalizedKey)
       .eq("status","SUCCESS");
     
-    if (count >= 2) {
+    if (countError) {
+    
+        console.error(
+          "Download count check failed:",
+          countError.message
+        );
+    
+    } else if (count >= 2) {
+    
+        await logDownloadEvent({
+          email: normalizedEmail,
+          license_key: normalizedKey,
+          tier: license.tier,
+          download_ip: ipAddress,
+          download_country: downloadCountry,
+          user_agent: browserInfo,
+          ip_match_score: ipMatchScore,
+          status: "DOWNLOAD_LIMIT_REACHED",
+          downloaded_at: new Date()
+        });
     
         return res.status(403).json({
           success:false,
