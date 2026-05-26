@@ -8,6 +8,16 @@ const supabase = createClient(
   supabaseServiceRoleKey
 );
 
+async function logDownloadEvent(eventData) {
+  const { error } = await supabase
+    .from("download_events")
+    .insert(eventData);
+
+  if (error) {
+    console.error("Download event log failed:", error.message);
+  }
+}
+
 export default async function handler(req, res) {
   try {
     if (req.method !== "POST") {
@@ -53,20 +63,17 @@ export default async function handler(req, res) {
       .single();
 
     if (licenseError || !license) {
-
-      await supabase
-        .from("download_events")
-        .insert({
-          email: normalizedEmail,
-          license_key: normalizedKey,
-          tier: null,
-          download_ip: ipAddress,
-          download_country: "Unknown",
-          user_agent: browserInfo,
-          ip_match_score: 0,
-          status: "INVALID_LICENSE",
-          downloaded_at: new Date()
-        });
+      await logDownloadEvent({
+        email: normalizedEmail,
+        license_key: normalizedKey,
+        tier: null,
+        download_ip: ipAddress,
+        download_country: "Unknown",
+        user_agent: browserInfo,
+        ip_match_score: 0,
+        status: "INVALID_LICENSE",
+        downloaded_at: new Date()
+      });
 
       return res.status(403).json({
         success: false,
@@ -77,20 +84,17 @@ export default async function handler(req, res) {
     const status = String(license.status || "").toLowerCase();
 
     if (status !== "active") {
-
-      await supabase
-        .from("download_events")
-        .insert({
-          email: normalizedEmail,
-          license_key: normalizedKey,
-          tier: license.tier,
-          download_ip: ipAddress,
-          download_country: "Unknown",
-          user_agent: browserInfo,
-          ip_match_score: 0,
-          status: "INACTIVE_LICENSE",
-          downloaded_at: new Date()
-        });
+      await logDownloadEvent({
+        email: normalizedEmail,
+        license_key: normalizedKey,
+        tier: license.tier,
+        download_ip: ipAddress,
+        download_country: "Unknown",
+        user_agent: browserInfo,
+        ip_match_score: 0,
+        status: "INACTIVE_LICENSE",
+        downloaded_at: new Date()
+      });
 
       return res.status(403).json({
         success: false,
@@ -103,20 +107,17 @@ export default async function handler(req, res) {
       const now = new Date();
 
       if (expiresAt < now) {
-
-        await supabase
-          .from("download_events")
-          .insert({
-            email: normalizedEmail,
-            license_key: normalizedKey,
-            tier: license.tier,
-            download_ip: ipAddress,
-            download_country: "Unknown",
-            user_agent: browserInfo,
-            ip_match_score: 0,
-            status: "EXPIRED_LICENSE",
-            downloaded_at: new Date()
-          });
+        await logDownloadEvent({
+          email: normalizedEmail,
+          license_key: normalizedKey,
+          tier: license.tier,
+          download_ip: ipAddress,
+          download_country: "Unknown",
+          user_agent: browserInfo,
+          ip_match_score: 0,
+          status: "EXPIRED_LICENSE",
+          downloaded_at: new Date()
+        });
 
         return res.status(403).json({
           success: false,
@@ -125,19 +126,17 @@ export default async function handler(req, res) {
       }
     }
 
-    await supabase
-      .from("download_events")
-      .insert({
-        email: normalizedEmail,
-        license_key: normalizedKey,
-        tier: license.tier,
-        download_ip: ipAddress,
-        download_country: "Unknown",
-        user_agent: browserInfo,
-        ip_match_score: 0,
-        status: "SUCCESS",
-        downloaded_at: new Date()
-      });
+    await logDownloadEvent({
+      email: normalizedEmail,
+      license_key: normalizedKey,
+      tier: license.tier,
+      download_ip: ipAddress,
+      download_country: "Unknown",
+      user_agent: browserInfo,
+      ip_match_score: 0,
+      status: "SUCCESS",
+      downloaded_at: new Date()
+    });
 
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
