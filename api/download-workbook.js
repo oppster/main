@@ -33,6 +33,44 @@ export default async function handler(req, res) {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedKey = licenseKey.trim();
+
+    const { data: license, error: licenseError } = await supabase
+      .from("licenses")
+      .select("email, license_key, tier, status, current_period_end, account_limit")
+      .eq("email", normalizedEmail)
+      .eq("license_key", normalizedKey)
+      .single();
+
+    if (licenseError || !license) {
+      return res.status(403).json({
+        success: false,
+        error: "We could not validate that email and license key combination."
+      });
+    }
+
+    const status = String(license.status || "").toLowerCase();
+
+    if (status !== "active") {
+      return res.status(403).json({
+        success: false,
+        error: "This license is not currently active."
+      });
+    }
+
+    if (license.current_period_end) {
+      const expiresAt = new Date(license.current_period_end);
+      const now = new Date();
+
+      if (expiresAt < now) {
+        return res.status(403).json({
+          success: false,
+          error: "This license has expired."
+        });
+      }
+    }
+
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
       .createSignedUrl(
@@ -49,7 +87,9 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      downloadUrl: data.signedUrl
+      downloadUrl: data.signedUrl,
+      tier: license.tier,
+      accountLimit: license.account_limit
     });
 
   } catch (err) {
