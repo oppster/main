@@ -37,6 +37,7 @@
     
     .plan-label {
       color: #f97316;
+      text-align:center;
       font-weight: 800;
       font-size: 18px;
       margin-bottom: 16px;
@@ -70,6 +71,12 @@
       color: #64748b;
       font-size: 14px;
       margin-top: 22px;
+    }
+
+    .button-container{
+        display:flex;
+        justify-content:center;
+        margin-top:30px;
     }
     
     .button {
@@ -114,13 +121,15 @@
 
       <ul class="feature-list">
         <li>Check your email for your receipt</li>
-        <li>We’ll send next-step access instructions</li>
-        <li>You can begin setting up your trading workflow</li>
+        <li>Your Oppster workbook access is ready</li>
+        <li>Begin setting up your trading workflow</li>
       </ul>
 
-      <a class="button primary" href="index.html">
-        Return to Oppster
-      </a>
+      <div class="button-container">
+          <a href="https://oppster.com" class="button primary">
+             Return to Oppster
+          </a>
+      </div>
 
       <p class="secure-note">Questions? Contact us at your Oppster support email.</p>
     </section>
