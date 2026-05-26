@@ -215,6 +215,13 @@ For your protection, download activity may be recorded including date, time, dev
 
 <script>
 
+const params = new URLSearchParams(
+    window.location.search
+);
+
+const downloadToken =
+    params.get("token");
+    
 document
 .getElementById("downloadForm")
 .addEventListener("submit", async function(e){
@@ -222,8 +229,8 @@ document
     e.preventDefault();
 
     const button = document.querySelector('button[type="submit"]');
-    const email = document.querySelector('[name="email"]').value;
-    const licenseKey = document.querySelector('[name="licenseKey"]').value;
+    let email = document.querySelector('[name="email"]').value;
+    let licenseKey = document.querySelector('[name="licenseKey"]').value;
 
     button.disabled = true;
     button.textContent = "Verifying...";
@@ -242,7 +249,8 @@ document
             },
             body: JSON.stringify({
                 email: email,
-                licenseKey: licenseKey
+                licenseKey: licenseKey,
+                token: downloadToken
             })
         });
 
