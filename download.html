@@ -225,13 +225,34 @@ const button = document.querySelector('button[type="submit"]');
 const msg = document.getElementById("downloadMessage");
 
 if (downloadToken) {
-    emailInput.removeAttribute("required");
-    licenseInput.removeAttribute("required");
+
+    document.querySelector('[name="email"]')
+        .closest("label")
+        ?.style.setProperty("display","none");
+
+    document.querySelector('[name="licenseKey"]')
+        .closest("label")
+        ?.style.setProperty("display","none");
+
+    document.querySelector('[name="email"]')
+        .style.display = "none";
+
+    document.querySelector('[name="licenseKey"]')
+        .style.display = "none";
+
+    const msg =
+    document.getElementById("downloadMessage");
 
     msg.style.display = "block";
     msg.style.color = "#6a625c";
-    msg.innerHTML =
-        "Secure download link detected. Click Verify & Download to continue.";
+    msg.style.fontSize = "15px";
+
+    msg.innerHTML = `
+      Secure download link verified.
+      <br><br>
+      No email or license key is required.
+      Click Verify & Download to continue.
+    `;
 }
 
 form.addEventListener("submit", async function(e){
