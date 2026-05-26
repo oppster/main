@@ -136,13 +136,106 @@
       </ul>
 
       <div class="button-container">
-          <a href="https://oppster.com" class="button primary">
-             Return to Oppster
-          </a>
-      </div>
+
+        <a
+            id="downloadButton"
+            class="button primary"
+            href="#"
+            style="
+                opacity:.7;
+                pointer-events:none;
+            "
+        >
+            Preparing Access...
+        </a>
+    
+    </div>
 
       <p class="secure-note">Questions? Contact Team Oppster for support.</p>
     </section>
   </main>
+  <script>
+
+  async function loadDownloadLink() {
+  
+      const button =
+          document.getElementById(
+              "downloadButton"
+          );
+  
+      try {
+  
+          const params =
+              new URLSearchParams(
+                  window.location.search
+              );
+  
+          const sessionId =
+              params.get(
+                  "session_id"
+              );
+  
+          if (!sessionId) {
+  
+              button.textContent =
+                  "Workbook Access Unavailable";
+  
+              return;
+          }
+  
+          const response =
+              await fetch(
+                  `/api/get-download-token?session_id=${sessionId}`
+              );
+  
+          const data =
+              await response.json();
+  
+          if (!data.success) {
+  
+              button.textContent =
+                  data.error;
+  
+              return;
+          }
+  
+          button.href =
+              `download.html?token=${data.downloadToken}`;
+  
+          button.textContent =
+              "Get My Oppster Workbook";
+  
+          button.style.opacity =
+              "1";
+  
+          button.style.pointerEvents =
+              "auto";
+  
+      }
+  
+      catch(err){
+  
+          console.error(
+              "Workbook access error:",
+              err
+          );
+  
+          button.textContent =
+              "Unable to Prepare Access";
+  
+          button.style.opacity =
+              ".7";
+  
+          button.style.pointerEvents =
+              "none";
+  
+      }
+  
+  }
+  
+  loadDownloadLink();
+  
+  </script>
+  
 </body>
 </html>
