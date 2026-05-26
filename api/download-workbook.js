@@ -197,6 +197,25 @@ export default async function handler(req, res) {
       }
     }
 
+    const { count } = await supabase
+      .from("download_events")
+      .select("*", {
+          count:"exact",
+          head:true
+      })
+      .eq("license_key", normalizedKey)
+      .eq("status","SUCCESS");
+    
+    if (count >= 2) {
+    
+        return res.status(403).json({
+          success:false,
+          error:
+          "Download limit reached. Please contact Team Oppster."
+        });
+    
+    }
+    
     await logDownloadEvent({
       email: normalizedEmail,
       license_key: normalizedKey,
