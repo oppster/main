@@ -234,62 +234,73 @@ document
             document.querySelector(".checkout-card");
         
             card.innerHTML = `
-        
+
                 <div class="hero-header">
-        
+            
                     <img src="oppster-logo.png"
                          alt="Oppster Logo"
                          class="oppster-logo">
-        
+            
                     <div class="plan-label">
-        
                         🌟 Founder Member
-        
                     </div>
-        
+            
                 </div>
-        
+            
                 <h1>
-        
-                    Download Ready
-        
+                    Successfully Downloaded
                 </h1>
-        
+            
                 <p class="checkout-subtext">
-        
-                    Your Oppster workbook download has started successfully.
-        
+                    Your Oppster workbook has been securely delivered and is ready for activation.
                 </p>
-        
+            
                 <ul style="
                     list-style:none;
                     padding:0;
                     line-height:2;
                     color:#6a625c;
                 ">
-        
                     <li>✓ Workbook download initiated</li>
                     <li>✓ Download activity recorded</li>
                     <li>✓ You're ready to activate Oppster</li>
-        
                 </ul>
-        
-                <a
-                class="button primary"
-                href="${data.downloadUrl}">
-        
-                Download Again
-        
+            
+                <button
+                    class="button primary"
+                    disabled
+                    style="
+                        opacity:.65;
+                        cursor:not-allowed;
+                    ">
+                    Download Complete
+                </button>
+            
+                <p class="secure-note">
+                    For your protection, this download activity may be recorded, including date, time,
+                    device/browser information, and related license activity.
+                </p>
+            
+                <p class="secure-note">
+                    Didn't see the download or was it interrupted?
+                    <a href="${data.downloadUrl}"
+                       style="color:#ff6a00; font-weight:600; text-decoration:none;">
+                        Click here to retry the download.
+                    </a>
+                </p>
+            
+                <p class="secure-note">
+                    Questions or issues?
+                    <a href="hello.html"
+                       style="color:#ff6a00; font-weight:600; text-decoration:none;">
+                        Contact Team Oppster.
+                    </a>
+                </p>
+            
+                <a href="index.html" class="footer-link">
+                    ← Return to Oppster
                 </a>
-        
-                <a
-                href="index.html"
-                class="footer-link">
-        
-                ← Return to Oppster
-        
-                </a>
-        
+            
             `;
         
             window.open(
