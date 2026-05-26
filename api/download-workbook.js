@@ -49,6 +49,20 @@ export default async function handler(req, res) {
     let normalizedEmail = email?.trim().toLowerCase();
     let normalizedKey = licenseKey?.trim();
 
+    const ipAddress =
+      req.headers["x-forwarded-for"] ||
+      req.socket.remoteAddress ||
+      "Unknown";
+
+    const browserInfo =
+      req.headers["user-agent"] ||
+      "Unknown";
+
+    const downloadCountry =
+      req.headers["x-vercel-ip-country"] ||
+      req.headers["cf-ipcountry"] ||
+      "Unknown";
+
     if (token) {
 
         const {
@@ -69,16 +83,28 @@ export default async function handler(req, res) {
             tokenError ||
             !tokenLicense
         ) {
-    
+        
+            await logDownloadEvent({
+                email: "UNKNOWN",
+                license_key: "UNKNOWN",
+                tier: "UNKNOWN",
+                download_ip: ipAddress,
+                download_country: downloadCountry,
+                user_agent: browserInfo,
+                ip_match_score: 0,
+                status: "INVALID_TOKEN",
+                downloaded_at: new Date()
+            });
+        
             return res.status(403)
             .json({
-    
+        
                 success:false,
                 error:
                 "Invalid download link."
-    
+        
             });
-    
+        
         }
     
         normalizedEmail =
@@ -89,19 +115,7 @@ export default async function handler(req, res) {
     
     }    
 
-    const ipAddress =
-      req.headers["x-forwarded-for"] ||
-      req.socket.remoteAddress ||
-      "Unknown";
-
-    const browserInfo =
-      req.headers["user-agent"] ||
-      "Unknown";
-
-    const downloadCountry =
-      req.headers["x-vercel-ip-country"] ||
-      req.headers["cf-ipcountry"] ||
-      "Unknown";
+    
     
     const { data: previousDownloads } = await supabase
       .from("download_events")
