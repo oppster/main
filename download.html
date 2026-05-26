@@ -187,6 +187,15 @@ License Key
 Verify & Download
 </button>
 
+<div id="downloadMessage"
+style="
+margin-top:15px;
+text-align:center;
+font-size:14px;
+display:none;
+">
+</div>
+    
 </form>
 
 <p class="secure-note">
@@ -216,6 +225,11 @@ document
 
     button.disabled = true;
     button.textContent = "Verifying...";
+    const msg =
+    document.getElementById("downloadMessage");
+    
+    msg.style.display = "none";
+    msg.innerHTML = "";
 
     try {
 
@@ -327,18 +341,32 @@ document
             );
         
         } else {
-            alert(data.error || "Unable to validate download.");
-            button.disabled = false;
-            button.textContent = "Verify & Download";
+            const msg =
+                document.getElementById("downloadMessage");
+                
+                msg.style.display = "block";
+                msg.style.color = "#c0392b";
+                
+                msg.innerHTML =
+                data.error || "Unable to validate download.";
+                
+                button.disabled = false;
+                button.textContent = "Verify & Download";
         }
 
     } catch (error) {
 
-        console.error(error);
-        alert("Unexpected error occurred.");
-
-        button.disabled = false;
-        button.textContent = "Verify & Download";
+        const msg =
+            document.getElementById("downloadMessage");
+            
+            msg.style.display = "block";
+            msg.style.color = "#c0392b";
+            
+            msg.innerHTML =
+            "Unexpected error occurred. Please try again or contact Team Oppster.";
+            
+            button.disabled = false;
+            button.textContent = "Verify & Download";
 
     }
 
