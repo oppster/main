@@ -36,11 +36,13 @@ export default async function handler(req, res) {
 
     const { email, licenseKey, token } = req.body || {};
 
-    if (!email || !licenseKey) {
+    if (!token && (!email || !licenseKey)) {
+
       return res.status(400).json({
-        success: false,
-        error: "Email and license key are required"
+        success:false,
+        error:"Email and license key are required"
       });
+    
     }
 
     let normalizedEmail = email?.trim().toLowerCase();
