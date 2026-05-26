@@ -218,38 +218,31 @@ For your protection, download activity may be recorded including date, time, dev
 const params = new URLSearchParams(window.location.search);
 const downloadToken = params.get("token");
 
-console.log("Download token:", downloadToken);
+const form = document.getElementById("downloadForm");
+const emailInput = document.querySelector('[name="email"]');
+const licenseInput = document.querySelector('[name="licenseKey"]');
+const button = document.querySelector('button[type="submit"]');
+const msg = document.getElementById("downloadMessage");
 
 if (downloadToken) {
-    document.querySelector('[name="email"]').removeAttribute("required");
-    document.querySelector('[name="licenseKey"]').removeAttribute("required");
+    emailInput.removeAttribute("required");
+    licenseInput.removeAttribute("required");
 
-    const msg = document.getElementById("downloadMessage");
     msg.style.display = "block";
     msg.style.color = "#6a625c";
     msg.innerHTML =
         "Secure download link detected. Click Verify & Download to continue.";
 }
-    
-document
-.getElementById("downloadForm")
-.addEventListener("submit", async function(e){
+
+form.addEventListener("submit", async function(e){
 
     e.preventDefault();
 
-    console.log("Submit fired");
-    console.log("Token sent:", downloadToken);
-    const button = document.querySelector('button[type="submit"]');
-    let email = document.querySelector('[name="email"]').value;
-    let licenseKey = document.querySelector('[name="licenseKey"]').value;
+    msg.style.display = "none";
+    msg.innerHTML = "";
 
     button.disabled = true;
     button.textContent = "Verifying...";
-    const msg =
-    document.getElementById("downloadMessage");
-    
-    msg.style.display = "none";
-    msg.innerHTML = "";
 
     try {
 
@@ -259,135 +252,112 @@ document
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: email,
-                licenseKey: licenseKey,
+                email: emailInput.value,
+                licenseKey: licenseInput.value,
                 token: downloadToken
             })
         });
 
         const data = await response.json();
 
-        if (data.success) {
-        
-            const card =
-            document.querySelector(".checkout-card");
-        
-            card.innerHTML = `
-
-                <div class="hero-header">
-            
-                    <img src="oppster-logo.png"
-                         alt="Oppster Logo"
-                         class="oppster-logo">
-            
-                    <div class="plan-label">
-                        🌟 Founder Member
-                    </div>
-            
-                </div>
-            
-                <h1>
-                    Successfully Downloaded
-                </h1>
-            
-                <p class="checkout-subtext">
-                    Your Oppster workbook has been securely delivered and is ready for activation.
-                </p>
-            
-                <ul class="success-list" style="
-                    list-style:none;
-                    padding:0;
-                    line-height:2;
-                    color:#6a625c;
-                ">
-                    <li>✓ Workbook download initiated</li>
-                    <li>✓ Download activity recorded</li>
-                    <li>✓ You're ready to activate Oppster</li>
-                </ul>
-            
-                <button
-                    class="button primary"
-                    disabled
-                    style="
-                        background:#d8e9d6;
-                        color:#2e6b2e;
-                        cursor:default;
-                        border:none;
-                ">
-                    Download Complete
-                </button>
-            
-                <p class="secure-note">
-                    For your protection and account security, download activity may be recorded, including date, time, device/browser information, and related license activity.
-                </p>
-            
-                <p class="secure-note">
-                    Didn't see the download or was it interrupted?
-                    <a href="${data.downloadUrl}"
-                       style="color:#ff6a00; font-weight:600; text-decoration:none;">
-                        Click here to retry the download.
-                    </a>
-                </p>
-            
-                <p class="secure-note">
-
-                🌟 Founder Members help shape Oppster.
-                
-                Was anything confusing during your download or setup experience?
-                
-                <a href="hello.html"
-                style="
-                color:#ff6a00;
-                font-weight:600;
-                text-decoration:none;
-                ">
-                
-                Share feedback or contact Team Oppster
-                
-                </a>
-                
-                </p>
-                
-                <a href="index.html" class="footer-link">
-                
-                ← Return to Oppster
-                
-                </a>
-            
-            `;
-        
-            window.open(
-                data.downloadUrl,
-                "_blank"
-            );
-        
-        } else {
-            const msg =
-                document.getElementById("downloadMessage");
-                
-                msg.style.display = "block";
-                msg.style.color = "#c0392b";
-                
-                msg.innerHTML =
+        if (!data.success) {
+            msg.style.display = "block";
+            msg.style.color = "#c0392b";
+            msg.innerHTML =
                 data.error || "Unable to validate download.";
-                
-                button.disabled = false;
-                button.textContent = "Verify & Download";
+
+            button.disabled = false;
+            button.textContent = "Verify & Download";
+            return;
         }
+
+        const card = document.querySelector(".checkout-card");
+
+        card.innerHTML = `
+
+            <div class="hero-header">
+
+                <img src="oppster-logo.png"
+                     alt="Oppster Logo"
+                     class="oppster-logo">
+
+                <div class="plan-label">
+                    🌟 Founder Member
+                </div>
+
+            </div>
+
+            <h1>
+                Successfully Downloaded
+            </h1>
+
+            <p class="checkout-subtext">
+                Your Oppster workbook has been securely delivered and is ready for activation.
+            </p>
+
+            <ul class="success-list" style="
+                list-style:none;
+                padding:0;
+                line-height:2;
+                color:#6a625c;
+            ">
+                <li>✓ Workbook download initiated</li>
+                <li>✓ Download activity recorded</li>
+                <li>✓ You're ready to activate Oppster</li>
+            </ul>
+
+            <button
+                class="button primary"
+                disabled
+                style="
+                    background:#d8e9d6;
+                    color:#2e6b2e;
+                    cursor:default;
+                    border:none;
+            ">
+                Download Complete
+            </button>
+
+            <p class="secure-note">
+                For your protection and account security, download activity may be recorded, including date, time, device/browser information, and related license activity.
+            </p>
+
+            <p class="secure-note">
+                Didn't see the download or was it interrupted?
+                <a href="${data.downloadUrl}"
+                   style="color:#ff6a00; font-weight:600; text-decoration:none;">
+                    Click here to retry the download.
+                </a>
+            </p>
+
+            <p class="secure-note">
+                🌟 Founder Members help shape Oppster.
+                <br><br>
+                Was anything confusing during your download or setup experience?
+                <br>
+                <a href="hello.html"
+                   style="color:#ff6a00; font-weight:600; text-decoration:none;">
+                    Share feedback or contact Team Oppster
+                </a>
+            </p>
+
+            <a href="index.html" class="footer-link">
+                ← Return to Oppster
+            </a>
+
+        `;
+
+        window.open(data.downloadUrl, "_blank");
 
     } catch (error) {
 
-        const msg =
-            document.getElementById("downloadMessage");
-            
-            msg.style.display = "block";
-            msg.style.color = "#c0392b";
-            
-            msg.innerHTML =
+        msg.style.display = "block";
+        msg.style.color = "#c0392b";
+        msg.innerHTML =
             "Unexpected error occurred. Please try again or contact Team Oppster.";
-            
-            button.disabled = false;
-            button.textContent = "Verify & Download";
+
+        button.disabled = false;
+        button.textContent = "Verify & Download";
 
     }
 
