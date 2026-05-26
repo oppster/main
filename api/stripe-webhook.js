@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { randomUUID } from "crypto";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -52,6 +53,8 @@ async function upsertLicenseFromCheckout(session) {
     account_limit: accountLimit,
     stripe_customer_id: session.customer,
     stripe_subscription_id: session.subscription,
+    download_token: randomUUID(),
+    last_downloaded_at: null,
     updated_at: new Date().toISOString(),
   };
 
