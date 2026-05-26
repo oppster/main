@@ -55,6 +55,11 @@ export default async function handler(req, res) {
       req.headers["user-agent"] ||
       "Unknown";
 
+    const downloadCountry =
+      req.headers["x-vercel-ip-country"] ||
+      req.headers["cf-ipcountry"] ||
+      "Unknown";
+    
     const { data: previousDownloads } = await supabase
       .from("download_events")
       .select("download_ip")
@@ -91,7 +96,7 @@ export default async function handler(req, res) {
         license_key: normalizedKey,
         tier: "UNKNOWN",
         download_ip: ipAddress,
-        download_country: "Unknown",
+        download_country: downloadCountry,
         user_agent: browserInfo,
         ip_match_score: ipMatchScore,
         status: "INVALID_LICENSE",
@@ -112,7 +117,7 @@ export default async function handler(req, res) {
         license_key: normalizedKey,
         tier: license.tier,
         download_ip: ipAddress,
-        download_country: "Unknown",
+        download_country: downloadCountry,
         user_agent: browserInfo,
         ip_match_score: ipMatchScore,
         status: "INACTIVE_LICENSE",
@@ -135,7 +140,7 @@ export default async function handler(req, res) {
           license_key: normalizedKey,
           tier: license.tier,
           download_ip: ipAddress,
-          download_country: "Unknown",
+          download_country: downloadCountry,
           user_agent: browserInfo,
           ip_match_score: ipMatchScore,
           status: "EXPIRED_LICENSE",
@@ -154,7 +159,7 @@ export default async function handler(req, res) {
       license_key: normalizedKey,
       tier: license.tier,
       download_ip: ipAddress,
-      download_country: "Unknown",
+      download_country: downloadCountry,
       user_agent: browserInfo,
       ip_match_score: ipMatchScore,
       status: "SUCCESS",
