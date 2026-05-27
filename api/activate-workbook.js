@@ -99,20 +99,19 @@ export default async function handler(req,res){
 
         }
 
-        if(
-            license.current_period_end &&
-            new Date(
+        if (
+            isLicenseExpired(
                 license.current_period_end
-            ) < new Date()
+            )
         ){
-
+        
             return res.status(403).json({
-
+        
                 success:false,
                 error:"License expired"
-
+        
             });
-
+        
         }
 
         if(
