@@ -19,6 +19,27 @@ async function logDownloadEvent(eventData) {
   }
 }
 
+function isLicenseExpired(currentPeriodEnd) {
+
+    if (!currentPeriodEnd) {
+        return false;
+    }
+
+    const raw =
+        String(currentPeriodEnd);
+
+    const expiresAt =
+        raw.includes("T")
+        ? new Date(raw)
+        : new Date(
+            raw +
+            "T23:59:59.999Z"
+        );
+
+    return expiresAt < new Date();
+
+}
+
 export default async function handler(req, res) {
   try {
     if (req.method !== "POST") {
@@ -190,11 +211,12 @@ export default async function handler(req, res) {
       });
     }
     
-    if (license.current_period_end) {
-      const expiresAt = new Date(license.current_period_end);
-      const now = new Date();
-
-      if (expiresAt < now) {
+    if (
+        isLicenseExpired(
+            license.current_period_end
+        )
+    ){
+    
         await logDownloadEvent({
           email: normalizedEmail,
           license_key: normalizedKey,
@@ -206,12 +228,12 @@ export default async function handler(req, res) {
           status: "EXPIRED_LICENSE",
           downloaded_at: new Date()
         });
-
+    
         return res.status(403).json({
-          success: false,
-          error: "This license has expired."
+          success:false,
+          error:"This license has expired."
         });
-      }
+    
     }
 
     const { count, error: countError } = await supabase
