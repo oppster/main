@@ -5,8 +5,28 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-export default async function handler(req,res){
+function isLicenseExpired(currentPeriodEnd) {
 
+    if (!currentPeriodEnd) {
+        return false;
+    }
+
+    const raw =
+        String(currentPeriodEnd);
+
+    const expiresAt =
+        raw.includes("T")
+        ? new Date(raw)
+        : new Date(
+            raw +
+            "T23:59:59.999Z"
+        );
+
+    return expiresAt < new Date();
+
+}
+
+export default async function handler(req,res){
     try{
 
         if(req.method !== "POST"){
