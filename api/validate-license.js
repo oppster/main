@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       `&select=*` +
       `&order=current_period_end.desc` +
       `&limit=1`;
-    
+
     if (license_key) {
       query =
         `${supabaseUrl}/rest/v1/licenses` +
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         `&select=*` +
         `&limit=1`;
     }
-    
+
     const response = await fetch(query, {
       headers: {
         apikey: supabaseKey,
@@ -54,24 +54,28 @@ export default async function handler(req, res) {
     }
 
     const license = rows[0];
-    const today = new Date();
-    const expires = license.current_period_end
-      ? new Date(license.current_period_end)
+
+    const expiresStr = license.current_period_end
+      ? String(license.current_period_end).slice(0, 10)
       : null;
 
     const activeStatuses = ["ACTIVE", "TRIALING", "GRACE"];
-    const isActiveStatus = activeStatuses.includes(
-      String(license.status || "").toUpperCase()
-    );
+    const rawStatus = String(license.status || "").toUpperCase();
 
-    const notExpired = !expires || expires >= today;
+    let effectiveStatus = rawStatus;
+
+    if (expiresStr && expiresStr < todayStr) {
+      effectiveStatus = "EXPIRED";
+    }
+
+    const valid = activeStatuses.includes(effectiveStatus);
 
     return res.status(200).json({
-      valid: isActiveStatus && notExpired,
+      valid,
       email: license.email,
       license_key: license.license_key,
       tier: license.tier,
-      status: license.status,
+      status: effectiveStatus,
       expires: license.current_period_end,
       account_limit: license.account_limit,
     });
