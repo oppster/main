@@ -216,7 +216,7 @@ For your protection, download activity may be recorded including date, time, dev
 <script>
 
 const params = new URLSearchParams(window.location.search);
-const downloadToken = params.get("token");
+const downloadCode = params.get("code");
 
 const form = document.getElementById("downloadForm");
 const emailInput = document.querySelector('[name="email"]');
@@ -224,7 +224,7 @@ const licenseInput = document.querySelector('[name="licenseKey"]');
 const button = document.querySelector('button[type="submit"]');
 const msg = document.getElementById("downloadMessage");
 
-if (downloadToken) {
+if (downloadCode) {
 
     emailInput.removeAttribute("required");
     licenseInput.removeAttribute("required");
@@ -258,17 +258,25 @@ form.addEventListener("submit", async function(e){
     button.disabled = true;
     button.textContent = "Verifying...";
 
+    if (!downloadCode) {
+        msg.style.display = "block";
+        msg.style.color = "#c0392b";
+        msg.innerHTML = "This secure download link is missing a download code.";
+    
+        button.disabled = false;
+        button.textContent = "Verify & Download";
+        return;
+    }
+
     try {
 
-        const response = await fetch("/api/download-workbook", {
+        const response = await fetch("https://mcfwdhhoiscnjuvjrsno.supabase.co/functions/v1/validate-download", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: emailInput.value,
-                licenseKey: licenseInput.value,
-                token: downloadToken
+                code: downloadCode
             })
         });
 
@@ -282,7 +290,7 @@ form.addEventListener("submit", async function(e){
             throw new Error(responseText);
         }
 
-        if (!data.success) {
+        if (!data.url) {
             msg.style.display = "block";
             msg.style.color = "#c0392b";
             msg.innerHTML =
@@ -310,7 +318,7 @@ form.addEventListener("submit", async function(e){
             </div>
 
             <h1>
-                Successfully Downloaded
+                Download Starting
             </h1>
 
             <p class="checkout-subtext">
@@ -374,7 +382,7 @@ form.addEventListener("submit", async function(e){
 
         `;
 
-        window.open(data.downloadUrl, "_blank");
+        window.location.href = data.url;
 
     } catch (error) {
     
