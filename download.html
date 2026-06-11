@@ -218,6 +218,9 @@ For your protection, download activity may be recorded including date, time, dev
 const params = new URLSearchParams(window.location.search);
 const downloadCode = params.get("code");
 
+const VALIDATE_DOWNLOAD_URL =
+    "https://mcfwdhhoiscnjuvrjsno.supabase.co/functions/v1/validate-download";
+
 const form = document.getElementById("downloadForm");
 const emailInput = document.querySelector('[name="email"]');
 const licenseInput = document.querySelector('[name="licenseKey"]');
@@ -270,7 +273,7 @@ form.addEventListener("submit", async function(e){
 
     try {
 
-        const response = await fetch("https://mcfwdhhoiscnjuvrjsno.supabase.co/functions/v1/validate-download", {
+        const response = await fetch(VALIDATE_DOWNLOAD_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
