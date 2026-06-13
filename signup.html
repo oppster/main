@@ -1356,11 +1356,17 @@
     
       if (step === 1) {
         backButton.textContent = "‹ Back to home";
-      } else if (step === 6) {
+      }
+      else if (step === 6 && showingAllPlans) {
+        backButton.textContent = "‹ Back";
+      }
+      else if (step === 6) {
         backButton.textContent = "‹ Back to Questions";
-      } else if (step === 7) {
+      }
+      else if (step === 7) {
         backButton.textContent = "‹ Back to Plans";
-      } else {
+      }
+      else {
         backButton.textContent = "‹ Back";
       }
     
