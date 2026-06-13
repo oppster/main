@@ -317,25 +317,6 @@
     .view-all-plans-link:hover {
       color: var(--orange-dark);
     }
-
-    .recommendation-back-wrap {
-      margin: 0 0 22px;
-    }
-
-    .recommendation-back-link {
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .recommendation-back-link:hover {
-      color: var(--ink);
-    }
-
     .button {
       display: inline-flex;
       align-items: center;
@@ -953,7 +934,6 @@
 
       <!-- RECOMMENDATION -->
       <section class="step" data-step="6">
-        
         <h1 id="recommendationHeadline">
           Based on your responses, we recommend <span id="recommendedPlanName" class="recommended-plan-name">Oppster Pro</span>.
         </h1>
@@ -1361,12 +1341,12 @@
         stepNumber.textContent = step;
         progressBar.style.width = ((step / discoverySteps) * 100) + "%";
     
-      } else if (step === 6) {
+      } else if (step === 7) {
         stepTop.style.display = "none";
         navButtons.style.display = "flex";
         nextButton.style.display = "none";
     
-      } else if (step === 7) {
+      } else if (step === 6) {
           stepTop.style.display = "none";
           navButtons.style.display = "flex";
           nextButton.style.display = "none";
@@ -1447,7 +1427,6 @@
         });
       });
     }
-
     document.getElementById("viewAllPlansButton").addEventListener("click", () => {
       renderOfferSet(getAllPlansSet(recommendedPlanKey), true);
       document.getElementById("viewAllPlansButton").textContent = "Showing all plans";
