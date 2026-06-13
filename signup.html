@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -202,6 +203,120 @@
       width: 30px;
       text-align: center;
       flex-shrink: 0;
+    }
+
+
+    .account-limit-note {
+      margin: -10px 0 26px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .account-stack {
+      position: relative;
+      width: 46px;
+      height: 38px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .account-stack .stack-card {
+      position: absolute;
+      width: 30px;
+      height: 22px;
+      border: 2px solid var(--orange);
+      border-radius: 7px;
+      background: white;
+      box-shadow: 0 6px 12px rgba(2,6,23,.10);
+    }
+
+    .account-stack .stack-card::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      height: 6px;
+      border-left: 2px solid var(--orange);
+      border-bottom: 2px solid var(--orange);
+      transform: skewX(-12deg);
+      opacity: .8;
+    }
+
+    .account-stack.stack-1 .stack-card:nth-child(1) {
+      left: 8px;
+      top: 8px;
+      transform: rotate(0deg);
+    }
+
+    .account-stack.stack-3 .stack-card:nth-child(1) {
+      left: 2px;
+      top: 12px;
+      transform: rotate(-12deg);
+    }
+
+    .account-stack.stack-3 .stack-card:nth-child(2) {
+      left: 8px;
+      top: 8px;
+      transform: rotate(0deg);
+    }
+
+    .account-stack.stack-3 .stack-card:nth-child(3) {
+      left: 14px;
+      top: 4px;
+      transform: rotate(12deg);
+    }
+
+    .account-stack.stack-5 .stack-card:nth-child(1) {
+      left: 0;
+      top: 14px;
+      transform: rotate(-18deg);
+    }
+
+    .account-stack.stack-5 .stack-card:nth-child(2) {
+      left: 5px;
+      top: 11px;
+      transform: rotate(-9deg);
+    }
+
+    .account-stack.stack-5 .stack-card:nth-child(3) {
+      left: 10px;
+      top: 8px;
+      transform: rotate(0deg);
+    }
+
+    .account-stack.stack-5 .stack-card:nth-child(4) {
+      left: 15px;
+      top: 5px;
+      transform: rotate(9deg);
+    }
+
+    .account-stack.stack-5 .stack-card:nth-child(5) {
+      left: 20px;
+      top: 2px;
+      transform: rotate(18deg);
+    }
+
+    .view-all-plans-wrap {
+      text-align: center;
+      margin-top: 26px;
+    }
+
+    .view-all-plans-link {
+      border: none;
+      background: transparent;
+      color: var(--orange);
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .view-all-plans-link:hover {
+      color: var(--orange-dark);
     }
 
     .button {
@@ -653,38 +768,38 @@
       <!-- STEP 2 -->
       <section class="step" data-step="2">
         <h1>How active is your <span>trading workflow?</span></h1>
-        <p class="step-lead">Choose the option that best reflects how often you manage trades.</p>
+        <p class="step-lead">Select any that apply.</p>
 
         <div class="option-panel">
           <div class="option-grid">
-            <button type="button" class="option-card" data-input="selectedActivity" data-value="A few trades per month">
+            <button type="button" class="option-card activity-card" data-value="A few trades per month">
               <span class="option-icon">🗓️</span>
               <span>A few trades per month</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedActivity" data-value="A few trades per week">
+            <button type="button" class="option-card activity-card" data-value="A few trades per week">
               <span class="option-icon">📆</span>
               <span>A few trades per week</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedActivity" data-value="Daily stock trades">
+            <button type="button" class="option-card activity-card" data-value="Daily stock trades">
               <span class="option-icon">📊</span>
               <span>Daily stock trades</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedActivity" data-value="Daily options trades">
+            <button type="button" class="option-card activity-card" data-value="Daily options trades">
               <span class="option-icon">⚡</span>
               <span>Daily options trades</span>
             </button>
 
-            <button type="button" class="option-card" data-input="selectedActivity" data-value="High-volume multi-position management">
+            <button type="button" class="option-card activity-card" data-value="High-volume multi-position management">
               <span class="option-icon">🔥</span>
               <span>High-volume management</span>
             </button>
           </div>
         </div>
 
-        <div class="error" id="error-2">Please choose your trading activity level.</div>
+        <div class="error" id="error-2">Please choose at least one trading activity level.</div>
       </section>
 
       <!-- STEP 3 -->
@@ -694,26 +809,35 @@
           Include any account you want to track separately, such as taxable, IRA, Roth IRA, HSA, or any account that needs its own P/L view.
         </p>
 
+        <p class="account-limit-note">Oppster currently supports tracking up to 5 accounts.</p>
+
         <div class="option-panel">
           <div class="option-grid">
             <button type="button" class="option-card" data-input="selectedAccounts" data-value="1 account">
-              <span class="option-icon">①</span>
+              <span class="account-stack stack-1" aria-hidden="true">
+                <span class="stack-card"></span>
+              </span>
               <span>1 account</span>
             </button>
 
             <button type="button" class="option-card" data-input="selectedAccounts" data-value="2-3 accounts">
-              <span class="option-icon">③</span>
+              <span class="account-stack stack-3" aria-hidden="true">
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+              </span>
               <span>2–3 accounts</span>
             </button>
 
             <button type="button" class="option-card" data-input="selectedAccounts" data-value="4-5 accounts">
-              <span class="option-icon">⑤</span>
+              <span class="account-stack stack-5" aria-hidden="true">
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+                <span class="stack-card"></span>
+              </span>
               <span>4–5 accounts</span>
-            </button>
-
-            <button type="button" class="option-card" data-input="selectedAccounts" data-value="More than 5 accounts">
-              <span class="option-icon">＋</span>
-              <span>More than 5 accounts</span>
             </button>
           </div>
         </div>
@@ -822,6 +946,11 @@
 
         <div class="trial-panel">
           <div class="offer-grid" id="offerGrid"></div>
+
+          <div class="view-all-plans-wrap">
+            <button type="button" class="view-all-plans-link" id="viewAllPlansButton">View all plans</button>
+          </div>
+
           <p class="recommendation-trust">
             Transparent pricing with simple cancellation anytime.
           </p>
@@ -881,7 +1010,7 @@
     const plans = {
       core: {
         name: "Core",
-        headline: "Based on your responses, Core may be the best fit for your workflow.",
+        headline: "Based on your responses, Core is the best fit for your workflow.",
         lead: "A simple structured starting point for tracking trading activity and improving consistency.",
         trial: "3 Day Free Trial",
         price: "$12",
@@ -896,7 +1025,7 @@
       },
       pro: {
         name: "Pro",
-        headline: "Based on your responses, Pro may be the best fit for your workflow.",
+        headline: "Based on your responses, Pro is the best fit for your workflow.",
         lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
         trial: "7 Day Free Trial",
         price: "$19",
@@ -911,7 +1040,7 @@
       },
       premium: {
         name: "Premium",
-        headline: "Based on your responses, Premium may be the best fit for your workflow.",
+        headline: "Based on your responses, Premium is the best fit for your workflow.",
         lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
         trial: "3 Day Free Trial",
         price: "$39.99",
@@ -950,8 +1079,7 @@
         style.includes("Multi-strategy trader") ||
         activity.includes("Daily options trades") ||
         activity.includes("High-volume") ||
-        accounts.includes("4-5") ||
-        accounts.includes("More than 5");
+        accounts.includes("4-5");
 
       const isCore =
         style.includes("Long-term buy and hold") ||
@@ -1089,29 +1217,11 @@
       return wrap;
     }
 
-    function applyRecommendation() {
-      recommendedPlanKey = determineRecommendation();
-      const selected = plans[recommendedPlanKey];
 
-      document.getElementById("recommendationHeadline").innerHTML =
-        `Based on your responses, <span class="recommended-plan-name">${selected.name}</span> may be the best fit for your workflow.`;
-
-      document.getElementById("recommendationLead").textContent = selected.lead;
-
-      const bullets = document.getElementById("recommendationBullets");
-      bullets.innerHTML = "";
-
-      getPersonalizedWhy(recommendedPlanKey).forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        bullets.appendChild(li);
-      });
-
+    function renderOfferSet(offerSet) {
       const offerGrid = document.getElementById("offerGrid");
       offerGrid.innerHTML = "";
       offerGrid.className = "offer-grid";
-
-      const offerSet = getOfferSet(recommendedPlanKey);
 
       offerSet.forEach(key => {
         offerGrid.appendChild(buildOfferCard(key, key === recommendedPlanKey));
@@ -1125,6 +1235,28 @@
           showStep(currentStep);
         });
       });
+    }
+
+    function applyRecommendation() {
+      recommendedPlanKey = determineRecommendation();
+      const selected = plans[recommendedPlanKey];
+
+      document.getElementById("recommendationHeadline").innerHTML =
+        `Based on your responses, <span class="recommended-plan-name">${selected.name}</span> is the best fit for your workflow.`;
+
+      document.getElementById("recommendationLead").textContent = selected.lead;
+
+      const bullets = document.getElementById("recommendationBullets");
+      bullets.innerHTML = "";
+
+      getPersonalizedWhy(recommendedPlanKey).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        bullets.appendChild(li);
+      });
+
+      renderOfferSet(getOfferSet(recommendedPlanKey));
+      document.getElementById("viewAllPlansButton").textContent = "View all plans";
     }
 
     function prepareReminderCheckout(planKey) {
@@ -1178,7 +1310,7 @@
             `Then continue with full ${plan.name} access at ${plan.price}/month.`;
       
           document.getElementById("recommendedSubmit").textContent =
-            plan.submit;
+            isCoreUpgradeToPro ? "Start My Free Trial" : plan.submit;
       
           document.getElementById("reminderDate").textContent =
             `You’ll receive a reminder before your ${trialDays} day trial ends.`;
@@ -1318,7 +1450,14 @@
       });
     }
 
+
+    document.getElementById("viewAllPlansButton").addEventListener("click", () => {
+      renderOfferSet(["core", "pro", "premium"]);
+      document.getElementById("viewAllPlansButton").textContent = "Showing all plans";
+    });
+
     wireMultiSelect("trading-style-card", "selectedTradingStyle");
+    wireMultiSelect("activity-card", "selectedActivity");
     wireMultiSelect("structure-card", "selectedStructureChallenges");
     wireMultiSelect("improvement-card", "selectedImprovementGoals");
 
