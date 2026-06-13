@@ -125,7 +125,7 @@ async function upsertLicenseFromCheckout(session) {
       <p><strong>Plan:</strong> Oppster ${tier}</p>
 
       <p>
-        <a href="${siteUrl}/download.html?token=${downloadToken}">
+        <a href="${siteUrl}/download.html?code=${downloadToken}">
           Download your Oppster workbook
         </a>
       </p>
@@ -153,7 +153,6 @@ async function getCustomerEmail(customerId) {
 
 async function sendTrialEndingEmail(subscription) {
   const email = await getCustomerEmail(subscription.customer);
-
   if (!email) return;
 
   await sendEmail({
@@ -161,13 +160,9 @@ async function sendTrialEndingEmail(subscription) {
     subject: "Your Oppster trial ends soon",
     html: `
       <h2>Your Oppster trial ends soon</h2>
-
       <p>Your Oppster trial is scheduled to end in 2 days.</p>
-
       <p>Your subscription will automatically continue unless you cancel before the trial ends.</p>
-
       <p>Need help? Email hello@oppster.com.</p>
-
       <p>— The Oppster Team</p>
     `,
   });
@@ -189,13 +184,9 @@ async function sendPaymentConfirmationEmail(invoice) {
     subject: "Your Oppster subscription is active",
     html: `
       <h2>Thank you for being an Oppster member</h2>
-
       <p>Your subscription payment was successful.</p>
-
       <p><strong>Amount charged:</strong> $${amount}</p>
-
       <p>Need help? Email hello@oppster.com.</p>
-
       <p>— The Oppster Team</p>
     `,
   });
@@ -213,13 +204,9 @@ async function sendPaymentFailedEmail(invoice) {
     subject: "Action needed: Oppster payment failed",
     html: `
       <h2>Action needed</h2>
-
       <p>We were unable to process your Oppster subscription payment.</p>
-
       <p>Please update your payment method to avoid interruption of access.</p>
-
       <p>Need help? Email hello@oppster.com.</p>
-
       <p>— The Oppster Team</p>
     `,
   });
@@ -252,7 +239,6 @@ export default async function handler(req, res) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
@@ -292,7 +278,6 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({ received: true });
-
   } catch (err) {
     console.error("Stripe webhook processing error:", err);
 
