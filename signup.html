@@ -457,6 +457,10 @@
       align-items: stretch;
     }
 
+    .offer-grid.all-plans {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
     .offer-card-wrap {
       display: flex;
       flex-direction: column;
@@ -674,7 +678,8 @@
       }
 
       .option-grid,
-      .offer-grid {
+      .offer-grid,
+      .offer-grid.all-plans {
         grid-template-columns: 1fr;
       }
 
@@ -1119,6 +1124,11 @@
       return ["pro", "premium"];
     }
 
+    function getAllPlansSet(planKey) {
+      const allPlans = ["core", "pro", "premium"];
+      return [planKey, ...allPlans.filter(key => key !== planKey)];
+    }
+
     function getPersonalizedWhy(planKey) {
       const style = getSelectedValues("selectedTradingStyle");
       const structure = getSelectedValues("selectedStructureChallenges");
@@ -1240,10 +1250,10 @@
     }
 
 
-    function renderOfferSet(offerSet) {
+    function renderOfferSet(offerSet, showAllPlans = false) {
       const offerGrid = document.getElementById("offerGrid");
       offerGrid.innerHTML = "";
-      offerGrid.className = "offer-grid";
+      offerGrid.className = showAllPlans ? "offer-grid all-plans" : "offer-grid";
 
       offerSet.forEach(key => {
         offerGrid.appendChild(buildOfferCard(key, key === recommendedPlanKey));
@@ -1446,7 +1456,7 @@
     });
 
     document.getElementById("viewAllPlansButton").addEventListener("click", () => {
-      renderOfferSet(["core", "pro", "premium"]);
+      renderOfferSet(getAllPlansSet(recommendedPlanKey), true);
       document.getElementById("viewAllPlansButton").textContent = "Showing all plans";
     });
 
