@@ -953,10 +953,7 @@
 
       <!-- RECOMMENDATION -->
       <section class="step" data-step="6">
-        <div class="recommendation-back-wrap">
-          <button type="button" class="recommendation-back-link" id="backToQuestionsButton">‹ Back to questions</button>
-        </div>
-
+        
         <h1 id="recommendationHeadline">
           Based on your responses, we recommend <span id="recommendedPlanName" class="recommended-plan-name">Oppster Pro</span>.
         </h1>
@@ -1364,21 +1361,23 @@
         stepNumber.textContent = step;
         progressBar.style.width = ((step / discoverySteps) * 100) + "%";
     
-      } else if (step === 7) {
+      } else if (step === 6) {
         stepTop.style.display = "none";
         navButtons.style.display = "flex";
         nextButton.style.display = "none";
     
-      } else {
-        stepTop.style.display = "none";
-        navButtons.style.display = "none";
-        nextButton.style.display = "inline-flex";
+      } else if (step === 7) {
+          stepTop.style.display = "none";
+          navButtons.style.display = "flex";
+          nextButton.style.display = "none";
       }
     
       if (step === 1) {
         backButton.textContent = "‹ Back to home";
+      } else if (step === 6) {
+        backButton.textContent = "‹ Back to Questions";
       } else if (step === 7) {
-        backButton.textContent = "‹ Back to plans";
+        backButton.textContent = "‹ Back to Plans";
       } else {
         backButton.textContent = "‹ Back";
       }
@@ -1449,12 +1448,6 @@
       });
     }
 
-
-    document.getElementById("backToQuestionsButton").addEventListener("click", () => {
-      currentStep = discoverySteps;
-      showStep(currentStep);
-    });
-
     document.getElementById("viewAllPlansButton").addEventListener("click", () => {
       renderOfferSet(getAllPlansSet(recommendedPlanKey), true);
       document.getElementById("viewAllPlansButton").textContent = "Showing all plans";
@@ -1479,16 +1472,31 @@
     });
 
     backButton.addEventListener("click", () => {
-      if (currentStep === 1) {
-        window.location.href = "index.html";
-        return;
-      }
 
-      currentStep -= 1;
+    if (currentStep === 1) {
+      window.location.href = "index.html";
+      return;
+    }
+  
+    // Recommendation screen -> return to last question
+    if (currentStep === 6) {
+      currentStep = 5;
       showStep(currentStep);
-    });
-
+      return;
+    }
+  
+    // Reminder screen -> return to recommendation screen
+    if (currentStep === 7) {
+      currentStep = 6;
+      showStep(currentStep);
+      return;
+    }
+  
+    currentStep -= 1;
     showStep(currentStep);
+  });
+  
+  showStep(currentStep);
   </script>
 </body>
 </html>
