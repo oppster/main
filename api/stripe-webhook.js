@@ -1,13 +1,63 @@
 import Stripe from "stripe";
 import { randomUUID } from "crypto";
+import nodemailer from "nodemailer";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const siteUrl = process.env.SITE_URL || "https://oppster.com";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+function getMailer() {
+  return nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.ZOHO_EMAIL_USER,
+      pass: process.env.ZOHO_EMAIL_PASS,
+    },
+  });
+}
+
+async function sendEmail({ to, subject, html }) {
+  const transporter = getMailer();
+
+  await transporter.sendMail({
+    from: `"Oppster" <${process.env.ZOHO_EMAIL_USER}>`,
+    to,
+    replyTo: "hello@oppster.com",
+    subject,
+    html,
+  });
+}
+
+async function getCheckoutPlan(session) {
+  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+    limit: 1,
+    expand: ["data.price"],
+  });
+
+  const price = lineItems.data?.[0]?.price;
+  const lookupKey = String(price?.lookup_key || "").toLowerCase();
+  const unitAmount = Number(price?.unit_amount || 0);
+
+  let tier = "CORE";
+  let accountLimit = 1;
+
+  if (lookupKey.includes("premium") || unitAmount >= 3900) {
+    tier = "PREMIUM";
+    accountLimit = 5;
+  } else if (lookupKey.includes("pro") || unitAmount >= 1900) {
+    tier = "PRO";
+    accountLimit = 3;
+  }
+
+  return { tier, accountLimit };
+}
 
 async function upsertLicenseFromCheckout(session) {
   const supabaseUrl = process.env.SUPABASE_URL;
@@ -19,21 +69,7 @@ async function upsertLicenseFromCheckout(session) {
     throw new Error("Missing customer email from checkout session");
   }
 
-  const amountTotal = Number(session.amount_total || 0);
-
-  let tier = "CORE";
-  let accountLimit = 1;
-
-  if (amountTotal >= 3900) {
-    tier = "PREMIUM";
-    accountLimit = 5;
-  } else if (amountTotal >= 1900) {
-    tier = "PRO";
-    accountLimit = 3;
-  } else {
-    tier = "CORE";
-    accountLimit = 1;
-  }
+  const { tier, accountLimit } = await getCheckoutPlan(session);
 
   const periodEnd = new Date();
   periodEnd.setDate(periodEnd.getDate() + 30);
@@ -44,6 +80,8 @@ async function upsertLicenseFromCheckout(session) {
     "-" +
     Math.random().toString(36).substring(2, 8).toUpperCase();
 
+  const downloadToken = randomUUID();
+
   const body = {
     email,
     license_key: licenseKey,
@@ -53,7 +91,7 @@ async function upsertLicenseFromCheckout(session) {
     account_limit: accountLimit,
     stripe_customer_id: session.customer,
     stripe_subscription_id: session.subscription,
-    download_token: randomUUID(),
+    download_token: downloadToken,
     last_downloaded_at: null,
     updated_at: new Date().toISOString(),
   };
@@ -73,6 +111,118 @@ async function upsertLicenseFromCheckout(session) {
     const errorText = await response.text();
     throw new Error(`Supabase license upsert failed: ${errorText}`);
   }
+
+  await sendEmail({
+    to: email,
+    subject: "Welcome to Oppster",
+    html: `
+      <h2>Welcome to Oppster</h2>
+
+      <p>Your subscription is active and your Oppster workbook access is ready.</p>
+
+      <p><strong>Account Email:</strong> ${email}</p>
+      <p><strong>Workbook Access Key:</strong> ${licenseKey}</p>
+      <p><strong>Plan:</strong> Oppster ${tier}</p>
+
+      <p>
+        <a href="${siteUrl}/download.html?token=${downloadToken}">
+          Download your Oppster workbook
+        </a>
+      </p>
+
+      <p><strong>Before you begin:</strong></p>
+      <ul>
+        <li>Download and save your Oppster workbook to a permanent folder.</li>
+        <li>Move it out of your Downloads folder before opening it.</li>
+        <li>Enable macros when prompted by Excel.</li>
+        <li>Complete your account setup.</li>
+      </ul>
+
+      <p>Need help? Email hello@oppster.com.</p>
+
+      <p>Thank you for joining Oppster.</p>
+      <p>— The Oppster Team</p>
+    `,
+  });
+}
+
+async function getCustomerEmail(customerId) {
+  const customer = await stripe.customers.retrieve(customerId);
+  return String(customer.email || "").trim().toLowerCase();
+}
+
+async function sendTrialEndingEmail(subscription) {
+  const email = await getCustomerEmail(subscription.customer);
+
+  if (!email) return;
+
+  await sendEmail({
+    to: email,
+    subject: "Your Oppster trial ends soon",
+    html: `
+      <h2>Your Oppster trial ends soon</h2>
+
+      <p>Your Oppster trial is scheduled to end in 2 days.</p>
+
+      <p>Your subscription will automatically continue unless you cancel before the trial ends.</p>
+
+      <p>Need help? Email hello@oppster.com.</p>
+
+      <p>— The Oppster Team</p>
+    `,
+  });
+}
+
+async function sendPaymentConfirmationEmail(invoice) {
+  if (Number(invoice.amount_paid || 0) <= 0) return;
+
+  const email =
+    String(invoice.customer_email || "").trim().toLowerCase() ||
+    await getCustomerEmail(invoice.customer);
+
+  if (!email) return;
+
+  const amount = (Number(invoice.amount_paid || 0) / 100).toFixed(2);
+
+  await sendEmail({
+    to: email,
+    subject: "Your Oppster subscription is active",
+    html: `
+      <h2>Thank you for being an Oppster member</h2>
+
+      <p>Your subscription payment was successful.</p>
+
+      <p><strong>Amount charged:</strong> $${amount}</p>
+
+      <p>Need help? Email hello@oppster.com.</p>
+
+      <p>— The Oppster Team</p>
+    `,
+  });
+}
+
+async function sendPaymentFailedEmail(invoice) {
+  const email =
+    String(invoice.customer_email || "").trim().toLowerCase() ||
+    await getCustomerEmail(invoice.customer);
+
+  if (!email) return;
+
+  await sendEmail({
+    to: email,
+    subject: "Action needed: Oppster payment failed",
+    html: `
+      <h2>Action needed</h2>
+
+      <p>We were unable to process your Oppster subscription payment.</p>
+
+      <p>Please update your payment method to avoid interruption of access.</p>
+
+      <p>Need help? Email hello@oppster.com.</p>
+
+      <p>— The Oppster Team</p>
+    `,
+  });
 }
 
 async function buffer(readable) {
@@ -108,16 +258,25 @@ export default async function handler(req, res) {
   }
 
   try {
-
     switch (event.type) {
-
       case "checkout.session.completed":
         await upsertLicenseFromCheckout(event.data.object);
-        console.log("Checkout completed and license updated");
+        console.log("Checkout completed, license updated, welcome email sent");
+        break;
+
+      case "customer.subscription.trial_will_end":
+        await sendTrialEndingEmail(event.data.object);
+        console.log("Trial ending email sent");
         break;
 
       case "invoice.paid":
-        console.log("Invoice paid");
+        await sendPaymentConfirmationEmail(event.data.object);
+        console.log("Invoice paid email handled");
+        break;
+
+      case "invoice.payment_failed":
+        await sendPaymentFailedEmail(event.data.object);
+        console.log("Payment failed email sent");
         break;
 
       case "customer.subscription.updated":
@@ -128,10 +287,6 @@ export default async function handler(req, res) {
         console.log("Subscription canceled");
         break;
 
-      case "invoice.payment_failed":
-        console.log("Payment failed");
-        break;
-
       default:
         console.log(`Unhandled event: ${event.type}`);
     }
@@ -139,10 +294,10 @@ export default async function handler(req, res) {
     return res.status(200).json({ received: true });
 
   } catch (err) {
+    console.error("Stripe webhook processing error:", err);
 
     return res.status(500).json({
       error: err.message,
     });
-
   }
 }
