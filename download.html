@@ -216,7 +216,7 @@ For your protection, download activity may be recorded including date, time, dev
 <script>
 
 const params = new URLSearchParams(window.location.search);
-const downloadCode = params.get("code");
+const downloadCode = params.get("code") || params.get("token");
 
 const VALIDATE_DOWNLOAD_URL =
     "https://mcfwdhhoiscnjuvrjsno.supabase.co/functions/v1/validate-download";
