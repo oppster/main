@@ -32,7 +32,8 @@
     
     .oppster-logo {
       width: 180px;
-      margin-bottom: 24px;
+      display: block;
+      margin: 0 auto 24px;
     }
     
     .plan-label {
@@ -42,11 +43,17 @@
       font-size: 18px;
       margin-bottom: 16px;
     }
-    
+
+    .plan-label,
+    .checkout-subtext {
+      text-align: center;
+    }
+        
     .checkout-card h1 {
       font-size: 48px;
       line-height: 1.05;
       margin-bottom: 20px;
+      text-align:center;
     }
     
     .checkout-subtext {
@@ -77,9 +84,10 @@
     }
     
     .support-note {
-      margin-top: 26px;
+      margin-top: 40px;
       color: #64748b;
       font-size: 16px;
+      text-align: center;
     }
     
     .support-note a {
@@ -96,29 +104,29 @@
     }
     
     .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    border-radius: 14px;
-    padding: 14px 32px;
-    font-weight: 800;
-  }
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border-radius: 14px;
+      padding: 14px 32px;
+      font-weight: 800;
+    }
   
-  .button.primary {
-    background: #f97316;
-    color: white;
-  }
-  
-  .button.primary:hover {
-    background: #ea580c;
-  }
-  
-  .button-wrap {
-    display: flex;
-    justify-content: center;
-    margin-top: 32px;
-  } 
+    .button.primary {
+      background: #f97316;
+      color: white;
+    }
+    
+    .button.primary:hover {
+      background: #ea580c;
+    }
+    
+    .button-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 32px;
+    } 
   </style>
 </head>
 
@@ -129,7 +137,7 @@
 
       <div class="plan-label"> ✓ Subscription active</div>
 
-      <h1>Welcome to Oppster</h1>
+      <h1 id="welcomeTitle">Welcome to Oppster</h1>
 
       <p class="checkout-subtext">
         Your Oppster workbook access is ready and your welcome email is on its way.
