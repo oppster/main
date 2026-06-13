@@ -1078,18 +1078,17 @@
       const style = getSelectedValues("selectedTradingStyle");
       const activity = getSelectedValues("selectedActivity");
       const accounts = getSelectedValues("selectedAccounts");
-
+    
       const isPremium =
         style.includes("Multi-strategy trader") ||
-        activity.includes("Daily options trades") ||
         activity.includes("High-volume") ||
         accounts.includes("4-5");
-
+    
       const isCore =
-        style.includes("Long-term buy and hold") ||
-        activity.includes("A few trades per month") ||
+        style.includes("Long-term buy and hold") &&
+        activity.includes("A few trades per month") &&
         accounts.includes("1 account");
-
+    
       if (isPremium) return "premium";
       if (isCore) return "core";
       return "pro";
