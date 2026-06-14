@@ -251,9 +251,9 @@ export default async function handler(req, res) {
         break;
 
       case "customer.subscription.trial_will_end":
-        await sendTrialEndingEmail(event.data.object);
-        console.log("Trial ending email sent");
-        break;
+        //await sendTrialEndingEmail(event.data.object);
+        //console.log("Trial ending email sent");
+        //break;
 
       case "invoice.paid":
         await sendPaymentConfirmationEmail(event.data.object);
