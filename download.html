@@ -289,6 +289,10 @@ form.addEventListener("submit", async function(e){
         
         try {
             data = JSON.parse(responseText);
+            console.log("validate-download response:", data);
+            alert(JSON.stringify(data));
+
+            
         } catch {
             throw new Error(responseText);
         }
