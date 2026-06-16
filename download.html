@@ -289,20 +289,19 @@ form.addEventListener("submit", async function(e){
         
         try {
             data = JSON.parse(responseText);
-            console.log("validate-download response:", data);
-            alert(JSON.stringify(data));
-
-            
+            console.log("validate-download response:", data);            
         } catch {
             throw new Error(responseText);
         }
 
-        if (!data.downloadUrl) {
+        const downloadUrl = data.url || data.downloadUrl;
+
+        if (!downloadUrl) {
             msg.style.display = "block";
             msg.style.color = "#c0392b";
             msg.innerHTML =
                 data.error || "Unable to validate download.";
-
+        
             button.disabled = false;
             button.textContent = "Verify & Download";
             return;
@@ -389,8 +388,8 @@ form.addEventListener("submit", async function(e){
 
         `;
 
-        const a = document.createElement("a");
-        a.href = data.downloadUrl;
+       const a = document.createElement("a");
+        a.href = downloadUrl;
         a.download = "";
         document.body.appendChild(a);
         a.click();
