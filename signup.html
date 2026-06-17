@@ -1015,42 +1015,42 @@
       name: "Core",
       headline: "Based on your responses, we recommend Oppster Core.",
       lead: "A simple structured starting point for tracking trading activity and improving consistency.",
-      trial: "Founder Bonus: 33 Days for the Price of 30",
+      trial: "Founder Access",
       price: "$12",
       period: "/mo",
       standardPeriod: "/mo",
       desc: "Built for traders who want organization, visibility, and a repeatable review process.",
       features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
       lookup: "oppster_core_monthly",
-      submit: "Get Founder Access",
+      submit: "Unlock Premium +3 Bonus Days",
       popular: false
     },
     pro: {
       name: "Pro",
       headline: "Based on your responses, we recommend Oppster Pro.",
       lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
-      trial: "Founder Bonus: 33 Days for the Price of 30",
+      trial: "Founder Access",
       price: "$19",
       period: "/mo",
       standardPeriod: "/mo",
       desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
       features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
       lookup: "oppster_pro_monthly",
-      submit: "Get Founder Access",
+      submit: "Unlock Premium +3 Bonus Days",
       popular: true
     },
     premium: {
       name: "Premium",
       headline: "Based on your responses, we recommend Oppster Premium.",
       lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
-      trial: "Founder Bonus: 33 Days for the Price of 30",
+      trial: "Founder Access",
       price: "$39",
       period: "/mo",
       standardPeriod: "/mo",
       desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
       features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
       lookup: "oppster_premium_monthly",
-      submit: "Get Founder Access",
+      submit: "Unlock Premium +3 Bonus Days",
       popular: false
     }
   };
@@ -1210,7 +1210,11 @@
         </ul>
         
         ${isRecommended
-          ? `<p class="trial-offer-inline">${plan.trial} available today.</p>`
+          ? `<p class="trial-offer-inline">
+               <strong>Founder Access</strong><br>
+               Unlock Premium: 30 Days<br>
+               + 3 Bonus Days Free
+             </p>`
           : ""}
         
         <button class="button ${buttonClass}" type="button" data-plan="${planKey}">
@@ -1284,7 +1288,7 @@
         `Start today with full ${plan.name} access at ${plan.price}/month. Cancel anytime.`;
     
       document.getElementById("recommendedSubmit").textContent =
-        "Get Founder Access";
+        plan.submit;
     }    
     
     function showStep(step) {
