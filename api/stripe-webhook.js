@@ -69,6 +69,9 @@ async function upsertLicenseFromCheckout(session) {
     throw new Error("Missing customer email from checkout session");
   }
 
+  const billingCountry = session.customer_details?.address?.country || null;
+  const billingPostalCode = session.customer_details?.address?.postal_code || null;
+  
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
   const accessDays = Number(session.metadata?.access_days || 30);
