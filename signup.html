@@ -482,16 +482,14 @@
     }
 
     .plan-card.recommended {
-      background: #f8fafc;
-      border-color: var(--line);
-      box-shadow: none;
-    }
-
-    .plan-card.popular {
       background: white;
       border-color: var(--orange);
       box-shadow: 0 18px 40px rgba(249,115,22,.12);
       transform: translateY(-6px);
+    }
+    
+    .plan-card.popular {
+      background: white;
     }
 
     .popular-label {
@@ -1188,10 +1186,9 @@
       card.className =
         "plan-card" +
         (isRecommended ? " recommended" : "") +
-        (plan.popular ? " popular" : "");
-    
-      const showPopularBadge = plan.popular && recommendedPlanKey !== "premium";
-      const badge = showPopularBadge
+        (plan.popular ? " popular-badge-only" : "");
+      
+      const badge = plan.popular
         ? '<div class="popular-label">Most Popular</div>'
         : "";
     
