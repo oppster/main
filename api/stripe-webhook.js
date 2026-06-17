@@ -94,6 +94,8 @@ async function upsertLicenseFromCheckout(session) {
     status: "ACTIVE",
     current_period_end: periodEnd.toISOString().slice(0, 10),
     account_limit: accountLimit,
+    billing_country: billingCountry,
+    billing_postal_code: billingPostalCode,
     stripe_customer_id: session.customer,
     stripe_subscription_id: session.subscription,
     download_token: downloadToken,
