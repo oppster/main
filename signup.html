@@ -7,697 +7,7 @@
   <title>Start Oppster | Structured Trading Workflow</title>
   <link rel="icon" type="image/png" sizes="32x32" href="oppster-icon.png">
 
-  <style>
-    :root {
-      --orange: #f97316;
-      --orange-dark: #ea580c;
-      --ink: #020617;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --bg: #f8fafc;
-      --dark: #0f172a;
-      --white: #ffffff;
-      --soft-orange: #fff7ed;
-      --soft-orange-border: #fed7aa;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      margin: 0;
-      overflow-x: hidden;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: var(--bg);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: min(100%, 1250px);
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo img {
-      height: 42px;
-      display: block;
-    }
-
-    .nav-actions {
-      font-weight: 800;
-      color: var(--muted);
-    }
-
-    main {
-      min-height: calc(100vh - 76px);
-      display: flex;
-      align-items: flex-start;
-      padding: 48px 0 72px;
-    }
-
-    .signup-shell {
-      width: 100%;
-      max-width: 1250px;
-      margin: 0 auto;
-    }
-
-    .step-top {
-      margin-bottom: 46px;
-    }
-
-    .step-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .step-label {
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .progress-track {
-      height: 12px;
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 999px;
-      background: white;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 20%;
-      background: var(--orange);
-      transition: width .25s ease;
-    }
-
-    .step {
-      display: none;
-    }
-
-    .step.active {
-      display: block;
-    }
-
-    .step h1 {
-      font-size: clamp(52px, 5.5vw, 72px);
-      line-height: 1.05;
-      letter-spacing: -0.06em;
-      margin: 0;
-    }
-
-    .step h1 span {
-      color: var(--orange);
-    }
-
-    .step-lead {
-      margin: 18px 0 36px;
-      color: var(--muted);
-      font-size: 22px;
-      line-height: 1.55;
-      max-width: 1100px;
-    }
-
-    .billing-note {
-      margin-top: -6px;
-      margin-bottom: 26px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 700;
-    }
-    
-    .option-panel,
-    .trial-panel {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 44px 44px 64px;
-      box-shadow: 0 18px 54px rgba(2,6,23,.06);
-    }
-
-    .option-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .option-card {
-      width: 100%;
-      min-height: 104px;
-      border: 1px solid #cbd5e1;
-      border-radius: 14px;
-      background: white;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 24px 28px;
-      font-size: 22px;
-      font-weight: 900;
-      text-align: left;
-      color: var(--ink);
-      cursor: pointer;
-      transition: .18s ease;
-    }
-
-    .option-card:hover {
-      border-color: var(--orange);
-      background: var(--soft-orange);
-      transform: translateY(-2px);
-    }
-
-    .option-card.selected {
-      border: 3px solid var(--orange);
-      background: var(--soft-orange);
-      box-shadow: 0 0 0 4px rgba(249,115,22,.10);
-    }
-
-    .option-icon {
-      font-size: 24px;
-      width: 30px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-
-    .account-limit-note {
-      margin: -10px 0 26px;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 800;
-      text-align: center;
-    }
-
-    .account-stack {
-      position: relative;
-      width: 46px;
-      height: 38px;
-      display: inline-block;
-      flex-shrink: 0;
-    }
-
-    .account-stack .stack-card {
-      position: absolute;
-      width: 30px;
-      height: 22px;
-      border: 2px solid var(--orange);
-      border-radius: 7px;
-      background: white;
-      box-shadow: 0 6px 12px rgba(2,6,23,.10);
-    }
-
-    .account-stack .stack-card::before {
-      content: "";
-      position: absolute;
-      left: 5px;
-      right: 5px;
-      bottom: 5px;
-      height: 6px;
-      border-left: 2px solid var(--orange);
-      border-bottom: 2px solid var(--orange);
-      transform: skewX(-12deg);
-      opacity: .8;
-    }
-
-    .account-stack.stack-1 .stack-card:nth-child(1) {
-      left: 8px;
-      top: 8px;
-      transform: rotate(0deg);
-    }
-
-    .account-stack.stack-3 .stack-card:nth-child(1) {
-      left: 2px;
-      top: 12px;
-      transform: rotate(-12deg);
-    }
-
-    .account-stack.stack-3 .stack-card:nth-child(2) {
-      left: 8px;
-      top: 8px;
-      transform: rotate(0deg);
-    }
-
-    .account-stack.stack-3 .stack-card:nth-child(3) {
-      left: 14px;
-      top: 4px;
-      transform: rotate(12deg);
-    }
-
-    .account-stack.stack-5 .stack-card:nth-child(1) {
-      left: 0;
-      top: 14px;
-      transform: rotate(-18deg);
-    }
-
-    .account-stack.stack-5 .stack-card:nth-child(2) {
-      left: 5px;
-      top: 11px;
-      transform: rotate(-9deg);
-    }
-
-    .account-stack.stack-5 .stack-card:nth-child(3) {
-      left: 10px;
-      top: 8px;
-      transform: rotate(0deg);
-    }
-
-    .account-stack.stack-5 .stack-card:nth-child(4) {
-      left: 15px;
-      top: 5px;
-      transform: rotate(9deg);
-    }
-
-    .account-stack.stack-5 .stack-card:nth-child(5) {
-      left: 20px;
-      top: 2px;
-      transform: rotate(18deg);
-    }
-
-    .view-all-plans-wrap {
-      text-align: center;
-      margin: 36px 0 20px;
-    }
-
-    .view-all-plans-link {
-      border: none;
-      background: transparent;
-      color: var(--orange);
-      font-weight: 900;
-      font-size: 15px;
-      cursor: pointer;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-
-    .view-all-plans-link:hover {
-      color: var(--orange-dark);
-    }
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      padding: 14px 22px;
-      font-weight: 900;
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: .2s ease;
-      font-size: 15px;
-      min-height: 52px;
-    }
-
-    .button.primary {
-      background: var(--orange);
-      color: white;
-      box-shadow: 0 10px 24px rgba(249,115,22,.18);
-    }
-
-    .button.primary:hover {
-      background: var(--orange-dark);
-      transform: translateY(-1px);
-    }
-
-    .button.secondary {
-      background: white;
-      border-color: var(--line);
-      color: var(--ink);
-    }
-
-    .button.secondary:hover {
-      background: #f8fafc;
-      transform: translateY(-1px);
-    }
-
-    .nav-buttons {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      margin-top: 38px;
-    }
-
-    .step[data-step="7"] .nav-buttons {
-      max-width: 760px;
-      margin: 18px auto 0;
-      justify-content: flex-start;
-    }
-
-    .back-button {
-      background: transparent;
-      border: none;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 0;
-    }
-    
-    .back-button:hover {
-      color: var(--ink);
-    }
-
-    .next-button {
-      min-width: 260px;
-    }
-
-    .error {
-      display: none;
-      margin-top: 18px;
-      color: #b91c1c;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-weight: 700;
-    }
-
-    .why-panel {
-      background: var(--soft-orange);
-      border: 1px solid var(--soft-orange-border);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 28px;
-    }
-
-    .why-panel h3 {
-      margin: 0 0 16px;
-      color: var(--dark);
-      font-size: 22px;
-    }
-
-    .why-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 12px;
-    }
-
-    .why-list li {
-      color: #334155;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .why-list li::before {
-      content: "✓";
-      color: var(--orange);
-      font-weight: 900;
-      margin-right: 10px;
-    }
-
-    .offer-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    .offer-grid.all-plans {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .offer-card-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .recommendation-banner {
-      color: var(--orange);
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      padding-left: 4px;
-      text-align: center;
-      width: 100%;
-      margin-bottom: 2px;
-    }
-
-    .recommendation-trust {
-      margin-top: 42px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 700;
-      display: block;
-      clear: both;
-    }
-
-    .plan-card {
-      position: relative;
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(2,6,23,.05);
-      display: flex;
-      flex-direction: column;
-      min-height: 100%;
-    }
-
-    .plan-card.recommended {
-      background: #f8fafc;
-      border-color: var(--line);
-      box-shadow: none;
-    }
-
-    .plan-card.popular {
-      background: white;
-      border-color: var(--orange);
-      box-shadow: 0 18px 40px rgba(249,115,22,.12);
-      transform: translateY(-6px);
-    }
-
-    .popular-label {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: var(--orange);
-      color: white;
-      border-radius: 0 22px 0 14px;
-      padding: 9px 15px;
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .trial-label {
-      color: var(--orange);
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: 10px;
-    }
-
-    .standard-label {
-      color: var(--orange);
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: 10px;
-    }
-
-    .trial-offer-inline {
-      text-align: center;
-      color: var(--orange);
-      font-size: 14px;
-      font-weight: 800;
-      margin: 6px 0 14px;
-    }
-    
-    .plan-card h3 {
-      font-size: 30px;
-      margin: 0 0 10px;
-    }
-
-    .recommended-plan-name {
-      color: var(--orange);
-    }
-
-    .plan-price {
-      font-size: 44px;
-      font-weight: 900;
-      margin: 8px 0;
-    }
-
-    .plan-price span {
-      font-size: 18px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .plan-card p {
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 24px 0;
-      flex: 1;
-    }
-
-    .feature-list li {
-      margin-bottom: 12px;
-      color: var(--dark);
-      font-weight: 700;
-    }
-
-    .feature-list li::before {
-      content: "✓";
-      color: var(--orange);
-      font-weight: 900;
-      margin-right: 10px;
-    }
-
-    form.checkout-form {
-      margin: 0;
-    }
-
-    form.checkout-form button {
-      width: 100%;
-    }
-
-    .offer-note {
-      text-align: center;
-      color: var(--muted);
-      font-weight: 800;
-      margin: 24px 0 14px;
-    }
-
-    .trust-card {
-      text-align: center;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    .reminder-icon {
-      width: 92px;
-      height: 92px;
-      border-radius: 28px;
-      background: var(--soft-orange);
-      color: var(--orange);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      margin-bottom: 26px;
-    }
-
-    .reminder-bubble {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 18px 22px;
-      margin: 28px auto;
-      max-width: 440px;
-      font-weight: 900;
-      color: var(--dark);
-    }
-
-    .hidden {
-      display: none;
-    }
-    
-    .trust-note {
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.6;
-      margin-top: 12px;
-    }
-
-    footer {
-      background: white;
-      border-top: 1px solid var(--line);
-      padding: 22px 0;
-      color: var(--muted);
-      font-size: 15px;
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      main {
-        padding: 42px 0 64px;
-      }
-
-      .step-meta {
-        display: block;
-      }
-
-      .step-label {
-        margin-bottom: 14px;
-      }
-
-      .option-grid,
-      .offer-grid,
-      .offer-grid.all-plans {
-        grid-template-columns: 1fr;
-      }
-
-      .plan-card.popular {
-        transform: none;
-      }
-
-      .step h1 {
-        font-size: 46px;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .option-panel,
-      .trial-panel {
-        padding: 24px;
-      }
-
-      .nav-buttons {
-        flex-direction: column-reverse;
-        align-items: stretch;
-      }
-
-      .button,
-      .next-button {
-        width: 100%;
-      }
-
-      .back-button {
-        text-align: center;
-      }
-
-      .logo img {
-        height: 36px;
-      }
-    }
-  </style>
+ 
 </head>
 
 <body>
@@ -963,32 +273,32 @@
       <!-- REMINDER -->
       <section class="step" data-step="7">
         <div class="trial-panel trust-card">
-          <div class="reminder-icon">🔔</div>
+          <div class="reminder-icon">🎉</div>
       
-          <h1 id="reminderTitle">We’ll remind you before your trial ends.</h1>
+          <h1 id="reminderTitle">Founder Bonus Included</h1>
       
           <p class="step-lead" id="reminderSubtitle" style="margin-left:auto;margin-right:auto;">
-            We’ll remind you 2 days before your trial ends.
+            Get 33 days of access for the price of 30. Your subscription begins immediately.
           </p>
-
+      
           <p class="billing-note" id="billingNote">
-            Then continue with full Pro access at $19/month.
+            Start today with full Pro access at $19/month. Cancel anytime.
           </p>
-          
-          <div class="reminder-bubble" id="reminderDate">
-            You’ll get a reminder before your trial ends.
-          </div>
-  
+      
+          <div class="reminder-bubble hidden" id="reminderDate"></div>
+      
           <form class="checkout-form" action="/api/create-checkout-session" method="POST">
             <input type="hidden" name="lookup_key" id="recommendedLookupKey" value="oppster_pro_monthly" />
-            <input type="hidden" name="trial_days" id="recommendedTrialDays" value="3" />
-            <button class="button primary" type="submit" id="recommendedSubmit">Start My Free Trial</button>
+            <input type="hidden" name="access_days" id="recommendedAccessDays" value="33" />
+            <button class="button primary" type="submit" id="recommendedSubmit">
+              Get Founder Access
+            </button>
           </form>
-
-           <p class="trust-note">
+      
+          <p class="trust-note">
             Transparent pricing with simple cancellation anytime.
           </p>
-        </div>       
+        </div>
       </section>
           
       <div class="nav-buttons" id="navButtons">
@@ -1011,53 +321,50 @@
     let recommendedPlanKey = "pro";
     let showingAllPlans = false;
 
-    const plans = {
-      core: {
-        name: "Core",
-        headline: "Based on your responses, we recommend Oppster Core.",
-        lead: "A simple structured starting point for tracking trading activity and improving consistency.",
-        trial: "3 Day Free Trial",
-        price: "$12",
-        period: "/mo after trial",
-        standardPeriod: "/mo",
-        desc: "Built for traders who want organization, visibility, and a repeatable review process.",
-        features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
-        lookup: "oppster_core_monthly",
-        trialDays: "3",
-        submit: "Start My Free Trial",
-        popular: false
-      },
-      pro: {
-        name: "Pro",
-        headline: "Based on your responses, we recommend Oppster Pro.",
-        lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
-        trial: "3 Day Free Trial",
-        price: "$19",
-        period: "/mo after trial",
-        standardPeriod: "/mo",
-        desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
-        features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
-        lookup: "oppster_pro_monthly",
-        trialDays: "3",
-        submit: "Start My Free Trial",
-        popular: true
-      },
-      premium: {
-        name: "Premium",
-        headline: "Based on your responses, we recommend Oppster Premium.",
-        lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
-        trial: "3 Day Free Trial",
-        price: "$39",
-        period: "/mo after trial",
-        standardPeriod: "/mo",
-        desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
-        features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
-        lookup: "oppster_premium_monthly",
-        trialDays: "3",
-        submit: "Start My Free Trial",
-        popular: false
-      }
-    };
+   const plans = {
+    core: {
+      name: "Core",
+      headline: "Based on your responses, we recommend Oppster Core.",
+      lead: "A simple structured starting point for tracking trading activity and improving consistency.",
+      trial: "Founder Bonus: 33 Days for the Price of 30",
+      price: "$12",
+      period: "/mo",
+      standardPeriod: "/mo",
+      desc: "Built for traders who want organization, visibility, and a repeatable review process.",
+      features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
+      lookup: "oppster_core_monthly",
+      submit: "Get Founder Access",
+      popular: false
+    },
+    pro: {
+      name: "Pro",
+      headline: "Based on your responses, we recommend Oppster Pro.",
+      lead: "A structured starting point for active traders who want better visibility and workflow discipline.",
+      trial: "Founder Bonus: 33 Days for the Price of 30",
+      price: "$19",
+      period: "/mo",
+      standardPeriod: "/mo",
+      desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
+      features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
+      lookup: "oppster_pro_monthly",
+      submit: "Get Founder Access",
+      popular: true
+    },
+    premium: {
+      name: "Premium",
+      headline: "Based on your responses, we recommend Oppster Premium.",
+      lead: "Designed for advanced traders managing multi-strategy workflows, higher activity, and expanded account needs.",
+      trial: "Founder Bonus: 33 Days for the Price of 30",
+      price: "$39",
+      period: "/mo",
+      standardPeriod: "/mo",
+      desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
+      features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
+      lookup: "oppster_premium_monthly",
+      submit: "Get Founder Access",
+      popular: false
+    }
+  };
 
     const nextButton = document.getElementById("nextButton");
     const backButton = document.getElementById("backButton");
@@ -1269,66 +576,28 @@
       document.getElementById("viewAllPlansButton").textContent = "View all plans";
     }
 
-    function getPlanTier(planKey) {
-      const tiers = { core: 1, pro: 2, premium: 3 };
-      return tiers[planKey] || 0;
-    }
-
-    function getTrialDays(planKey) {
-      const selectedTier = getPlanTier(planKey);
-      const recommendedTier = getPlanTier(recommendedPlanKey);
-
-      // Final launch rule:
-      // Recommended plan or upgrade = 3-day trial.
-      // Downgrade = no trial.
-      return selectedTier < recommendedTier ? "0" : "3";
-    }
-
     function prepareReminderCheckout(planKey) {
+
       const plan = plans[planKey];
-      const trialDays = getTrialDays(planKey);
-      const hasTrial = trialDays !== "0";
-
+    
       document.getElementById("recommendedLookupKey").value = plan.lookup;
-      document.getElementById("recommendedTrialDays").value = trialDays;
+      document.getElementById("recommendedAccessDays").value = "33";
+    
+      document.getElementById("reminderDate").classList.add("hidden");
+    
+      document.getElementById("reminderTitle").textContent =
+        "Founder Bonus Included";
+    
+      document.getElementById("reminderSubtitle").textContent =
+        "Get 33 days of access for the price of 30. Your subscription begins immediately.";
+    
       document.getElementById("billingNote").textContent =
-        `Then continue with full ${plan.name} access at ${plan.price}/month.`;
-
-      if (hasTrial) {
-        document.getElementById("reminderDate").classList.remove("hidden");
-        document.getElementById("reminderTitle").textContent =
-          "We’ll remind you before your trial ends.";
-        document.getElementById("reminderSubtitle").textContent =
-          "We’ll remind you 2 days before your trial ends.";
-        document.getElementById("recommendedSubmit").textContent =
-          "Start My Free Trial";
-        formatReminderDate(trialDays);
-      } else {
-        document.getElementById("reminderTitle").textContent =
-          `You selected Oppster ${plan.name}.`;
-        document.getElementById("reminderSubtitle").textContent =
-          `Start immediately with full ${plan.name} access and trading workflow visibility.`;
-        document.getElementById("billingNote").textContent =
-          `Start managing your trading performance with immediate access to all ${plan.name} features for ${plan.price}/month.`;
-        document.getElementById("recommendedSubmit").textContent =
-          `Start Oppster ${plan.name}`;
-        document.getElementById("reminderDate").classList.add("hidden");
-      }
-    }
-    function formatReminderDate(trialDays) {
-      const today = new Date();
-      const reminderDate = new Date(today);
-      reminderDate.setDate(today.getDate() + Math.max(Number(trialDays) - 2, 1));
-
-      const formatted = reminderDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric"
-      });
-
-      document.getElementById("reminderDate").textContent =
-        "You’ll get a reminder on " + formatted + ".";
-    }
-
+        `Start today with full ${plan.name} access at ${plan.price}/month. Cancel anytime.`;
+    
+      document.getElementById("recommendedSubmit").textContent =
+        "Get Founder Access";
+    }    
+    
     function showStep(step) {
       document.querySelectorAll(".step").forEach(section => {
         section.classList.toggle("active", Number(section.dataset.step) === step);
