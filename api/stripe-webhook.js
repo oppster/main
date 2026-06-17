@@ -72,7 +72,7 @@ async function upsertLicenseFromCheckout(session) {
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
   const periodEnd = new Date();
-  periodEnd.setDate(periodEnd.getDate() + 30);
+  periodEnd.setDate(periodEnd.getDate() + 33);
 
   const licenseKey =
     "OPP-" +
