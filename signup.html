@@ -532,7 +532,12 @@
       font-weight: 800;
       margin: 6px 0 14px;
     }
-    
+
+    .trial-offer-inline strong{
+        font-size:1rem;
+        color:#ff6b00;
+    }  
+      
     .plan-card h3 {
       font-size: 30px;
       margin: 0 0 10px;
@@ -1022,7 +1027,7 @@
       desc: "Built for traders who want organization, visibility, and a repeatable review process.",
       features: ["Single-account tracking", "Structured trade review workflow", "Trade visibility and organization", "Open opportunities workflow"],
       lookup: "oppster_core_monthly",
-      submit: "Unlock Premium +3 Bonus Days",
+      submit: "Unlock Premium Access",
       popular: false
     },
     pro: {
@@ -1036,7 +1041,7 @@
       desc: "Built for active retail investors who want multi-account tracking, strategy workflows, and better position visibility.",
       features: ["Multi-account tracking", "Advanced options workflows", "Position health visibility", "Trade Cues and Trade Gems"],
       lookup: "oppster_pro_monthly",
-      submit: "Unlock Premium +3 Bonus Days",
+      submit: "Unlock Premium Access",
       popular: true
     },
     premium: {
@@ -1050,7 +1055,7 @@
       desc: "Built for advanced options traders managing multi-strategy workflows and expanded portfolios.",
       features: ["Advanced multi-strategy workflows", "Expanded account management", "Advanced visibility and monitoring", "Built for high-volume workflows"],
       lookup: "oppster_premium_monthly",
-      submit: "Unlock Premium +3 Bonus Days",
+      submit: "Unlock Premium Access",
       popular: false
     }
   };
@@ -1212,7 +1217,7 @@
         ${isRecommended
           ? `<p class="trial-offer-inline">
                <strong>Founder Access</strong><br>
-               Unlock Premium: 30 Days<br>
+               30 Days Premium Access<br>
                + 3 Bonus Days Free
              </p>`
           : ""}
