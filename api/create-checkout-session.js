@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
 
   try {
     const lookup_key = req.body.lookup_key;
-    const trial_days = Number(req.body.trial_days || 0);
+    const access_days = Number(req.body.access_days || 30);
 
     const prices = await stripe.prices.list({
       lookup_keys: [lookup_key],
@@ -29,13 +29,15 @@ module.exports = async (req, res) => {
       mode: 'subscription',
       success_url: 'https://oppster.com/success.html?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://oppster.com/cancel.html',
+      metadata: {
+        access_days: String(access_days),
+      },
+      subscription_data: {
+        metadata: {
+          access_days: String(access_days),
+        },
+      },
     };
-
-    if (trial_days > 0) {
-      sessionConfig.subscription_data = {
-        trial_period_days: trial_days,
-      };
-    }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
