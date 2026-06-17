@@ -166,8 +166,8 @@ export default async function handler(req, res) {
     
     const { data: license, error: licenseError } = await supabase
       .from("licenses")
-      //.select("email, license_key, tier, status, current_period_end, account_limit")
-      .select("email, license_key, tier, status, current_period_end, account_limit, billing_country")
+      .select("email, license_key, tier, status, current_period_end, account_limit")
+      //.select("email, license_key, tier, status, current_period_end, account_limit, billing_country")
       .eq("email", normalizedEmail)
       .eq("license_key", normalizedKey)
       .single();
@@ -191,11 +191,6 @@ export default async function handler(req, res) {
       });
     }
     
-    const eventCountry =
-      license.billing_country ||
-      downloadCountry ||
-      "Unknown";
-    
     const status = String(license.status || "").toLowerCase();
 
     if (status !== "active") {
@@ -204,7 +199,7 @@ export default async function handler(req, res) {
         license_key: normalizedKey,
         tier: license.tier,
         download_ip: ipAddress,
-        download_country: eventCountry,
+        download_country: downloadCountry,
         user_agent: browserInfo,
         ip_match_score: ipMatchScore,
         status: "INACTIVE_LICENSE",
@@ -228,7 +223,7 @@ export default async function handler(req, res) {
           license_key: normalizedKey,
           tier: license.tier,
           download_ip: ipAddress,
-          download_country: eventCountry,
+          download_country: downloadCountry,
           user_agent: browserInfo,
           ip_match_score: ipMatchScore,
           status: "EXPIRED_LICENSE",
@@ -265,7 +260,7 @@ export default async function handler(req, res) {
           license_key: normalizedKey,
           tier: license.tier,
           download_ip: ipAddress,
-          download_country: eventCountry,
+          download_country: downloadCountry,
           user_agent: browserInfo,
           ip_match_score: ipMatchScore,
           status: "DOWNLOAD_LIMIT_REACHED",
@@ -285,7 +280,7 @@ export default async function handler(req, res) {
       license_key: normalizedKey,
       tier: license.tier,
       download_ip: ipAddress,
-      download_country: eventCountry,
+      download_country: downloadCountry,
       user_agent: browserInfo,
       ip_match_score: ipMatchScore,
       status: "SUCCESS",
