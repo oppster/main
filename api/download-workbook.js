@@ -317,7 +317,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase.storage
       .from("oppster-downloads")
       .createSignedUrl(
-        "founder-member/oppster-founder-edition-2026.xlsm",
+        "founder-member/oppster-founder-member-edition-2026.xlsm",
         600
       );
 
