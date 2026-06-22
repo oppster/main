@@ -79,6 +79,23 @@ export default async function handler(req, res) {
       req.headers["user-agent"] ||
       "Unknown";
 
+    const ua = String(browserInfo).toLowerCase();
+
+    const isMobileOrTablet =
+      ua.includes("iphone") ||
+      ua.includes("ipad") ||
+      ua.includes("android") ||
+      ua.includes("mobile") ||
+      ua.includes("tablet");
+    
+    if (isMobileOrTablet) {
+      return res.status(403).json({
+        success: false,
+        error:
+          "Oppster must be downloaded from a Windows or Mac computer using desktop Excel. Mobile and tablet downloads are not supported."
+      });
+    }
+    
     const downloadCountry =
       req.headers["x-vercel-ip-country"] ||
       req.headers["cf-ipcountry"] ||
