@@ -59,25 +59,71 @@ async function getCheckoutPlan(session) {
   return { tier, accountLimit };
 }
 
-async function upsertLicenseFromCheckout(session) {
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+async function getSubscriptionDetails(session) {
+  if (!session.subscription) {
+    throw new Error("Missing Stripe subscription ID from checkout session");
+  }
 
-  const email = String(session.customer_details?.email || "").trim().toLowerCase();
+  const subscription = await stripe.subscriptions.retrieve(
+    session.subscription
+  );
+
+  if (!subscription.current_period_end) {
+    throw new Error("Missing subscription period end from Stripe");
+  }
+
+  return {
+    subscriptionId: subscription.id,
+    customerId: String(subscription.customer || session.customer || ""),
+    currentPeriodEnd: new Date(
+      subscription.current_period_end * 1000
+    )
+      .toISOString()
+      .slice(0, 10),
+  };
+}
+
+async function getCheckoutEmail(session) {
+  let email = String(
+    session.customer_details?.email || session.customer_email || ""
+  )
+    .trim()
+    .toLowerCase();
+
+  if (!email && session.customer) {
+    email = await getCustomerEmail(session.customer);
+  }
 
   if (!email) {
     throw new Error("Missing customer email from checkout session");
   }
 
-  const billingCountry = session.customer_details?.address?.country || null;
-  const billingPostalCode = session.customer_details?.address?.postal_code || null;
-  
+  return email;
+}
+
+async function createNewLicense(session) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Supabase environment variables are missing");
+  }
+
+  const email = await getCheckoutEmail(session);
+
+  const billingCountry =
+    session.customer_details?.address?.country || null;
+
+  const billingPostalCode =
+    session.customer_details?.address?.postal_code || null;
+
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
-  const accessDays = Number(session.metadata?.access_days || 30);
-
-  const periodEnd = new Date();
-  periodEnd.setDate(periodEnd.getDate() + accessDays);
+  const {
+    subscriptionId,
+    customerId,
+    currentPeriodEnd,
+  } = await getSubscriptionDetails(session);
 
   const licenseKey =
     "OPP-" +
@@ -92,31 +138,37 @@ async function upsertLicenseFromCheckout(session) {
     license_key: licenseKey,
     tier,
     status: "ACTIVE",
-    current_period_end: periodEnd.toISOString().slice(0, 10),
+    current_period_end: currentPeriodEnd,
     account_limit: accountLimit,
     billing_country: billingCountry,
     billing_postal_code: billingPostalCode,
-    stripe_customer_id: session.customer,
-    stripe_subscription_id: session.subscription,
+    stripe_customer_id: customerId,
+    stripe_subscription_id: subscriptionId,
     download_token: downloadToken,
     last_downloaded_at: null,
     updated_at: new Date().toISOString(),
   };
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/licenses`, {
-    method: "POST",
-    headers: {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-      "Content-Type": "application/json",
-      Prefer: "resolution=merge-duplicates",
-    },
-    body: JSON.stringify(body),
-  });
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/licenses`,
+    {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(body),
+    }
+  );
+
+  const responseText = await response.text();
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Supabase license upsert failed: ${errorText}`);
+    throw new Error(
+      `Supabase license creation failed: ${response.status} ${responseText}`
+    );
   }
 
   await sendEmail({
@@ -138,6 +190,7 @@ async function upsertLicenseFromCheckout(session) {
       </p>
 
       <p><strong>Before you begin:</strong></p>
+
       <ul>
         <li>Download and save your Oppster workbook to a permanent folder.</li>
         <li>Move it out of your Downloads folder before opening it.</li>
@@ -151,7 +204,200 @@ async function upsertLicenseFromCheckout(session) {
       <p>— The Oppster Team</p>
     `,
   });
+
+  console.log(
+    `New Oppster license created: ${licenseKey}`
+  );
 }
+
+async function renewExistingLicense(session) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Supabase environment variables are missing");
+  }
+
+  const existingLicenseKey = String(
+    session.metadata?.existing_license_key || ""
+  ).trim();
+
+  const activatedWorkbookId = String(
+    session.metadata?.activated_workbook_id || ""
+  ).trim();
+
+  if (!existingLicenseKey) {
+    throw new Error(
+      "Renewal checkout is missing existing_license_key metadata"
+    );
+  }
+
+  if (!activatedWorkbookId) {
+    throw new Error(
+      "Renewal checkout is missing activated_workbook_id metadata"
+    );
+  }
+
+  const email = await getCheckoutEmail(session);
+
+  const billingCountry =
+    session.customer_details?.address?.country || null;
+
+  const billingPostalCode =
+    session.customer_details?.address?.postal_code || null;
+
+  const { tier, accountLimit } = await getCheckoutPlan(session);
+
+  const {
+    subscriptionId,
+    customerId,
+    currentPeriodEnd,
+  } = await getSubscriptionDetails(session);
+
+  const licenseQuery =
+    `${supabaseUrl}/rest/v1/licenses` +
+    `?license_key=eq.${encodeURIComponent(existingLicenseKey)}` +
+    `&activated_workbook_id=eq.${encodeURIComponent(
+      activatedWorkbookId
+    )}` +
+    `&select=email,license_key,activated_workbook_id` +
+    `&limit=1`;
+
+  const lookupResponse = await fetch(licenseQuery, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  const licenseRows = await lookupResponse.json();
+
+  if (!lookupResponse.ok) {
+    throw new Error(
+      `Renewal license lookup failed: ${lookupResponse.status} ${JSON.stringify(
+        licenseRows
+      )}`
+    );
+  }
+
+  if (!Array.isArray(licenseRows) || licenseRows.length !== 1) {
+    throw new Error(
+      "The renewal license and workbook association was not found"
+    );
+  }
+
+  const storedEmail = String(licenseRows[0].email || "")
+    .trim()
+    .toLowerCase();
+
+  if (storedEmail && storedEmail !== email) {
+    throw new Error(
+      "The checkout email does not match the existing license email"
+    );
+  }
+
+  const updateBody = {
+    email,
+    tier,
+    status: "ACTIVE",
+    current_period_end: currentPeriodEnd,
+    account_limit: accountLimit,
+    billing_country: billingCountry,
+    billing_postal_code: billingPostalCode,
+    stripe_customer_id: customerId,
+    stripe_subscription_id: subscriptionId,
+    updated_at: new Date().toISOString(),
+  };
+
+  const updateUrl =
+    `${supabaseUrl}/rest/v1/licenses` +
+    `?license_key=eq.${encodeURIComponent(existingLicenseKey)}` +
+    `&activated_workbook_id=eq.${encodeURIComponent(
+      activatedWorkbookId
+    )}`;
+
+  const updateResponse = await fetch(updateUrl, {
+    method: "PATCH",
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify(updateBody),
+  });
+
+  const updatedRows = await updateResponse.json();
+
+  if (!updateResponse.ok) {
+    throw new Error(
+      `Supabase license renewal failed: ${updateResponse.status} ${JSON.stringify(
+        updatedRows
+      )}`
+    );
+  }
+
+  if (!Array.isArray(updatedRows) || updatedRows.length !== 1) {
+    throw new Error(
+      "Oppster renewal did not update exactly one license"
+    );
+  }
+
+  await sendEmail({
+    to: email,
+    subject: "Your Oppster membership has been renewed",
+    html: `
+      <h2>Your Oppster membership is active</h2>
+
+      <p>Thank you for renewing your Oppster membership.</p>
+
+      <p><strong>Account Email:</strong> ${email}</p>
+      <p><strong>Workbook Access Key:</strong> ${existingLicenseKey}</p>
+      <p><strong>Plan:</strong> Oppster ${tier}</p>
+      <p><strong>Access Through:</strong> ${currentPeriodEnd}</p>
+
+      <p>
+        Open your existing Oppster workbook and refresh your license
+        to restore full access.
+      </p>
+
+      <p>You do not need to download a new workbook.</p>
+
+      <p>Need help? Email hello@oppster.com.</p>
+
+      <p>Thank you for continuing with Oppster.</p>
+      <p>— The Oppster Team</p>
+    `,
+  });
+
+  console.log(
+    `Oppster license renewed: ${existingLicenseKey}`
+  );
+}
+
+async function processCompletedCheckout(session) {
+  const purchaseType = String(
+    session.metadata?.purchase_type || "NEW"
+  )
+    .trim()
+    .toUpperCase();
+
+  if (purchaseType === "RENEWAL") {
+    await renewExistingLicense(session);
+    return;
+  }
+
+  if (purchaseType === "NEW") {
+    await createNewLicense(session);
+    return;
+  }
+
+  throw new Error(
+    `Unsupported checkout purchase type: ${purchaseType}`
+  );
+}
+
+  
 
 async function getCustomerEmail(customerId) {
   const customer = await stripe.customers.retrieve(customerId);
@@ -253,14 +499,14 @@ export default async function handler(req, res) {
   try {
     switch (event.type) {
       case "checkout.session.completed":
-        await upsertLicenseFromCheckout(event.data.object);
-        console.log("Checkout completed, license updated, welcome email sent");
+        await processCompletedCheckout(event.data.object);
+        console.log("Checkout completed successfully");
         break;
 
       case "customer.subscription.trial_will_end":
         //await sendTrialEndingEmail(event.data.object);
         //console.log("Trial ending email sent");
-        //break;
+        break;
 
       case "invoice.paid":
         await sendPaymentConfirmationEmail(event.data.object);
