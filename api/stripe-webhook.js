@@ -68,10 +68,11 @@ async function upsertLicenseFromCheckout(session) {
   
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
-  const accessDays = Number(session.metadata?.access_days || 30);
+  const subscription = await stripe.subscriptions.retrieve(session.subscription);
 
-  const periodEnd = new Date();
-  periodEnd.setDate(periodEnd.getDate() + accessDays);
+  const periodEnd = new Date(
+      subscription.current_period_end * 1000
+  );
 
   const licenseKey =
     "OPP-" +
