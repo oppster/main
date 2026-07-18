@@ -173,88 +173,89 @@
       </p>
     </section>
   </main>
+  
   <script>
+  const MAX_ATTEMPTS = 12;
+  const RETRY_DELAY_MS = 2000;
+
+  function wait(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
 
   async function loadDownloadLink() {
-  
-      const button =
-          document.getElementById(
-              "downloadButton"
-          );
-  
+    const button = document.getElementById("downloadButton");
+
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+
+    if (!sessionId) {
+      button.textContent = "Workbook Access Unavailable";
+      return;
+    }
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
       try {
-  
-          const params =
-              new URLSearchParams(
-                  window.location.search
-              );
-  
-          const sessionId =
-              params.get(
-                  "session_id"
-              );
-  
-          if (!sessionId) {
-  
-              button.textContent =
-                  "Workbook Access Unavailable";
-  
-              return;
+        button.textContent =
+          attempt === 1
+            ? "Preparing Access..."
+            : `Preparing Access... (${attempt}/${MAX_ATTEMPTS})`;
+
+        const response = await fetch(
+          `/api/get-download-token?session_id=${encodeURIComponent(sessionId)}`,
+          {
+            method: "GET",
+            cache: "no-store"
           }
-  
-          const response =
-              await fetch(
-                  `/api/get-download-token?session_id=${sessionId}`
-              );
-  
-          const data =
-              await response.json();
-  
-          if (!data.success) {
-  
-              button.textContent =
-                  data.error;
-  
-              return;
-          }
-  
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.success && data.downloadToken) {
           button.href =
-              `download.html?token=${data.downloadToken}`;
-  
+            `download.html?token=${encodeURIComponent(data.downloadToken)}`;
+
+          button.textContent = "Get My Oppster Workbook";
+          button.style.opacity = "1";
+          button.style.pointerEvents = "auto";
+
+          return;
+        }
+
+        const accessNotReady =
+          response.status === 404 ||
+          String(data.error || "")
+            .toLowerCase()
+            .includes("not ready");
+
+        if (!accessNotReady) {
           button.textContent =
-              "Get My Oppster Workbook";
-  
-          button.style.opacity =
-              "1";
-  
-          button.style.pointerEvents =
-              "auto";
-  
+            data.error || "Unable to Prepare Access";
+
+          return;
+        }
+
+        if (attempt < MAX_ATTEMPTS) {
+          await wait(RETRY_DELAY_MS);
+        }
+      } catch (err) {
+        console.error("Workbook access error:", err);
+
+        if (attempt < MAX_ATTEMPTS) {
+          await wait(RETRY_DELAY_MS);
+          continue;
+        }
       }
-  
-      catch(err){
-  
-          console.error(
-              "Workbook access error:",
-              err
-          );
-  
-          button.textContent =
-              "Unable to Prepare Access";
-  
-          button.style.opacity =
-              ".7";
-  
-          button.style.pointerEvents =
-              "none";
-  
-      }
-  
+    }
+
+    button.textContent =
+      "Download access is taking longer than expected. Please check your welcome email or contact Team Oppster.";
+
+    button.style.opacity = ".7";
+    button.style.pointerEvents = "none";
   }
-  
+
   loadDownloadLink();
-  
-  </script>
+</script>
   
 </body>
 </html>
