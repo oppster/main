@@ -1,15 +1,9 @@
-import Stripe from "stripe";
-import { randomUUID } from "crypto";
-import nodemailer from "nodemailer";
+const Stripe = require("stripe");
+const { randomUUID } = require("crypto");
+const nodemailer = require("nodemailer");
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const siteUrl = process.env.SITE_URL || "https://oppster.com";
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
 
 function getMailer() {
   return nodemailer.createTransport({
@@ -229,7 +223,7 @@ async function buffer(readable) {
   return Buffer.concat(chunks);
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).send("Method Not Allowed");
   }
@@ -293,3 +287,10 @@ export default async function handler(req, res) {
     });
   }
 }
+module.exports = handler;
+
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
+};
