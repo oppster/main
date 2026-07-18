@@ -182,24 +182,65 @@ async function sendTrialEndingEmail(subscription) {
 }
 
 async function sendPaymentConfirmationEmail(invoice) {
-  if (Number(invoice.amount_paid || 0) <= 0) return;
+  const amountPaid = Number(invoice.amount_paid || 0);
+
+  if (amountPaid <= 0) return;
 
   const email =
     String(invoice.customer_email || "").trim().toLowerCase() ||
     await getCustomerEmail(invoice.customer);
 
-  if (!email) return;
+  if (!email) {
+    throw new Error("Unable to determine customer email for renewal");
+  }
 
-  const amount = (Number(invoice.amount_paid || 0) / 100).toFixed(2);
+  const currency = String(invoice.currency || "usd").toUpperCase();
+
+  const amount = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(amountPaid / 100);
+
+  const periodEndTimestamp =
+    invoice.lines?.data?.[0]?.period?.end || null;
+
+  const renewedThrough = periodEndTimestamp
+    ? new Date(periodEndTimestamp * 1000).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : null;
 
   await sendEmail({
     to: email,
-    subject: "Your Oppster subscription is active",
+    subject: "Your Oppster subscription has renewed",
     html: `
-      <h2>Thank you for being an Oppster member</h2>
-      <p>Your subscription payment was successful.</p>
-      <p><strong>Amount charged:</strong> $${amount}</p>
+      <h2>Your Oppster subscription has renewed</h2>
+
+      <p>Your Oppster subscription renewal was processed successfully.</p>
+
+      <p><strong>Amount charged:</strong> ${amount}</p>
+
+      ${
+        renewedThrough
+          ? `<p><strong>Access renewed through:</strong> ${renewedThrough}</p>`
+          : ""
+      }
+
+      <p>
+        Your existing Oppster workbook and Workbook Access Key remain active.
+        You do not need to download or activate a new workbook.
+      </p>
+
+      <p>
+        Open your workbook and select <strong>Refresh License</strong> if the
+        updated subscription period is not displayed immediately.
+      </p>
+
       <p>Need help? Email hello@oppster.com.</p>
+
+      <p>Thank you for continuing with Oppster.</p>
       <p>— The Oppster Team</p>
     `,
   });
