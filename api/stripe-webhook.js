@@ -68,10 +68,21 @@ async function upsertLicenseFromCheckout(session) {
   
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
-  const subscription = await stripe.subscriptions.retrieve(session.subscription);
+  const subscription = await stripe.subscriptions.retrieve(
+  session.subscription
+);
 
+  const periodEndTimestamp =
+    subscription.items?.data?.[0]?.current_period_end;
+  
+  if (!periodEndTimestamp) {
+    throw new Error(
+      "Missing subscription item current_period_end from Stripe"
+    );
+  }
+  
   const periodEnd = new Date(
-      subscription.current_period_end * 1000
+    periodEndTimestamp * 1000
   );
 
   const licenseKey =
@@ -127,7 +138,7 @@ async function upsertLicenseFromCheckout(session) {
       <p><strong>Plan:</strong> Oppster ${tier}</p>
 
       <p>
-        <a href="${siteUrl}/download.html?code=${downloadToken}">
+        <a href="${siteUrl}/download.html?token=${downloadToken}">
           Download your Oppster workbook
         </a>
       </p>
