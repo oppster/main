@@ -1143,5 +1143,44 @@
     </div>
   
   </footer>
+<script>
+(() => {
+
+    const params = new URLSearchParams(window.location.search);
+
+    const purchaseType = params.get("purchase_type");
+    const licenseKey = params.get("existing_license_key");
+    const workbookId = params.get("activated_workbook_id");
+
+    if (purchaseType !== "RENEWAL") {
+        return;
+    }
+
+    document
+        .querySelectorAll('form[action="/api/create-checkout-session"]')
+        .forEach(form => {
+
+            const addHidden = (name, value) => {
+
+                const input = document.createElement("input");
+
+                input.type = "hidden";
+                input.name = name;
+                input.value = value || "";
+
+                form.appendChild(input);
+
+            };
+
+            addHidden("existing_license_key", licenseKey);
+            addHidden("activated_workbook_id", workbookId);
+            addHidden("purchase_type", purchaseType);
+            addHidden("existing_license_key", licenseKey);
+            addHidden("activated_workbook_id", workbookId);
+        });
+
+})();
+</script>
+
 </body>
 </html>
