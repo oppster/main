@@ -495,7 +495,9 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-
+  
+  console.log("Stripe Event:", event.type);
+  
   try {
     switch (event.type) {
       case "checkout.session.completed":
