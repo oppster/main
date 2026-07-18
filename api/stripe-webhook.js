@@ -268,10 +268,26 @@ async function handler(req, res) {
         //console.log("Trial ending email sent");
         break;
 
-      case "invoice.paid":
-        await sendPaymentConfirmationEmail(event.data.object);
-        console.log("Invoice paid email handled");
+      case "invoice.paid": {
+        const invoice = event.data.object;
+      
+        const amountPaid = Number(invoice.amount_paid || 0);
+        const billingReason = String(invoice.billing_reason || "");
+      
+        if (
+          amountPaid <= 0 ||
+          billingReason !== "subscription_cycle"
+        ) {
+          console.log(
+            `Invoice paid email skipped: billing_reason=${billingReason}, amount_paid=${amountPaid}`
+          );
+          break;
+        }
+      
+        await sendPaymentConfirmationEmail(invoice);
+        console.log("Renewal payment confirmation email sent");
         break;
+      }
 
       case "invoice.payment_failed":
         await sendPaymentFailedEmail(event.data.object);
