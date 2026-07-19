@@ -57,33 +57,42 @@ async function upsertLicenseFromCheckout(session) {
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const email = String(session.customer_details?.email || "").trim().toLowerCase();
+  const email = String(
+    session.customer_details?.email || ""
+  )
+    .trim()
+    .toLowerCase();
 
   if (!email) {
     throw new Error("Missing customer email from checkout session");
   }
 
-  const billingCountry = session.customer_details?.address?.country || null;
-  const billingPostalCode = session.customer_details?.address?.postal_code || null;
-  
+  const billingCountry =
+    session.customer_details?.address?.country || null;
+
+  const billingPostalCode =
+    session.customer_details?.address?.postal_code || null;
+
   const { tier, accountLimit } = await getCheckoutPlan(session);
 
   const subscription = await stripe.subscriptions.retrieve(
-  session.subscription
-);
+    session.subscription
+  );
 
   const periodEndTimestamp =
     subscription.items?.data?.[0]?.current_period_end;
-  
+
   if (!periodEndTimestamp) {
     throw new Error(
       "Missing subscription item current_period_end from Stripe"
     );
   }
-  
-  const periodEnd = new Date(
-    periodEndTimestamp * 1000
-  );
+
+  const periodEnd = new Date(periodEndTimestamp * 1000);
+
+  if (Number.isNaN(periodEnd.getTime())) {
+    throw new Error("Invalid current_period_end from Stripe");
+  }
 
   const licenseKey =
     "OPP-" +
@@ -109,20 +118,26 @@ async function upsertLicenseFromCheckout(session) {
     updated_at: new Date().toISOString(),
   };
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/licenses`, {
-    method: "POST",
-    headers: {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-      "Content-Type": "application/json",
-      Prefer: "resolution=merge-duplicates",
-    },
-    body: JSON.stringify(body),
-  });
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/licenses`,
+    {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates",
+      },
+      body: JSON.stringify(body),
+    }
+  );
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Supabase license upsert failed: ${errorText}`);
+
+    throw new Error(
+      `Supabase license upsert failed: ${errorText}`
+    );
   }
 
   await sendEmail({
@@ -131,7 +146,10 @@ async function upsertLicenseFromCheckout(session) {
     html: `
       <h2>Welcome to Oppster</h2>
 
-      <p>Your subscription is active and your Oppster workbook access is ready.</p>
+      <p>
+        Your subscription is active and your Oppster workbook access
+        is ready.
+      </p>
 
       <p><strong>Account Email:</strong> ${email}</p>
       <p><strong>Workbook Access Key:</strong> ${licenseKey}</p>
@@ -144,9 +162,14 @@ async function upsertLicenseFromCheckout(session) {
       </p>
 
       <p><strong>Before you begin:</strong></p>
+
       <ul>
-        <li>Download and save your Oppster workbook to a permanent folder.</li>
-        <li>Move it out of your Downloads folder before opening it.</li>
+        <li>
+          Download and save your Oppster workbook to a permanent folder.
+        </li>
+        <li>
+          Move it out of your Downloads folder before opening it.
+        </li>
         <li>Enable macros when prompted by Excel.</li>
         <li>Complete your account setup.</li>
       </ul>
@@ -161,56 +184,162 @@ async function upsertLicenseFromCheckout(session) {
 
 async function getCustomerEmail(customerId) {
   const customer = await stripe.customers.retrieve(customerId);
-  return String(customer.email || "").trim().toLowerCase();
+
+  return String(customer.email || "")
+    .trim()
+    .toLowerCase();
 }
 
 async function sendTrialEndingEmail(subscription) {
   const email = await getCustomerEmail(subscription.customer);
-  if (!email) return;
+
+  if (!email) {
+    return;
+  }
 
   await sendEmail({
     to: email,
     subject: "Your Oppster trial ends soon",
     html: `
       <h2>Your Oppster trial ends soon</h2>
-      <p>Your Oppster trial is scheduled to end in 2 days.</p>
-      <p>Your subscription will automatically continue unless you cancel before the trial ends.</p>
+
+      <p>
+        Your Oppster trial is scheduled to end in 2 days.
+      </p>
+
+      <p>
+        Your subscription will automatically continue unless you cancel
+        before the trial ends.
+      </p>
+
       <p>Need help? Email hello@oppster.com.</p>
       <p>— The Oppster Team</p>
     `,
   });
 }
 
-async function sendPaymentConfirmationEmail(invoice) {
-  const amountPaid = Number(invoice.amount_paid || 0);
+async function updateLicenseFromRenewal(invoice) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (amountPaid <= 0) return;
+  const subscriptionId =
+    invoice.subscription ||
+    invoice.parent?.subscription_details?.subscription;
 
-  const email =
-    String(invoice.customer_email || "").trim().toLowerCase() ||
-    await getCustomerEmail(invoice.customer);
-
-  if (!email) {
-    throw new Error("Unable to determine customer email for renewal");
+  if (!subscriptionId) {
+    throw new Error(
+      "Missing Stripe subscription ID from renewal invoice"
+    );
   }
 
-  const currency = String(invoice.currency || "usd").toUpperCase();
+  const subscription = await stripe.subscriptions.retrieve(
+    subscriptionId
+  );
+
+  const periodEndTimestamp =
+    subscription.items?.data?.[0]?.current_period_end;
+
+  if (!periodEndTimestamp) {
+    throw new Error(
+      "Missing subscription item current_period_end from Stripe renewal"
+    );
+  }
+
+  const periodEnd = new Date(periodEndTimestamp * 1000);
+
+  if (Number.isNaN(periodEnd.getTime())) {
+    throw new Error(
+      "Invalid renewal current_period_end from Stripe"
+    );
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/licenses?stripe_subscription_id=eq.${encodeURIComponent(
+      subscriptionId
+    )}`,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify({
+        status: "ACTIVE",
+        current_period_end: periodEnd
+          .toISOString()
+          .slice(0, 10),
+        updated_at: new Date().toISOString(),
+      }),
+    }
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+
+    throw new Error(
+      `Supabase renewal update failed: ${errorText}`
+    );
+  }
+
+  const updatedRows = await response.json();
+
+  if (
+    !Array.isArray(updatedRows) ||
+    updatedRows.length === 0
+  ) {
+    throw new Error(
+      `No Oppster license found for Stripe subscription ${subscriptionId}`
+    );
+  }
+
+  return {
+    subscriptionId,
+    periodEndTimestamp,
+    periodEnd,
+  };
+}
+
+async function sendPaymentConfirmationEmail(
+  invoice,
+  periodEndTimestamp
+) {
+  const amountPaid = Number(invoice.amount_paid || 0);
+
+  if (amountPaid <= 0) {
+    return;
+  }
+
+  const email =
+    String(invoice.customer_email || "")
+      .trim()
+      .toLowerCase() ||
+    (await getCustomerEmail(invoice.customer));
+
+  if (!email) {
+    throw new Error(
+      "Unable to determine customer email for renewal"
+    );
+  }
+
+  const currency = String(
+    invoice.currency || "usd"
+  ).toUpperCase();
 
   const amount = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
   }).format(amountPaid / 100);
 
-  const periodEndTimestamp =
-    invoice.lines?.data?.[0]?.period?.end || null;
-
-  const renewedThrough = periodEndTimestamp
-    ? new Date(periodEndTimestamp * 1000).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : null;
+  const renewedThrough = new Date(
+    periodEndTimestamp * 1000
+  ).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
   await sendEmail({
     to: email,
@@ -218,24 +347,26 @@ async function sendPaymentConfirmationEmail(invoice) {
     html: `
       <h2>Your Oppster subscription has renewed</h2>
 
-      <p>Your Oppster subscription renewal was processed successfully.</p>
+      <p>
+        Your Oppster subscription renewal was processed successfully.
+      </p>
 
       <p><strong>Amount charged:</strong> ${amount}</p>
 
-      ${
-        renewedThrough
-          ? `<p><strong>Access renewed through:</strong> ${renewedThrough}</p>`
-          : ""
-      }
-
       <p>
-        Your existing Oppster workbook and Workbook Access Key remain active.
-        You do not need to download or activate a new workbook.
+        <strong>Access renewed through:</strong>
+        ${renewedThrough}
       </p>
 
       <p>
-        Open your workbook and select <strong>Refresh License</strong> if the
-        updated subscription period is not displayed immediately.
+        Your existing Oppster workbook and Workbook Access Key remain
+        active. You do not need to download or activate a new workbook.
+      </p>
+
+      <p>
+        Open your workbook and select
+        <strong>Refresh License</strong> to display the updated
+        subscription period.
       </p>
 
       <p>Need help? Email hello@oppster.com.</p>
@@ -248,18 +379,30 @@ async function sendPaymentConfirmationEmail(invoice) {
 
 async function sendPaymentFailedEmail(invoice) {
   const email =
-    String(invoice.customer_email || "").trim().toLowerCase() ||
-    await getCustomerEmail(invoice.customer);
+    String(invoice.customer_email || "")
+      .trim()
+      .toLowerCase() ||
+    (await getCustomerEmail(invoice.customer));
 
-  if (!email) return;
+  if (!email) {
+    return;
+  }
 
   await sendEmail({
     to: email,
     subject: "Action needed: Oppster payment failed",
     html: `
       <h2>Action needed</h2>
-      <p>We were unable to process your Oppster subscription payment.</p>
-      <p>Please update your payment method to avoid interruption of access.</p>
+
+      <p>
+        We were unable to process your Oppster subscription payment.
+      </p>
+
+      <p>
+        Please update your payment method to avoid interruption
+        of access.
+      </p>
+
       <p>Need help? Email hello@oppster.com.</p>
       <p>— The Oppster Team</p>
     `,
@@ -270,7 +413,11 @@ async function buffer(readable) {
   const chunks = [];
 
   for await (const chunk of readable) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+    chunks.push(
+      typeof chunk === "string"
+        ? Buffer.from(chunk)
+        : chunk
+    );
   }
 
   return Buffer.concat(chunks);
@@ -294,45 +441,77 @@ async function handler(req, res) {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return res
+      .status(400)
+      .send(`Webhook Error: ${err.message}`);
   }
+
+  console.log("Stripe Event:", event.type);
 
   try {
     switch (event.type) {
       case "checkout.session.completed":
-        await upsertLicenseFromCheckout(event.data.object);
-        console.log("Checkout completed, license updated, welcome email sent");
+        await upsertLicenseFromCheckout(
+          event.data.object
+        );
+
+        console.log(
+          "Checkout completed, license updated, welcome email sent"
+        );
+
         break;
 
       case "customer.subscription.trial_will_end":
-        //await sendTrialEndingEmail(event.data.object);
-        //console.log("Trial ending email sent");
+        // await sendTrialEndingEmail(event.data.object);
+        // console.log("Trial ending email sent");
         break;
 
       case "invoice.paid": {
         const invoice = event.data.object;
-      
-        const amountPaid = Number(invoice.amount_paid || 0);
-        const billingReason = String(invoice.billing_reason || "");
-      
+
+        const amountPaid = Number(
+          invoice.amount_paid || 0
+        );
+
+        const billingReason = String(
+          invoice.billing_reason || ""
+        );
+
         if (
           amountPaid <= 0 ||
           billingReason !== "subscription_cycle"
         ) {
           console.log(
-            `Invoice paid email skipped: billing_reason=${billingReason}, amount_paid=${amountPaid}`
+            `Invoice paid renewal skipped: billing_reason=${billingReason}, amount_paid=${amountPaid}`
           );
+
           break;
         }
-      
-        await sendPaymentConfirmationEmail(invoice);
-        console.log("Renewal payment confirmation email sent");
+
+        const renewal =
+          await updateLicenseFromRenewal(invoice);
+
+        await sendPaymentConfirmationEmail(
+          invoice,
+          renewal.periodEndTimestamp
+        );
+
+        console.log(
+          `Renewal completed through ${renewal.periodEnd
+            .toISOString()
+            .slice(0, 10)}`
+        );
+
         break;
       }
 
       case "invoice.payment_failed":
-        await sendPaymentFailedEmail(event.data.object);
+        await sendPaymentFailedEmail(
+          event.data.object
+        );
+
         console.log("Payment failed email sent");
+
         break;
 
       case "customer.subscription.updated":
@@ -344,18 +523,26 @@ async function handler(req, res) {
         break;
 
       default:
-        console.log(`Unhandled event: ${event.type}`);
+        console.log(
+          `Unhandled event: ${event.type}`
+        );
     }
 
-    return res.status(200).json({ received: true });
+    return res.status(200).json({
+      received: true,
+    });
   } catch (err) {
-    console.error("Stripe webhook processing error:", err);
+    console.error(
+      "Stripe webhook processing error:",
+      err
+    );
 
     return res.status(500).json({
       error: err.message,
     });
   }
 }
+
 module.exports = handler;
 
 module.exports.config = {
