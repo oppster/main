@@ -102,6 +102,8 @@ async function upsertLicenseFromCheckout(session) {
       session.subscription
     );
 
+  console.log("Renewal metadata:", subscription.metadata);
+  
   const periodEndTimestamp =
     subscription.items?.data?.[0]
       ?.current_period_end;
@@ -597,14 +599,27 @@ async function handler(req, res) {
           invoice.billing_reason || ""
         );
 
+        // Ignore free invoices only.
+        if (amountPaid <= 0) {
+          console.log(
+            `Invoice paid skipped: amount_paid=${amountPaid}`
+          );
+        
+          break;
+        }
+        
+        // Process BOTH:
+        //   subscription_create  (first invoice after Checkout)
+        //   subscription_cycle   (future automatic renewals)
+        
         if (
-          amountPaid <= 0 ||
+          billingReason !== "subscription_create" &&
           billingReason !== "subscription_cycle"
         ) {
           console.log(
-            `Invoice paid renewal skipped: billing_reason=${billingReason}, amount_paid=${amountPaid}`
+            `Invoice paid ignored: billing_reason=${billingReason}`
           );
-
+        
           break;
         }
 
