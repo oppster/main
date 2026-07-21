@@ -60,6 +60,15 @@ module.exports = async (req, res) => {
         `&select=email,license_key,activated_workbook_id,stripe_customer_id` +
         `&limit=1`;
 
+  console.log("Renewal lookup:", {
+  supabaseUrl,
+  existingLicenseKey,
+  existingLicenseKeyLength: existingLicenseKey.length,
+  activatedWorkbookId,
+  activatedWorkbookIdLength: activatedWorkbookId.length,
+  licenseQuery,
+});
+      
       const licenseResponse = await fetch(licenseQuery, {
         headers: {
           apikey: supabaseKey,
@@ -68,6 +77,12 @@ module.exports = async (req, res) => {
       });
 
       const licenseRows = await licenseResponse.json();
+
+console.log("License lookup response:", {
+  status: licenseResponse.status,
+  ok: licenseResponse.ok,
+  rows: licenseRows,
+});
 
       if (!licenseResponse.ok) {
         throw new Error(
