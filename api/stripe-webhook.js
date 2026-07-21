@@ -30,32 +30,50 @@ async function sendEmail({ to, subject, html }) {
 }
 
 async function getCheckoutPlan(session) {
-  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-    limit: 1,
-    expand: ["data.price"],
-  });
+  const lineItems = await stripe.checkout.sessions.listLineItems(
+    session.id,
+    {
+      limit: 1,
+      expand: ["data.price"],
+    }
+  );
 
   const price = lineItems.data?.[0]?.price;
-  const lookupKey = String(price?.lookup_key || "").toLowerCase();
-  const unitAmount = Number(price?.unit_amount || 0);
+  const lookupKey = String(
+    price?.lookup_key || ""
+  ).toLowerCase();
+
+  const unitAmount = Number(
+    price?.unit_amount || 0
+  );
 
   let tier = "CORE";
   let accountLimit = 1;
 
-  if (lookupKey.includes("premium") || unitAmount >= 3900) {
+  if (
+    lookupKey.includes("premium") ||
+    unitAmount >= 3900
+  ) {
     tier = "PREMIUM";
     accountLimit = 5;
-  } else if (lookupKey.includes("pro") || unitAmount >= 1900) {
+  } else if (
+    lookupKey.includes("pro") ||
+    unitAmount >= 1900
+  ) {
     tier = "PRO";
     accountLimit = 3;
   }
 
-  return { tier, accountLimit };
+  return {
+    tier,
+    accountLimit,
+  };
 }
 
 async function upsertLicenseFromCheckout(session) {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   const email = String(
     session.customer_details?.email || ""
@@ -64,23 +82,29 @@ async function upsertLicenseFromCheckout(session) {
     .toLowerCase();
 
   if (!email) {
-    throw new Error("Missing customer email from checkout session");
+    throw new Error(
+      "Missing customer email from checkout session"
+    );
   }
 
   const billingCountry =
     session.customer_details?.address?.country || null;
 
   const billingPostalCode =
-    session.customer_details?.address?.postal_code || null;
+    session.customer_details?.address?.postal_code ||
+    null;
 
-  const { tier, accountLimit } = await getCheckoutPlan(session);
+  const { tier, accountLimit } =
+    await getCheckoutPlan(session);
 
-  const subscription = await stripe.subscriptions.retrieve(
-    session.subscription
-  );
+  const subscription =
+    await stripe.subscriptions.retrieve(
+      session.subscription
+    );
 
   const periodEndTimestamp =
-    subscription.items?.data?.[0]?.current_period_end;
+    subscription.items?.data?.[0]
+      ?.current_period_end;
 
   if (!periodEndTimestamp) {
     throw new Error(
@@ -88,17 +112,27 @@ async function upsertLicenseFromCheckout(session) {
     );
   }
 
-  const periodEnd = new Date(periodEndTimestamp * 1000);
+  const periodEnd = new Date(
+    periodEndTimestamp * 1000
+  );
 
   if (Number.isNaN(periodEnd.getTime())) {
-    throw new Error("Invalid current_period_end from Stripe");
+    throw new Error(
+      "Invalid current_period_end from Stripe"
+    );
   }
 
   const licenseKey =
     "OPP-" +
-    Math.random().toString(36).substring(2, 8).toUpperCase() +
+    Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase() +
     "-" +
-    Math.random().toString(36).substring(2, 8).toUpperCase();
+    Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
 
   const downloadToken = randomUUID();
 
@@ -107,12 +141,15 @@ async function upsertLicenseFromCheckout(session) {
     license_key: licenseKey,
     tier,
     status: "ACTIVE",
-    current_period_end: periodEnd.toISOString().slice(0, 10),
+    current_period_end: periodEnd
+      .toISOString()
+      .slice(0, 10),
     account_limit: accountLimit,
     billing_country: billingCountry,
     billing_postal_code: billingPostalCode,
     stripe_customer_id: session.customer,
-    stripe_subscription_id: session.subscription,
+    stripe_subscription_id:
+      session.subscription,
     download_token: downloadToken,
     last_downloaded_at: null,
     updated_at: new Date().toISOString(),
@@ -183,7 +220,8 @@ async function upsertLicenseFromCheckout(session) {
 }
 
 async function getCustomerEmail(customerId) {
-  const customer = await stripe.customers.retrieve(customerId);
+  const customer =
+    await stripe.customers.retrieve(customerId);
 
   return String(customer.email || "")
     .trim()
@@ -191,7 +229,9 @@ async function getCustomerEmail(customerId) {
 }
 
 async function sendTrialEndingEmail(subscription) {
-  const email = await getCustomerEmail(subscription.customer);
+  const email = await getCustomerEmail(
+    subscription.customer
+  );
 
   if (!email) {
     return;
@@ -220,11 +260,13 @@ async function sendTrialEndingEmail(subscription) {
 
 async function updateLicenseFromRenewal(invoice) {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   const subscriptionId =
     invoice.subscription ||
-    invoice.parent?.subscription_details?.subscription;
+    invoice.parent?.subscription_details
+      ?.subscription;
 
   if (!subscriptionId) {
     throw new Error(
@@ -232,12 +274,49 @@ async function updateLicenseFromRenewal(invoice) {
     );
   }
 
-  const subscription = await stripe.subscriptions.retrieve(
-    subscriptionId
-  );
+  const subscription =
+    await stripe.subscriptions.retrieve(
+      subscriptionId
+    );
+
+  const metadata = subscription.metadata || {};
+
+  const purchaseType = String(
+    metadata.purchase_type || ""
+  )
+    .trim()
+    .toUpperCase();
+
+  const existingLicenseKey = String(
+    metadata.existing_license_key || ""
+  )
+    .split(",")[0]
+    .trim();
+
+  const activatedWorkbookId = String(
+    metadata.activated_workbook_id || ""
+  )
+    .split(",")[0]
+    .trim();
+
+  if (purchaseType !== "RENEWAL") {
+    throw new Error(
+      `Subscription ${subscriptionId} is not marked as a renewal`
+    );
+  }
+
+  if (
+    !existingLicenseKey ||
+    !activatedWorkbookId
+  ) {
+    throw new Error(
+      "Renewal subscription metadata is missing the existing license key or workbook ID"
+    );
+  }
 
   const periodEndTimestamp =
-    subscription.items?.data?.[0]?.current_period_end;
+    subscription.items?.data?.[0]
+      ?.current_period_end;
 
   if (!periodEndTimestamp) {
     throw new Error(
@@ -245,7 +324,9 @@ async function updateLicenseFromRenewal(invoice) {
     );
   }
 
-  const periodEnd = new Date(periodEndTimestamp * 1000);
+  const periodEnd = new Date(
+    periodEndTimestamp * 1000
+  );
 
   if (Number.isNaN(periodEnd.getTime())) {
     throw new Error(
@@ -253,27 +334,39 @@ async function updateLicenseFromRenewal(invoice) {
     );
   }
 
-  const response = await fetch(
-    `${supabaseUrl}/rest/v1/licenses?stripe_subscription_id=eq.${encodeURIComponent(
-      subscriptionId
-    )}`,
-    {
-      method: "PATCH",
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-        "Content-Type": "application/json",
-        Prefer: "return=representation",
-      },
-      body: JSON.stringify({
-        status: "ACTIVE",
-        current_period_end: periodEnd
-          .toISOString()
-          .slice(0, 10),
-        updated_at: new Date().toISOString(),
-      }),
-    }
-  );
+  const updateUrl =
+    `${supabaseUrl}/rest/v1/licenses` +
+    `?license_key=eq.${encodeURIComponent(
+      existingLicenseKey
+    )}` +
+    `&activated_workbook_id=eq.${encodeURIComponent(
+      activatedWorkbookId
+    )}`;
+
+  const response = await fetch(updateUrl, {
+    method: "PATCH",
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify({
+      status: "ACTIVE",
+      current_period_end: periodEnd
+        .toISOString()
+        .slice(0, 10),
+
+      stripe_customer_id:
+        typeof subscription.customer === "string"
+          ? subscription.customer
+          : subscription.customer?.id || null,
+
+      stripe_subscription_id: subscriptionId,
+
+      updated_at: new Date().toISOString(),
+    }),
+  });
 
   if (!response.ok) {
     const errorText = await response.text();
@@ -290,7 +383,7 @@ async function updateLicenseFromRenewal(invoice) {
     updatedRows.length === 0
   ) {
     throw new Error(
-      `No Oppster license found for Stripe subscription ${subscriptionId}`
+      `No Oppster renewal license found for ${existingLicenseKey} and workbook ${activatedWorkbookId}`
     );
   }
 
@@ -298,6 +391,8 @@ async function updateLicenseFromRenewal(invoice) {
     subscriptionId,
     periodEndTimestamp,
     periodEnd,
+    existingLicenseKey,
+    activatedWorkbookId,
   };
 }
 
@@ -305,7 +400,9 @@ async function sendPaymentConfirmationEmail(
   invoice,
   periodEndTimestamp
 ) {
-  const amountPaid = Number(invoice.amount_paid || 0);
+  const amountPaid = Number(
+    invoice.amount_paid || 0
+  );
 
   if (amountPaid <= 0) {
     return;
@@ -327,10 +424,13 @@ async function sendPaymentConfirmationEmail(
     invoice.currency || "usd"
   ).toUpperCase();
 
-  const amount = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-  }).format(amountPaid / 100);
+  const amount = new Intl.NumberFormat(
+    "en-US",
+    {
+      style: "currency",
+      currency,
+    }
+  ).format(amountPaid / 100);
 
   const renewedThrough = new Date(
     periodEndTimestamp * 1000
@@ -343,7 +443,8 @@ async function sendPaymentConfirmationEmail(
 
   await sendEmail({
     to: email,
-    subject: "Your Oppster subscription has renewed",
+    subject:
+      "Your Oppster subscription has renewed",
     html: `
       <h2>Your Oppster subscription has renewed</h2>
 
@@ -390,7 +491,8 @@ async function sendPaymentFailedEmail(invoice) {
 
   await sendEmail({
     to: email,
-    subject: "Action needed: Oppster payment failed",
+    subject:
+      "Action needed: Oppster payment failed",
     html: `
       <h2>Action needed</h2>
 
@@ -425,7 +527,9 @@ async function buffer(readable) {
 
 async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).send("Method Not Allowed");
+    return res
+      .status(405)
+      .send("Method Not Allowed");
   }
 
   const sig = req.headers["stripe-signature"];
@@ -462,7 +566,9 @@ async function handler(req, res) {
         break;
 
       case "customer.subscription.trial_will_end":
-        // await sendTrialEndingEmail(event.data.object);
+        // await sendTrialEndingEmail(
+        //   event.data.object
+        // );
         // console.log("Trial ending email sent");
         break;
 
@@ -510,16 +616,22 @@ async function handler(req, res) {
           event.data.object
         );
 
-        console.log("Payment failed email sent");
+        console.log(
+          "Payment failed email sent"
+        );
 
         break;
 
       case "customer.subscription.updated":
-        console.log("Subscription updated");
+        console.log(
+          "Subscription updated"
+        );
         break;
 
       case "customer.subscription.deleted":
-        console.log("Subscription canceled");
+        console.log(
+          "Subscription canceled"
+        );
         break;
 
       default:
