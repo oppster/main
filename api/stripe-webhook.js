@@ -554,16 +554,30 @@ async function handler(req, res) {
 
   try {
     switch (event.type) {
-      case "checkout.session.completed":
-        await upsertLicenseFromCheckout(
-          event.data.object
-        );
 
+      case "checkout.session.completed": {
+      const session = event.data.object;
+    
+      const purchaseType = String(
+        session.metadata?.purchase_type || "NEW"
+      )
+        .trim()
+        .toUpperCase();
+    
+      if (purchaseType === "RENEWAL") {
         console.log(
-          "Checkout completed, license updated, welcome email sent"
+          "Renewal checkout completed; no new license or workbook created"
         );
-
-        break;
+      } else {
+        await upsertLicenseFromCheckout(session);
+    
+        console.log(
+          "New checkout completed, license created, welcome email sent"
+        );
+      }
+    
+      break;
+    }
 
       case "customer.subscription.trial_will_end":
         // await sendTrialEndingEmail(
