@@ -8,13 +8,23 @@ module.exports = async (req, res) => {
   try {
     const lookupKey = String(req.body?.lookup_key || "").trim();
 
-    const existingLicenseKey = String(
-      req.body?.existing_license_key || ""
-    ).trim();
-
-    const activatedWorkbookId = String(
-      req.body?.activated_workbook_id || ""
-    ).trim();
+    function normalizeSingleValue(value) {
+      if (Array.isArray(value)) {
+        value = value[0];
+      }
+    
+      return String(value || "")
+        .split(",")[0]
+        .trim();
+    }
+    
+    const existingLicenseKey = normalizeSingleValue(
+      req.body?.existing_license_key
+    );
+    
+    const activatedWorkbookId = normalizeSingleValue(
+      req.body?.activated_workbook_id
+    );
 
     if (!lookupKey) {
       return res.status(400).send("Missing price lookup key");
