@@ -79,6 +79,7 @@ export default async function handler(req, res) {
       expires: license.current_period_end,
       current_period_end: license.current_period_end,
       account_limit: license.account_limit,
+      activated_workbook_id: license.activated_workbook_id,
     });
   } catch (err) {
     return res.status(500).json({
