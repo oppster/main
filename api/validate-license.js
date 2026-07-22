@@ -77,6 +77,7 @@ export default async function handler(req, res) {
       tier: license.tier,
       status: effectiveStatus,
       expires: license.current_period_end,
+      current_period_end: license.current_period_end,
       account_limit: license.account_limit,
     });
   } catch (err) {
